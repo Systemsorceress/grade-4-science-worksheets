@@ -1,0 +1,2620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wild Safari Explorer - Animal & Plant Classification</title>
+
+<style>
+:root{
+    --jungle:#2e7d32;
+    --leaf:#4caf50;
+    --light-leaf:#81c784;
+    --yellow:#ffeb3b;
+    --yellow-dark:#fbc02d;
+    --cream:#f4f8f3;
+    --pale-green:#e8f5e9;
+    --white:#ffffff;
+    --text:#17351b;
+    --muted:#58705b;
+    --correct:#4caf50;
+    --incorrect:#e53935;
+    --blue:#42a5f5;
+    --purple:#8e7cc3;
+    --orange:#ff9800;
+    --shadow:0 8px 0 rgba(46,125,50,.12),0 12px 25px rgba(24,60,29,.08);
+    --radius:16px;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    font-family:"Outfit","Fredoka","Trebuchet MS",Arial,sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(129,199,132,.22),transparent 25%),
+        radial-gradient(circle at 90% 20%,rgba(255,235,59,.16),transparent 25%),
+        linear-gradient(135deg,var(--cream),var(--pale-green));
+    color:var(--text);
+    min-height:100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(255,255,255,.95);
+    backdrop-filter:blur(12px);
+    border-bottom:3px solid #d8e8d9;
+    padding:12px 20px;
+}
+
+.nav{
+    max-width:1250px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-icon{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:var(--yellow);
+    border:3px solid #17351b;
+    display:grid;
+    place-items:center;
+    font-size:28px;
+    box-shadow:4px 4px 0 #17351b;
+}
+
+.brand h1{
+    margin:0;
+    color:var(--jungle);
+    font-size:clamp(18px,3vw,27px);
+    font-weight:900;
+}
+
+.brand small{
+    color:var(--muted);
+    font-weight:700;
+}
+
+.controls{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.score{
+    background:#fff8c7;
+    border:3px solid #222;
+    border-radius:14px;
+    padding:9px 14px;
+    font-weight:900;
+    box-shadow:3px 3px 0 #222;
+    white-space:nowrap;
+}
+
+button{
+    font:inherit;
+    cursor:pointer;
+}
+
+.main-btn{
+    border:3px solid #17351b;
+    border-radius:12px;
+    padding:9px 15px;
+    font-weight:900;
+    color:#fff;
+    background:var(--jungle);
+    box-shadow:3px 3px 0 #17351b;
+    transition:.15s;
+}
+
+.main-btn:hover{
+    transform:translateY(-2px);
+}
+
+.main-btn:active{
+    transform:translate(2px,2px);
+    box-shadow:1px 1px 0 #17351b;
+}
+
+.reset-btn{
+    background:#fff;
+    color:var(--jungle);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    max-width:1250px;
+    margin:25px auto 10px;
+    padding:25px;
+}
+
+.hero-card{
+    background:#fff;
+    border-radius:24px;
+    padding:28px;
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
+    border:2px solid #d9eadb;
+}
+
+.hero-card:after{
+    content:"🌿  🦋  🌿  🐒  🌿";
+    position:absolute;
+    right:20px;
+    bottom:8px;
+    font-size:25px;
+    opacity:.18;
+}
+
+.hero h2{
+    margin:0 0 7px;
+    color:var(--jungle);
+    font-size:clamp(27px,5vw,45px);
+    line-height:1.05;
+}
+
+.hero p{
+    margin:0;
+    color:var(--muted);
+    font-size:17px;
+    max-width:750px;
+    font-weight:600;
+}
+
+.instructions{
+    display:inline-flex;
+    gap:8px;
+    margin-top:17px;
+    background:var(--yellow);
+    border:2px solid #222;
+    border-radius:30px;
+    padding:9px 16px;
+    font-weight:900;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:10px 25px 60px;
+}
+
+.activity{
+    background:var(--white);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin:22px 0;
+    overflow:hidden;
+    border:2px solid #dbe9dc;
+}
+
+.activity-head{
+    background:linear-gradient(90deg,var(--jungle),#388e3c);
+    color:#fff;
+    padding:17px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.activity-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.number{
+    width:43px;
+    height:43px;
+    flex:none;
+    display:grid;
+    place-items:center;
+    background:var(--yellow);
+    color:#17351b;
+    border:3px solid #17351b;
+    border-radius:50%;
+    font-weight:1000;
+    box-shadow:3px 3px 0 #17351b;
+}
+
+.activity-head h3{
+    margin:0;
+    font-size:20px;
+}
+
+.activity-head p{
+    margin:2px 0 0;
+    opacity:.9;
+    font-size:13px;
+}
+
+.section-check{
+    border:3px solid #17351b;
+    background:var(--yellow);
+    color:#17351b;
+    border-radius:11px;
+    padding:8px 13px;
+    font-weight:900;
+    box-shadow:3px 3px 0 #17351b;
+}
+
+.activity-body{
+    padding:22px;
+}
+
+.question{
+    background:#fbfdfb;
+    border:2px solid #d8e8d9;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:17px;
+}
+
+.question:last-child{
+    margin-bottom:0;
+}
+
+.question-title{
+    font-size:17px;
+    font-weight:900;
+    margin-bottom:13px;
+}
+
+.question-number{
+    display:inline-grid;
+    place-items:center;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background:var(--light-leaf);
+    color:#123;
+    font-weight:900;
+    margin-right:6px;
+}
+
+/* =========================
+   CARDS / ANIMAL CARDS
+========================= */
+
+.animal-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:13px;
+}
+
+.creature-card{
+    background:#fff;
+    border:3px solid #203c25;
+    border-radius:15px;
+    padding:12px;
+    text-align:center;
+    box-shadow:4px 4px 0 #d8e8d9;
+    transition:.2s;
+}
+
+.creature-card:hover{
+    transform:translateY(-3px) rotate(-1deg);
+}
+
+.creature-icon{
+    height:80px;
+    display:grid;
+    place-items:center;
+    font-size:48px;
+}
+
+.creature-name{
+    font-weight:900;
+    margin-bottom:9px;
+}
+
+select,
+input[type="text"],
+input[type="number"],
+textarea{
+    width:100%;
+    border:3px solid #263d2a;
+    border-radius:10px;
+    padding:9px 10px;
+    font:inherit;
+    background:#fff;
+    color:var(--text);
+    font-weight:700;
+    outline:none;
+}
+
+select:focus,
+input:focus,
+textarea:focus,
+button:focus{
+    outline:4px solid rgba(66,165,245,.35);
+    outline-offset:2px;
+}
+
+.correct{
+    border-color:var(--correct)!important;
+    background:#e8f5e9!important;
+}
+
+.incorrect{
+    border-color:var(--incorrect)!important;
+    background:#ffebee!important;
+    animation:wiggle .3s ease;
+}
+
+@keyframes wiggle{
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-4px)}
+    75%{transform:translateX(4px)}
+}
+
+.status{
+    display:inline-block;
+    margin-top:7px;
+    font-size:13px;
+    font-weight:900;
+}
+
+.status.good{
+    color:#218838;
+}
+
+.status.bad{
+    color:#c62828;
+}
+
+/* =========================
+   DRAG SORTING
+========================= */
+
+.sort-layout{
+    display:grid;
+    grid-template-columns:1fr 1.5fr;
+    gap:20px;
+}
+
+.drag-bank,
+.sort-box{
+    border:3px dashed #80a887;
+    border-radius:15px;
+    padding:15px;
+    min-height:180px;
+}
+
+.drag-bank h4,
+.sort-box h4{
+    margin:0 0 12px;
+    color:var(--jungle);
+}
+
+.drag-items{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.drag-item{
+    border:3px solid #17351b;
+    background:#fff;
+    border-radius:12px;
+    padding:9px 13px;
+    font-weight:900;
+    cursor:grab;
+    box-shadow:3px 3px 0 #cfe2d1;
+    user-select:none;
+}
+
+.drag-item:active{
+    cursor:grabbing;
+}
+
+.drag-item.selected{
+    background:var(--yellow);
+    transform:scale(1.03);
+}
+
+.drop-groups{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.drop-zone{
+    min-height:160px;
+    border:3px dashed #6fa477;
+    border-radius:14px;
+    padding:12px;
+    transition:.2s;
+}
+
+.drop-zone.over{
+    background:#e8f5e9;
+    transform:scale(1.01);
+}
+
+.drop-zone h4{
+    color:#17351b;
+}
+
+.dropped-item{
+    display:inline-block;
+    background:#fff;
+    border:2px solid #17351b;
+    border-radius:9px;
+    padding:6px 9px;
+    margin:4px;
+    font-weight:800;
+}
+
+/* =========================
+   PLANT CLASSIFICATION
+========================= */
+
+.plant-sort{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.plant-column{
+    min-height:180px;
+    border:3px dashed #6fa477;
+    border-radius:15px;
+    padding:15px;
+    background:#f8fcf8;
+}
+
+.plant-column h4{
+    margin-top:0;
+    color:var(--jungle);
+}
+
+.plant-cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.plant-card{
+    border:3px solid #17351b;
+    background:#fff;
+    border-radius:13px;
+    padding:12px;
+    text-align:center;
+    font-weight:900;
+    cursor:grab;
+    box-shadow:3px 3px 0 #d8e8d9;
+}
+
+.plant-icon{
+    font-size:38px;
+    margin-bottom:5px;
+}
+
+/* =========================
+   SPEECH BUBBLES
+========================= */
+
+.clue-list{
+    display:grid;
+    gap:13px;
+}
+
+.clue-row{
+    display:grid;
+    grid-template-columns:100px 1fr 190px;
+    gap:12px;
+    align-items:center;
+}
+
+.avatar{
+    border-radius:50%;
+    width:65px;
+    height:65px;
+    display:grid;
+    place-items:center;
+    font-size:33px;
+    border:3px solid #17351b;
+    background:#fff8c7;
+}
+
+.speech{
+    background:#fff;
+    border:3px solid #263d2a;
+    border-radius:16px;
+    padding:11px 14px;
+    position:relative;
+    font-weight:700;
+}
+
+.speech:before{
+    content:"";
+    position:absolute;
+    left:-10px;
+    top:20px;
+    border-width:7px 10px 7px 0;
+    border-style:solid;
+    border-color:transparent #263d2a transparent transparent;
+}
+
+/* =========================
+   INVERTEBRATE ANALYSIS
+========================= */
+
+.invertebrate-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-bottom:18px;
+}
+
+.analysis-creature{
+    text-align:center;
+    border:3px solid #263d2a;
+    border-radius:15px;
+    padding:15px;
+    background:#fff;
+}
+
+.analysis-icon{
+    font-size:55px;
+}
+
+.check-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.check-option{
+    border:2px solid #a5bba7;
+    border-radius:11px;
+    padding:10px;
+    background:#fff;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.check-option:hover{
+    background:#f0f7f1;
+}
+
+.check-option input{
+    width:auto;
+    margin-right:7px;
+}
+
+/* =========================
+   REFLECTION
+========================= */
+
+.hint{
+    margin-top:9px;
+    display:none;
+    background:#fff8c7;
+    border:2px solid #d7b900;
+    border-radius:10px;
+    padding:10px;
+    font-size:14px;
+    font-weight:700;
+}
+
+.hint.show{
+    display:block;
+}
+
+.hint-btn{
+    margin-top:8px;
+    border:2px solid #17351b;
+    border-radius:9px;
+    background:#fff;
+    padding:7px 10px;
+    font-weight:800;
+}
+
+/* =========================
+   TRUE FALSE
+========================= */
+
+.tf-options{
+    display:flex;
+    gap:14px;
+}
+
+.tf-btn{
+    flex:1;
+    padding:15px;
+    border:3px solid #17351b;
+    background:#fff;
+    border-radius:13px;
+    font-size:20px;
+    font-weight:1000;
+    box-shadow:4px 4px 0 #d8e8d9;
+    transition:.15s;
+}
+
+.tf-btn:hover{
+    transform:translateY(-2px);
+}
+
+.tf-btn.selected{
+    background:var(--yellow);
+}
+
+.tf-btn.correct{
+    background:#e8f5e9!important;
+}
+
+.tf-btn.incorrect{
+    background:#ffebee!important;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.bottom-actions{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:25px;
+}
+
+.big-check{
+    padding:13px 24px;
+    font-size:17px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:500;
+    background:rgba(10,35,15,.72);
+    display:none;
+    place-items:center;
+    padding:20px;
+}
+
+.modal.show{
+    display:grid;
+    animation:fadeIn .2s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+}
+
+.modal-card{
+    width:min(500px,100%);
+    background:#fff;
+    border:5px solid #17351b;
+    border-radius:24px;
+    padding:25px;
+    text-align:center;
+    box-shadow:10px 10px 0 rgba(0,0,0,.25);
+    animation:pop .3s ease;
+}
+
+@keyframes pop{
+    0%{transform:scale(.7) rotate(-3deg)}
+    70%{transform:scale(1.04) rotate(1deg)}
+    100%{transform:scale(1)}
+}
+
+.modal-emoji{
+    font-size:50px;
+}
+
+.modal-card h2{
+    color:var(--jungle);
+    margin:7px 0;
+    font-size:30px;
+}
+
+.stars{
+    font-size:42px;
+    letter-spacing:5px;
+    margin:8px 0;
+}
+
+.modal-score{
+    font-size:21px;
+    font-weight:900;
+}
+
+.modal-message{
+    color:var(--muted);
+    font-weight:700;
+    margin:12px 0 18px;
+}
+
+.close-modal{
+    background:var(--jungle);
+    color:#fff;
+    border:3px solid #17351b;
+    border-radius:11px;
+    padding:10px 22px;
+    font-weight:900;
+}
+
+/* =========================
+   DECORATION
+========================= */
+
+.leaf-divider{
+    height:10px;
+    margin:10px 0;
+    background:
+      radial-gradient(circle at 10px 5px,#81c784 0 6px,transparent 7px) 0 0/30px 10px;
+    opacity:.5;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+    .animal-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .sort-layout{
+        grid-template-columns:1fr;
+    }
+
+    .clue-row{
+        grid-template-columns:70px 1fr;
+    }
+
+    .clue-row select{
+        grid-column:2;
+    }
+}
+
+@media(max-width:650px){
+    .topbar{
+        position:relative;
+    }
+
+    .nav{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .controls{
+        width:100%;
+        justify-content:flex-start;
+    }
+
+    .hero{
+        padding:14px;
+    }
+
+    .container{
+        padding:5px 14px 40px;
+    }
+
+    .hero-card{
+        padding:20px;
+    }
+
+    .activity-body{
+        padding:14px;
+    }
+
+    .activity-head{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .animal-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .drop-groups,
+    .plant-sort,
+    .invertebrate-grid{
+        grid-template-columns:1fr;
+    }
+
+    .plant-cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .clue-row{
+        grid-template-columns:55px 1fr;
+    }
+
+    .clue-row select{
+        grid-column:1 / -1;
+    }
+
+    .check-grid{
+        grid-template-columns:1fr;
+    }
+
+    .tf-options{
+        flex-direction:column;
+    }
+}
+
+@media(max-width:420px){
+    .animal-grid{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .creature-card{
+        padding:8px;
+    }
+
+    .creature-icon{
+        height:60px;
+        font-size:38px;
+    }
+
+    .brand h1{
+        font-size:18px;
+    }
+
+    .score{
+        width:100%;
+        text-align:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="topbar">
+    <nav class="nav">
+
+        <div class="brand">
+            <div class="brand-icon">🌿</div>
+            <div>
+                <h1>Wild Safari Explorer</h1>
+                <small>Animal & Plant Classification Lab</small>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="score" id="scoreDisplay">
+                ⭐ Score: 0 / 15
+            </div>
+
+            <button class="main-btn" onclick="checkAll()">
+                🔎 Check Answers
+            </button>
+
+            <button class="main-btn reset-btn" onclick="resetAll()">
+                🔄 Reset All
+            </button>
+        </div>
+
+    </nav>
+</header>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+    <div class="hero-card">
+
+        <h2>🌳 Welcome, Young Explorer!</h2>
+
+        <p>
+            Explore the jungle, classify animals and plants,
+            investigate clues, and discover how scientists group living things.
+        </p>
+
+        <div class="instructions">
+            🐾 Drag • Click • Choose • Think • Discover!
+        </div>
+
+    </div>
+</section>
+
+
+<main class="container">
+
+<!-- =========================================================
+     QUESTION 1
+========================================================= -->
+
+<section class="activity" id="section1">
+
+    <div class="activity-head">
+
+        <div class="activity-title">
+
+            <div class="number">1</div>
+
+            <div>
+                <h3>Animal Group Matching</h3>
+                <p>Match each animal to its scientific group.</p>
+            </div>
+
+        </div>
+
+        <button class="section-check" onclick="checkSection(1)">
+            ✓ Check Section
+        </button>
+
+    </div>
+
+    <div class="activity-body">
+
+        <div class="question">
+
+            <div class="question-title">
+                Match each animal with the correct animal group.
+            </div>
+
+            <div class="animal-grid">
+
+                <div class="creature-card">
+                    <div class="creature-icon">🦎</div>
+                    <div class="creature-name">Green Iguana</div>
+                    <select data-answer="reptile" class="q1">
+                        <option value="">Choose group</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>fish</option>
+                    </select>
+                </div>
+
+                <div class="creature-card">
+                    <div class="creature-icon">🦅</div>
+                    <div class="creature-name">Bald Eagle</div>
+                    <select data-answer="bird" class="q1">
+                        <option value="">Choose group</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>fish</option>
+                    </select>
+                </div>
+
+                <div class="creature-card">
+                    <div class="creature-icon">🦈</div>
+                    <div class="creature-name">Great White Shark</div>
+                    <select data-answer="fish" class="q1">
+                        <option value="">Choose group</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>fish</option>
+                    </select>
+                </div>
+
+                <div class="creature-card">
+                    <div class="creature-icon">🐯</div>
+                    <div class="creature-name">Tiger</div>
+                    <select data-answer="mammal" class="q1">
+                        <option value="">Choose group</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>fish</option>
+                    </select>
+                </div>
+
+                <div class="creature-card">
+                    <div class="creature-icon">🐸</div>
+                    <div class="creature-name">Toad</div>
+                    <select data-answer="amphibian" class="q1">
+                        <option value="">Choose group</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>fish</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- =========================================================
+     QUESTION 2
+========================================================= -->
+
+<section class="activity" id="section2">
+
+    <div class="activity-head">
+
+        <div class="activity-title">
+
+            <div class="number">2</div>
+
+            <div>
+                <h3>Animal Group Sorting</h3>
+                <p>Sort the animals into vertebrates and invertebrates.</p>
+            </div>
+
+        </div>
+
+        <button class="section-check" onclick="checkSection(2)">
+            ✓ Check Section
+        </button>
+
+    </div>
+
+    <div class="activity-body">
+
+        <div class="question">
+
+            <div class="question-title">
+                Part A — Drag the animals into the correct group.
+            </div>
+
+            <div class="sort-layout">
+
+                <div class="drag-bank">
+
+                    <h4>🐾 Animal Bank</h4>
+
+                    <div class="drag-items" id="animalBank">
+
+                        <div class="drag-item"
+                             draggable="true"
+                             data-animal="dog"
+                             data-group="vertebrate">
+                            🐶 Dog
+                        </div>
+
+                        <div class="drag-item"
+                             draggable="true"
+                             data-animal="spider"
+                             data-group="invertebrate">
+                            🕷️ Spider
+                        </div>
+
+                        <div class="drag-item"
+                             draggable="true"
+                             data-animal="parrot"
+                             data-group="vertebrate">
+                            🦜 Parrot
+                        </div>
+
+                        <div class="drag-item"
+                             draggable="true"
+                             data-animal="fish"
+                             data-group="vertebrate">
+                            🐟 Fish
+                        </div>
+
+                        <div class="drag-item"
+                             draggable="true"
+                             data-animal="butterfly"
+                             data-group="invertebrate">
+                            🦋 Butterfly
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="drop-groups">
+
+                    <div class="sort-box drop-zone"
+                         data-group="vertebrate">
+
+                        <h4>🦴 Vertebrates</h4>
+
+                    </div>
+
+                    <div class="sort-box drop-zone"
+                         data-group="invertebrate">
+
+                        <h4>🐌 Invertebrates</h4>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="question">
+
+            <div class="question-title">
+                Part B — Could you have sorted them another way?
+            </div>
+
+            <textarea
+                id="reflection"
+                rows="3"
+                placeholder="Explain another way you could sort the animals..."></textarea>
+
+            <button class="hint-btn" onclick="toggleHint('hint2')">
+                💡 Show Hint
+            </button>
+
+            <div class="hint" id="hint2">
+                Hint: Think about things such as where animals live,
+                whether they can fly, or how many legs they have.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     QUESTION 3
+========================================================= -->
+
+<section class="activity" id="section3">
+
+    <div class="activity-head">
+
+        <div class="activity-title">
+
+            <div class="number">3</div>
+
+            <div>
+                <h3>Plant Classification Lab</h3>
+                <p>Sort the plants into flowering and non-flowering plants.</p>
+            </div>
+
+        </div>
+
+        <button class="section-check" onclick="checkSection(3)">
+            ✓ Check Section
+        </button>
+
+    </div>
+
+    <div class="activity-body">
+
+        <div class="question">
+
+            <div class="question-title">
+                Drag each plant into the correct column.
+            </div>
+
+            <div class="plant-cards" id="plantBank">
+
+                <div class="plant-card"
+                     draggable="true"
+                     data-group="nonflowering">
+                    <div class="plant-icon">🌿</div>
+                    Moss
+                </div>
+
+                <div class="plant-card"
+                     draggable="true"
+                     data-group="flowering">
+                    <div class="plant-icon">🌹</div>
+                    Rose
+                </div>
+
+                <div class="plant-card"
+                     draggable="true"
+                     data-group="nonflowering">
+                    <div class="plant-icon">🌱</div>
+                    Fern
+                </div>
+
+                <div class="plant-card"
+                     draggable="true"
+                     data-group="flowering">
+                    <div class="plant-icon">🌷</div>
+                    Lily
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="plant-sort">
+
+            <div class="plant-column drop-zone"
+                 data-group="flowering">
+
+                <h4>🌸 Flowering Plants</h4>
+
+            </div>
+
+            <div class="plant-column drop-zone"
+                 data-group="nonflowering">
+
+                <h4>🌿 Non-Flowering Plants</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     QUESTION 4
+========================================================= -->
+
+<section class="activity" id="section4">
+
+    <div class="activity-head">
+
+        <div class="activity-title">
+
+            <div class="number">4</div>
+
+            <div>
+                <h3>Animal Clue Detective</h3>
+                <p>Read each clue and identify the animal group.</p>
+            </div>
+
+        </div>
+
+        <button class="section-check" onclick="checkSection(4)">
+            ✓ Check Section
+        </button>
+
+    </div>
+
+    <div class="activity-body">
+
+        <div class="question">
+
+            <div class="question-title">
+                Choose the animal group described by each explorer.
+            </div>
+
+            <div class="clue-list">
+
+                <div class="clue-row">
+
+                    <div class="avatar">👦</div>
+
+                    <div class="speech">
+                        <strong>Mo:</strong>
+                        “This animal has a backbone, fins and lives in water.”
+                    </div>
+
+                    <select class="q4" data-answer="fish">
+                        <option value="">Choose...</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>fish</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>invertebrate</option>
+                    </select>
+
+                </div>
+
+
+                <div class="clue-row">
+
+                    <div class="avatar">👧</div>
+
+                    <div class="speech">
+                        <strong>Whitney:</strong>
+                        “This animal has fur on its body and is feeding its young with milk.”
+                    </div>
+
+                    <select class="q4" data-answer="mammal">
+                        <option value="">Choose...</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>fish</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>invertebrate</option>
+                    </select>
+
+                </div>
+
+
+                <div class="clue-row">
+
+                    <div class="avatar">👦</div>
+
+                    <div class="speech">
+                        <strong>Dexter:</strong>
+                        “This animal has feathers, wings and a beak.”
+                    </div>
+
+                    <select class="q4" data-answer="bird">
+                        <option value="">Choose...</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>fish</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>invertebrate</option>
+                    </select>
+
+                </div>
+
+
+                <div class="clue-row">
+
+                    <div class="avatar">👦</div>
+
+                    <div class="speech">
+                        <strong>Max:</strong>
+                        “This animal has a backbone and dry scales on its body.”
+                    </div>
+
+                    <select class="q4" data-answer="reptile">
+                        <option value="">Choose...</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>fish</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>invertebrate</option>
+                    </select>
+
+                </div>
+
+
+                <div class="clue-row">
+
+                    <div class="avatar">👧</div>
+
+                    <div class="speech">
+                        <strong>Rosie:</strong>
+                        “This animal lives on both land and water.”
+                    </div>
+
+                    <select class="q4" data-answer="amphibian">
+                        <option value="">Choose...</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>fish</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>invertebrate</option>
+                    </select>
+
+                </div>
+
+
+                <div class="clue-row">
+
+                    <div class="avatar">👧</div>
+
+                    <div class="speech">
+                        <strong>Annie:</strong>
+                        “This animal does not have a spine.”
+                    </div>
+
+                    <select class="q4" data-answer="invertebrate">
+                        <option value="">Choose...</option>
+                        <option>mammal</option>
+                        <option>reptile</option>
+                        <option>fish</option>
+                        <option>amphibian</option>
+                        <option>bird</option>
+                        <option>invertebrate</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     QUESTION 5
+========================================================= -->
+
+<section class="activity" id="section5">
+
+    <div class="activity-head">
+
+        <div class="activity-title">
+
+            <div class="number">5</div>
+
+            <div>
+                <h3>Invertebrate Investigation</h3>
+                <p>Study the animals and discover what they have in common.</p>
+            </div>
+
+        </div>
+
+        <button class="section-check" onclick="checkSection(5)">
+            ✓ Check Section
+        </button>
+
+    </div>
+
+    <div class="activity-body">
+
+        <div class="invertebrate-grid">
+
+            <div class="analysis-creature">
+                <div class="analysis-icon">🕷️</div>
+                <strong>Spider</strong>
+            </div>
+
+            <div class="analysis-creature">
+                <div class="analysis-icon">🐞</div>
+                <strong>Ladybird</strong>
+            </div>
+
+            <div class="analysis-creature">
+                <div class="analysis-icon">🪱</div>
+                <strong>Worm</strong>
+            </div>
+
+        </div>
+
+
+        <div class="question">
+
+            <div class="question-title">
+                Part A — What group do these animals belong to?
+            </div>
+
+            <select id="q5group" data-answer="invertebrates">
+                <option value="">Choose group...</option>
+                <option>mammals</option>
+                <option>reptiles</option>
+                <option>birds</option>
+                <option>fish</option>
+                <option>amphibians</option>
+                <option>invertebrates</option>
+            </select>
+
+        </div>
+
+
+        <div class="question">
+
+            <div class="question-title">
+                Part B — Which feature do they all share?
+            </div>
+
+            <select id="q5similar" data-answer="no-backbone">
+                <option value="">Choose...</option>
+                <option value="backbone">They all have a backbone.</option>
+                <option value="no-backbone">They have no backbone or spine.</option>
+                <option value="feathers">They all have feathers.</option>
+                <option value="fur">They all have fur.</option>
+            </select>
+
+        </div>
+
+
+        <div class="question">
+
+            <div class="question-title">
+                Part C — Choose three differences you could use to describe them.
+            </div>
+
+            <div class="check-grid">
+
+                <label class="check-option">
+                    <input type="checkbox" class="q5diff" value="legs">
+                    Number of legs
+                </label>
+
+                <label class="check-option">
+                    <input type="checkbox" class="q5diff" value="wings">
+                    Whether they have wings
+                </label>
+
+                <label class="check-option">
+                    <input type="checkbox" class="q5diff" value="body">
+                    Body shape or segments
+                </label>
+
+                <label class="check-option">
+                    <input type="checkbox" class="q5diff" value="habitat">
+                    Habitat
+                </label>
+
+                <label class="check-option">
+                    <input type="checkbox" class="q5diff" value="colour">
+                    Colour
+                </label>
+
+                <label class="check-option">
+                    <input type="checkbox" class="q5diff" value="food">
+                    What they eat
+                </label>
+
+            </div>
+
+            <p style="color:#58705b;font-weight:700;font-size:14px;">
+                Select any three sensible differences.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     QUESTION 6
+========================================================= -->
+
+<section class="activity" id="section6">
+
+    <div class="activity-head">
+
+        <div class="activity-title">
+
+            <div class="number">6</div>
+
+            <div>
+                <h3>True or False — Plant Grouping</h3>
+                <p>Think carefully like a scientist.</p>
+            </div>
+
+        </div>
+
+        <button class="section-check" onclick="checkSection(6)">
+            ✓ Check Section
+        </button>
+
+    </div>
+
+    <div class="activity-body">
+
+        <div class="question">
+
+            <div class="question-title">
+                🌱 “Plants can <strong>only</strong> be grouped by their leaf colour.”
+            </div>
+
+            <div class="tf-options">
+
+                <button
+                    class="tf-btn"
+                    data-value="true"
+                    onclick="selectTF(this)">
+                    TRUE
+                </button>
+
+                <button
+                    class="tf-btn"
+                    data-value="false"
+                    onclick="selectTF(this)">
+                    FALSE
+                </button>
+
+            </div>
+
+            <div id="tfExplanation"
+                 style="margin-top:14px;font-weight:700;color:#58705b;">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<div class="bottom-actions">
+
+    <button class="main-btn big-check" onclick="checkAll()">
+        🌟 Check My Safari Adventure
+    </button>
+
+    <button class="main-btn reset-btn big-check" onclick="resetAll()">
+        🔄 Start Again
+    </button>
+
+</div>
+
+</main>
+
+
+<!-- =========================
+     FEEDBACK MODAL
+========================= -->
+
+<div class="modal" id="resultModal">
+
+    <div class="modal-card">
+
+        <div class="modal-emoji" id="modalEmoji">🦁</div>
+
+        <h2 id="modalTitle">Safari Complete!</h2>
+
+        <div class="stars" id="modalStars">
+            ⭐⭐⭐
+        </div>
+
+        <div class="modal-score" id="modalScore">
+            Score: 15 / 15
+        </div>
+
+        <div class="modal-message" id="modalMessage">
+            Amazing explorer!
+        </div>
+
+        <button class="close-modal" onclick="closeModal()">
+            🐾 Continue Exploring
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const TOTAL_QUESTIONS = 15;
+
+let sectionScores = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0
+};
+
+let checkedSections = new Set();
+
+let selectedTF = null;
+
+
+/* =========================================================
+   OPTIONAL AUDIO
+========================================================= */
+
+function playTone(correct){
+
+    try{
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if(!AudioContext) return;
+
+        const ctx = new AudioContext();
+
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+
+        oscillator.frequency.value =
+            correct ? 660 : 220;
+
+        oscillator.type = "sine";
+
+        gain.gain.setValueAtTime(
+            .0001,
+            ctx.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            .12,
+            ctx.currentTime + .02
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            .0001,
+            ctx.currentTime + .25
+        );
+
+        oscillator.start();
+
+        oscillator.stop(
+            ctx.currentTime + .27
+        );
+
+    }catch(e){}
+
+}
+
+
+/* =========================================================
+   SCORE
+========================================================= */
+
+function updateScore(){
+
+    let total = Object.values(sectionScores)
+        .reduce((a,b)=>a+b,0);
+
+    document.getElementById("scoreDisplay").textContent =
+        `⭐ Score: ${total} / ${TOTAL_QUESTIONS} Stars`;
+}
+
+
+/* =========================================================
+   GENERIC INPUT CHECKER
+========================================================= */
+
+function checkInput(input){
+
+    const answer =
+        String(input.dataset.answer || "")
+        .trim()
+        .toLowerCase();
+
+    const value =
+        String(input.value || "")
+        .trim()
+        .toLowerCase();
+
+    input.classList.remove("correct","incorrect");
+
+    if(value === answer){
+
+        input.classList.add("correct");
+
+        return true;
+
+    }else{
+
+        input.classList.add("incorrect");
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   QUESTION 1
+========================================================= */
+
+function checkQuestion1(){
+
+    const inputs =
+        document.querySelectorAll(".q1");
+
+    let score = 0;
+
+    inputs.forEach(input=>{
+
+        if(checkInput(input)){
+            score++;
+        }
+
+    });
+
+    return score;
+}
+
+
+/* =========================================================
+   DRAG AND DROP
+========================================================= */
+
+let draggedItem = null;
+
+document.addEventListener("dragstart",function(e){
+
+    if(
+        e.target.classList.contains("drag-item") ||
+        e.target.classList.contains("plant-card")
+    ){
+
+        draggedItem = e.target;
+
+        e.target.style.opacity = ".55";
+
+        e.dataTransfer.setData(
+            "text/plain",
+            "drag"
+        );
+    }
+
+});
+
+
+document.addEventListener("dragend",function(e){
+
+    if(
+        e.target.classList.contains("drag-item") ||
+        e.target.classList.contains("plant-card")
+    ){
+
+        e.target.style.opacity = "1";
+
+    }
+
+});
+
+
+document.querySelectorAll(".drop-zone")
+.forEach(zone=>{
+
+    zone.addEventListener("dragover",function(e){
+
+        e.preventDefault();
+
+        zone.classList.add("over");
+
+    });
+
+    zone.addEventListener("dragleave",function(){
+
+        zone.classList.remove("over");
+
+    });
+
+    zone.addEventListener("drop",function(e){
+
+        e.preventDefault();
+
+        zone.classList.remove("over");
+
+        if(!draggedItem) return;
+
+        zone.appendChild(draggedItem);
+
+        draggedItem.classList.remove("selected");
+
+        draggedItem = null;
+
+    });
+
+});
+
+
+/* =========================================================
+   CLICK TO MOVE
+   Mobile / Touch fallback
+========================================================= */
+
+document.addEventListener("click",function(e){
+
+    const item =
+        e.target.closest(".drag-item,.plant-card");
+
+    if(!item) return;
+
+    if(
+        item.parentElement.classList.contains("drop-zone") ||
+        item.parentElement.id === "animalBank" ||
+        item.parentElement.id === "plantBank"
+    ){
+
+        const allSameType =
+            item.classList.contains("plant-card")
+            ? document.querySelectorAll(".plant-column")
+            : document.querySelectorAll(".sort-box");
+
+        item.classList.toggle("selected");
+
+        if(item.classList.contains("selected")){
+
+            allSameType.forEach(zone=>{
+
+                zone.onclick = function(){
+
+                    if(item.classList.contains("selected")){
+
+                        zone.appendChild(item);
+
+                        item.classList.remove(
+                            "selected"
+                        );
+
+                    }
+
+                };
+
+            });
+
+        }
+
+    }
+
+});
+
+
+/* =========================================================
+   QUESTION 2
+========================================================= */
+
+function checkQuestion2(){
+
+    let score = 0;
+
+    const items =
+        document.querySelectorAll("#section2 .drag-item");
+
+    items.forEach(item=>{
+
+        const parent =
+            item.closest(".drop-zone");
+
+        if(!parent){
+
+            item.classList.add("incorrect");
+
+            return;
+
+        }
+
+        const expected =
+            item.dataset.group;
+
+        const actual =
+            parent.dataset.group;
+
+        if(expected === actual){
+
+            item.classList.remove("incorrect");
+            item.classList.add("correct");
+
+            score++;
+
+        }else{
+
+            item.classList.remove("correct");
+            item.classList.add("incorrect");
+
+        }
+
+    });
+
+    return score;
+
+}
+
+
+/* =========================================================
+   QUESTION 3
+========================================================= */
+
+function checkQuestion3(){
+
+    let score = 0;
+
+    const items =
+        document.querySelectorAll(".plant-card");
+
+    items.forEach(item=>{
+
+        const parent =
+            item.closest(".plant-column");
+
+        if(!parent){
+
+            item.classList.add("incorrect");
+
+            return;
+
+        }
+
+        if(
+            item.dataset.group ===
+            parent.dataset.group
+        ){
+
+            item.classList.remove("incorrect");
+            item.classList.add("correct");
+
+            score++;
+
+        }else{
+
+            item.classList.remove("correct");
+            item.classList.add("incorrect");
+
+        }
+
+    });
+
+    return score;
+
+}
+
+
+/* =========================================================
+   QUESTION 4
+========================================================= */
+
+function checkQuestion4(){
+
+    const inputs =
+        document.querySelectorAll(".q4");
+
+    let score = 0;
+
+    inputs.forEach(input=>{
+
+        if(checkInput(input)){
+            score++;
+        }
+
+    });
+
+    return score;
+
+}
+
+
+/* =========================================================
+   QUESTION 5
+========================================================= */
+
+function checkQuestion5(){
+
+    let score = 0;
+
+    const group =
+        document.getElementById("q5group");
+
+    const similar =
+        document.getElementById("q5similar");
+
+    if(checkInput(group)) score++;
+
+    if(checkInput(similar)) score++;
+
+    /*
+       For Part C, any three sensible differences
+       are accepted. This deliberately makes the
+       activity more exploratory rather than requiring
+       one rigid combination.
+    */
+
+    const differences =
+        document.querySelectorAll(".q5diff:checked");
+
+    const allDiff =
+        document.querySelectorAll(".q5diff");
+
+    allDiff.forEach(box=>{
+        box.parentElement.classList.remove(
+            "correct",
+            "incorrect"
+        );
+    });
+
+    if(differences.length === 3){
+
+        differences.forEach(box=>{
+            box.parentElement.classList.add("correct");
+        });
+
+        score++;
+
+    }else{
+
+        allDiff.forEach(box=>{
+            box.parentElement.classList.add("incorrect");
+        });
+
+    }
+
+    return score;
+
+}
+
+
+/* =========================================================
+   QUESTION 6
+========================================================= */
+
+function selectTF(button){
+
+    document.querySelectorAll(".tf-btn")
+    .forEach(btn=>{
+        btn.classList.remove(
+            "selected",
+            "correct",
+            "incorrect"
+        );
+    });
+
+    button.classList.add("selected");
+
+    selectedTF = button.dataset.value;
+
+    document.getElementById("tfExplanation")
+        .textContent = "";
+
+}
+
+
+function checkQuestion6(){
+
+    const buttons =
+        document.querySelectorAll(".tf-btn");
+
+    buttons.forEach(btn=>{
+        btn.classList.remove(
+            "correct",
+            "incorrect"
+        );
+    });
+
+    if(!selectedTF){
+
+        buttons.forEach(btn=>{
+            btn.classList.add("incorrect");
+        });
+
+        return 0;
+
+    }
+
+    const selected =
+        document.querySelector(
+            `.tf-btn[data-value="${selectedTF}"]`
+        );
+
+    if(selectedTF === "false"){
+
+        selected.classList.add("correct");
+
+        document.getElementById("tfExplanation")
+            .textContent =
+            "✓ Correct! Plants can be grouped in many ways, such as flowering and non-flowering plants, habitat, size, leaf shape and more.";
+
+        return 1;
+
+    }else{
+
+        selected.classList.add("incorrect");
+
+        document.getElementById("tfExplanation")
+            .textContent =
+            "Not quite. Plants can be grouped using many characteristics, not just leaf colour.";
+
+        return 0;
+
+    }
+
+}
+
+
+/* =========================================================
+   SECTION CHECK
+========================================================= */
+
+function checkSection(section){
+
+    let score = 0;
+
+    switch(section){
+
+        case 1:
+            score = checkQuestion1();
+            break;
+
+        case 2:
+            score = checkQuestion2();
+            break;
+
+        case 3:
+            score = checkQuestion3();
+            break;
+
+        case 4:
+            score = checkQuestion4();
+            break;
+
+        case 5:
+            score = checkQuestion5();
+            break;
+
+        case 6:
+            score = checkQuestion6();
+            break;
+
+    }
+
+    sectionScores[section] = score;
+
+    checkedSections.add(section);
+
+    updateScore();
+
+    playTone(
+        score > 0
+    );
+
+}
+
+
+/* =========================================================
+   CHECK EVERYTHING
+========================================================= */
+
+function checkAll(){
+
+    checkSection(1);
+    checkSection(2);
+    checkSection(3);
+    checkSection(4);
+    checkSection(5);
+    checkSection(6);
+
+    const total =
+        Object.values(sectionScores)
+        .reduce((a,b)=>a+b,0);
+
+    showResult(total);
+
+}
+
+
+/* =========================================================
+   RESULT MODAL
+========================================================= */
+
+function showResult(score){
+
+    const modal =
+        document.getElementById("resultModal");
+
+    const stars =
+        document.getElementById("modalStars");
+
+    const title =
+        document.getElementById("modalTitle");
+
+    const message =
+        document.getElementById("modalMessage");
+
+    const emoji =
+        document.getElementById("modalEmoji");
+
+    document.getElementById("modalScore")
+        .textContent =
+        `Score: ${score} / ${TOTAL_QUESTIONS}`;
+
+    const percentage =
+        Math.round(
+            (score / TOTAL_QUESTIONS) * 100
+        );
+
+    let starCount;
+    let titleText;
+    let messageText;
+    let emojiText;
+
+    if(percentage >= 90){
+
+        starCount = 3;
+        titleText = "Jungle Genius! 🌟";
+        messageText =
+            "Amazing work! You classified living things like a real scientist.";
+        emojiText = "🦁";
+
+    }else if(percentage >= 65){
+
+        starCount = 2;
+        titleText = "Great Explorer! 🌿";
+        messageText =
+            "Fantastic effort! Keep exploring and your science skills will grow.";
+        emojiText = "🐯";
+
+    }else{
+
+        starCount = 1;
+        titleText = "Keep Exploring! 🐾";
+        messageText =
+            "Every scientist makes discoveries by trying again. Have another go!";
+        emojiText = "🐢";
+
+    }
+
+    stars.textContent =
+        "⭐".repeat(starCount) +
+        "☆".repeat(3-starCount);
+
+    title.textContent = titleText;
+    message.textContent = messageText;
+    emoji.textContent = emojiText;
+
+    modal.classList.add("show");
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal(){
+
+    document.getElementById("resultModal")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   HINT
+========================================================= */
+
+function toggleHint(id){
+
+    document.getElementById(id)
+        .classList.toggle("show");
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetAll(){
+
+    /*
+       Reset normal selects and inputs
+    */
+
+    document.querySelectorAll(
+        "select,input[type='text'],input[type='number'],textarea"
+    ).forEach(el=>{
+
+        el.value = "";
+
+        el.classList.remove(
+            "correct",
+            "incorrect"
+        );
+
+    });
+
+
+    /*
+       Reset checkboxes
+    */
+
+    document.querySelectorAll(
+        "input[type='checkbox']"
+    ).forEach(box=>{
+
+        box.checked = false;
+
+        box.parentElement.classList.remove(
+            "correct",
+            "incorrect"
+        );
+
+    });
+
+
+    /*
+       Reset animal cards
+    */
+
+    const animalBank =
+        document.getElementById("animalBank");
+
+    document.querySelectorAll(
+        "#section2 .drag-item"
+    ).forEach(item=>{
+
+        animalBank.appendChild(item);
+
+        item.classList.remove(
+            "correct",
+            "incorrect",
+            "selected"
+        );
+
+    });
+
+
+    /*
+       Reset plants
+    */
+
+    const plantBank =
+        document.getElementById("plantBank");
+
+    document.querySelectorAll(
+        ".plant-card"
+    ).forEach(item=>{
+
+        plantBank.appendChild(item);
+
+        item.classList.remove(
+            "correct",
+            "incorrect",
+            "selected"
+        );
+
+    });
+
+
+    /*
+       Reset True / False
+    */
+
+    document.querySelectorAll(".tf-btn")
+        .forEach(btn=>{
+
+            btn.classList.remove(
+                "selected",
+                "correct",
+                "incorrect"
+            );
+
+        });
+
+    selectedTF = null;
+
+    document.getElementById("tfExplanation")
+        .textContent = "";
+
+
+    /*
+       Reset score
+    */
+
+    sectionScores = {
+        1:0,
+        2:0,
+        3:0,
+        4:0,
+        5:0,
+        6:0
+    };
+
+    checkedSections.clear();
+
+    updateScore();
+
+    document.querySelectorAll(".hint")
+        .forEach(hint=>{
+            hint.classList.remove("show");
+        });
+
+    closeModal();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   KEYBOARD ACCESSIBILITY FOR DRAG ITEMS
+========================================================= */
+
+document.querySelectorAll(
+    ".drag-item,.plant-card"
+).forEach(item=>{
+
+    item.setAttribute("tabindex","0");
+
+    item.addEventListener(
+        "keydown",
+        function(e){
+
+            if(e.key === "Enter" || e.key === " "){
+
+                e.preventDefault();
+
+                item.click();
+
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   CLOSE MODAL BY CLICKING OUTSIDE
+========================================================= */
+
+document.getElementById("resultModal")
+.addEventListener("click",function(e){
+
+    if(e.target === this){
+        closeModal();
+    }
+
+});
+
+
+/* =========================================================
+   ESC CLOSE
+========================================================= */
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key === "Escape"){
+        closeModal();
+    }
+
+});
+
+
+/* =========================================================
+   INITIAL SCORE
+========================================================= */
+
+updateScore();
+
+</script>
+
+</body>
+</html>

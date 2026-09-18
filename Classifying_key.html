@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animal Classification Key — Year 4</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #2563eb;
+    --teal: #0d9488;
+    --green: #16a34a;
+    --red: #dc2626;
+    --yellow: #facc15;
+    --purple: #7c3aed;
+    --pink: #ec4899;
+    --dark: #172033;
+    --muted: #64748b;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, "Comic Sans MS", sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+.topbar {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.progress {
+    width: 180px;
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 7%;
+    background: var(--blue);
+    transition: width .3s ease;
+}
+
+.slide-count {
+    font-weight: 700;
+    color: var(--muted);
+}
+
+/* MAIN */
+
+.deck {
+    max-width: 1150px;
+    margin: auto;
+    padding: 35px 25px 110px;
+}
+
+.slide {
+    display: none;
+    animation: fade .3s ease;
+}
+
+.slide.active {
+    display: block;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.slide-number {
+    color: var(--blue);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: .85rem;
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    margin: 10px 0;
+}
+
+h2 {
+    font-size: clamp(1.7rem, 4vw, 2.7rem);
+    margin: 8px 0;
+}
+
+h3 {
+    font-size: 1.4rem;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 1.2rem;
+}
+
+.card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 28px;
+    margin: 20px 0;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, .07);
+}
+
+.center {
+    text-align: center;
+}
+
+.big-question {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin: 25px 0;
+}
+
+.callout {
+    background: #eff6ff;
+    border-left: 6px solid var(--blue);
+    padding: 20px;
+    border-radius: 14px;
+    font-size: 1.2rem;
+    margin: 20px 0;
+}
+
+.remember {
+    background: #fefce8;
+    border: 2px solid #fde047;
+    padding: 20px;
+    border-radius: 18px;
+    font-weight: 700;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+/* ANIMAL CARDS */
+
+.animal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.animal {
+    background: white;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, .07);
+}
+
+.animal:hover {
+    transform: translateY(-4px);
+    border-color: var(--blue);
+}
+
+.animal .emoji {
+    font-size: 3.5rem;
+}
+
+.animal-name {
+    font-weight: 800;
+    margin-top: 8px;
+}
+
+/* GROUP CARDS */
+
+.group-card {
+    background: white;
+    border-radius: 20px;
+    padding: 22px;
+    border-top: 7px solid var(--blue);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, .07);
+}
+
+.group-card .emoji {
+    font-size: 3rem;
+}
+
+.group-card h3 {
+    margin-bottom: 8px;
+}
+
+/* BUTTONS */
+
+button {
+    font: inherit;
+}
+
+.btn {
+    border: none;
+    border-radius: 14px;
+    padding: 13px 22px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.primary {
+    background: var(--blue);
+    color: white;
+}
+
+.secondary {
+    background: #e2e8f0;
+    color: var(--dark);
+}
+
+.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.option {
+    padding: 18px;
+    border: 3px solid #e2e8f0;
+    background: white;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.option:hover {
+    border-color: var(--blue);
+}
+
+.option.correct {
+    background: #dcfce7;
+    border-color: var(--green);
+}
+
+.option.wrong {
+    background: #fee2e2;
+    border-color: var(--red);
+}
+
+.feedback {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.feedback.show {
+    display: block;
+}
+
+.feedback.correct {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.feedback.wrong {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* MATCHING */
+
+.match-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: center;
+    margin: 12px 0;
+}
+
+.animal-label {
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 14px;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+select,
+input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    border: 3px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: white;
+}
+
+select:focus,
+input:focus {
+    outline: none;
+    border-color: var(--blue);
+}
+
+/* CLASSIFICATION TREE */
+
+.tree {
+    max-width: 850px;
+    margin: auto;
+    text-align: center;
+}
+
+.tree-start {
+    background: #e0f2fe;
+    border: 3px solid #38bdf8;
+    padding: 18px;
+    border-radius: 16px;
+    font-weight: 800;
+}
+
+.tree-question {
+    margin: 18px auto;
+    background: white;
+    border: 3px solid #94a3b8;
+    padding: 22px;
+    border-radius: 18px;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.tree-branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.branch {
+    padding: 25px;
+    border-radius: 18px;
+    font-weight: 800;
+}
+
+.yes {
+    background: #dcfce7;
+    border: 3px solid var(--green);
+}
+
+.no {
+    background: #fef3c7;
+    border: 3px solid #f59e0b;
+}
+
+/* SORTING */
+
+.sort-zone {
+    min-height: 170px;
+    border: 3px dashed #94a3b8;
+    border-radius: 20px;
+    padding: 18px;
+    background: #f8fafc;
+}
+
+.sort-zone h3 {
+    text-align: center;
+}
+
+.sort-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.sort-item {
+    padding: 15px 18px;
+    background: white;
+    border: 3px solid #cbd5e1;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.sort-item.selected {
+    border-color: var(--purple);
+    background: #ede9fe;
+}
+
+.sort-item.correct-sort {
+    border-color: var(--green);
+    background: #dcfce7;
+}
+
+.sort-item.wrong-sort {
+    border-color: var(--red);
+    background: #fee2e2;
+}
+
+/* FEATURE BOX */
+
+.feature {
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.feature .emoji {
+    font-size: 2.8rem;
+}
+
+/* FOOTER NAV */
+
+.navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    z-index: 20;
+}
+
+.navbar .btn {
+    min-width: 130px;
+}
+
+.navbar .next {
+    background: var(--blue);
+    color: white;
+}
+
+/* SCORE */
+
+.score-box {
+    text-align: center;
+    background: white;
+    border-radius: 25px;
+    padding: 35px;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, .08);
+}
+
+.score-number {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--blue);
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 800px) {
+
+    .animal-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .three-column,
+    .two-column,
+    .option-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .progress {
+        width: 100px;
+    }
+
+    .deck {
+        padding: 25px 15px 110px;
+    }
+}
+
+@media(max-width: 500px) {
+
+    .animal-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .animal .emoji {
+        font-size: 2.7rem;
+    }
+
+    .navbar .btn {
+        min-width: 100px;
+        padding: 11px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="logo">🐾 Animal Classification</div>
+
+    <div class="progress-wrap">
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="slide-count" id="slideCount">1 / 14</div>
+    </div>
+</header>
+
+
+<main class="deck">
+
+<!-- ========================================================= -->
+<!-- SLIDE 1 -->
+<!-- ========================================================= -->
+
+<section class="slide active">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 1</div>
+        <h1>🐾 Meet the Animal Groups</h1>
+        <p class="subtitle">How can we classify animals?</p>
+    </div>
+
+    <div class="card center">
+
+        <p class="big-question">
+            Scientists group animals by looking at their <strong>features</strong>.
+        </p>
+
+        <div class="two-column">
+
+            <div class="group-card">
+                <div class="emoji">🦴</div>
+                <h3>Vertebrates</h3>
+                <p>Animals with a backbone.</p>
+            </div>
+
+            <div class="group-card">
+                <div class="emoji">🐌</div>
+                <h3>Invertebrates</h3>
+                <p>Animals without a backbone.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h2 class="center">🤔 Think!</h2>
+
+        <p class="center">
+            What do you notice about these animals?
+        </p>
+
+        <div class="animal-grid">
+
+            <div class="animal" onclick="animalGuess(this,'vertebrate')">
+                <div class="emoji">🐶</div>
+                <div class="animal-name">Dog</div>
+            </div>
+
+            <div class="animal" onclick="animalGuess(this,'vertebrate')">
+                <div class="emoji">🐟</div>
+                <div class="animal-name">Fish</div>
+            </div>
+
+            <div class="animal" onclick="animalGuess(this,'invertebrate')">
+                <div class="emoji">🦋</div>
+                <div class="animal-name">Butterfly</div>
+            </div>
+
+            <div class="animal" onclick="animalGuess(this,'invertebrate')">
+                <div class="emoji">🐙</div>
+                <div class="animal-name">Octopus</div>
+            </div>
+
+        </div>
+
+        <div id="animalFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 2 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 2</div>
+        <h1>🔎 What Is a Classification Key?</h1>
+    </div>
+
+    <div class="card">
+
+        <p class="big-question">
+            A <strong>classification key</strong> is a tool that helps us
+            identify and group living things.
+        </p>
+
+        <p>
+            It uses a series of simple questions.
+        </p>
+
+        <div class="tree">
+
+            <div class="tree-start">
+                🐾 START: Look at the animal
+            </div>
+
+            <div class="tree-question">
+                Does the animal have a backbone?
+            </div>
+
+            <div class="tree-branches">
+
+                <div class="branch yes">
+                    YES 🦴
+                    <br><br>
+                    VERTEBRATE
+                </div>
+
+                <div class="branch no">
+                    NO 🚫🦴
+                    <br><br>
+                    INVERTEBRATE
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>💭 Which question would help us sort animals?</h2>
+
+        <div class="option-grid">
+
+            <button class="option"
+                onclick="checkOption(this,false,'keyFeedback')">
+                🎨 What colour is it?
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,true,'keyFeedback')">
+                🦴 Does it have a backbone?
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,false,'keyFeedback')">
+                😊 Is it cute?
+            </button>
+
+        </div>
+
+        <div id="keyFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 3 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 3</div>
+        <h1>🦴 Vertebrates</h1>
+        <p class="subtitle">What is a vertebrate?</p>
+    </div>
+
+    <div class="card center">
+
+        <div style="font-size:5rem;">🦴</div>
+
+        <p class="big-question">
+            A <strong>vertebrate</strong> is an animal that has a
+            <strong>backbone</strong>.
+        </p>
+
+        <p>
+            Vertebrates have an internal skeleton with a backbone.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2 class="center">The 5 Main Groups</h2>
+
+        <div class="three-column">
+
+            <div class="feature">
+                <div class="emoji">🐟</div>
+                <strong>Fish</strong>
+            </div>
+
+            <div class="feature">
+                <div class="emoji">🐸</div>
+                <strong>Amphibians</strong>
+            </div>
+
+            <div class="feature">
+                <div class="emoji">🦎</div>
+                <strong>Reptiles</strong>
+            </div>
+
+            <div class="feature">
+                <div class="emoji">🐦</div>
+                <strong>Birds</strong>
+            </div>
+
+            <div class="feature">
+                <div class="emoji">🐶</div>
+                <strong>Mammals</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>👉 Tap the animals that have backbones.</h2>
+
+        <div class="animal-grid">
+
+            <div class="animal" onclick="toggleBackbone(this,true)">
+                <div class="emoji">🐶</div>
+                <div class="animal-name">Dog</div>
+            </div>
+
+            <div class="animal" onclick="toggleBackbone(this,false)">
+                <div class="emoji">🦋</div>
+                <div class="animal-name">Butterfly</div>
+            </div>
+
+            <div class="animal" onclick="toggleBackbone(this,true)">
+                <div class="emoji">🐟</div>
+                <div class="animal-name">Fish</div>
+            </div>
+
+            <div class="animal" onclick="toggleBackbone(this,false)">
+                <div class="emoji">🐙</div>
+                <div class="animal-name">Octopus</div>
+            </div>
+
+        </div>
+
+        <div id="backboneFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 4 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 4</div>
+        <h1>🐟 The 5 Vertebrate Groups</h1>
+        <p class="subtitle">Can you match the animal to its group?</p>
+    </div>
+
+    <div class="card">
+
+        <div class="two-column">
+
+            <div class="group-card">
+                <div class="emoji">🐟</div>
+                <h3>Fish</h3>
+                <p>Live mainly in water.</p>
+            </div>
+
+            <div class="group-card">
+                <div class="emoji">🐸</div>
+                <h3>Amphibians</h3>
+                <p>Live on land and in water.</p>
+            </div>
+
+            <div class="group-card">
+                <div class="emoji">🦎</div>
+                <h3>Reptiles</h3>
+                <p>Have dry, scaly skin.</p>
+            </div>
+
+            <div class="group-card">
+                <div class="emoji">🐦</div>
+                <h3>Birds</h3>
+                <p>Have feathers.</p>
+            </div>
+
+            <div class="group-card">
+                <div class="emoji">🐶</div>
+                <h3>Mammals</h3>
+                <p>Have hair or fur and feed milk to their young.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>🧩 Match the animals</h2>
+
+        <div class="match-row">
+            <div class="animal-label">🐸 Frog</div>
+            <select data-answer="Amphibian">
+                <option value="">Choose...</option>
+                <option>Fish</option>
+                <option>Amphibian</option>
+                <option>Reptile</option>
+                <option>Bird</option>
+                <option>Mammal</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🦁 Lion</div>
+            <select data-answer="Mammal">
+                <option value="">Choose...</option>
+                <option>Fish</option>
+                <option>Amphibian</option>
+                <option>Reptile</option>
+                <option>Bird</option>
+                <option>Mammal</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🐍 Snake</div>
+            <select data-answer="Reptile">
+                <option value="">Choose...</option>
+                <option>Fish</option>
+                <option>Amphibian</option>
+                <option>Reptile</option>
+                <option>Bird</option>
+                <option>Mammal</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🐟 Shark</div>
+            <select data-answer="Fish">
+                <option value="">Choose...</option>
+                <option>Fish</option>
+                <option>Amphibian</option>
+                <option>Reptile</option>
+                <option>Bird</option>
+                <option>Mammal</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🦅 Eagle</div>
+            <select data-answer="Bird">
+                <option value="">Choose...</option>
+                <option>Fish</option>
+                <option>Amphibian</option>
+                <option>Reptile</option>
+                <option>Bird</option>
+                <option>Mammal</option>
+            </select>
+        </div>
+
+        <br>
+
+        <button class="btn primary" onclick="checkMatching()">
+            Check Answers
+        </button>
+
+        <div id="matchingFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 5 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 5</div>
+        <h1>🐌 Invertebrates</h1>
+        <p class="subtitle">What is an invertebrate?</p>
+    </div>
+
+    <div class="card center">
+
+        <div style="font-size:5rem;">🐌</div>
+
+        <p class="big-question">
+            An <strong>invertebrate</strong> is an animal that
+            <strong>does not have a backbone</strong>.
+        </p>
+
+        <div class="remember">
+            🚫🦴 No backbone = Invertebrate
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Examples</h2>
+
+        <div class="animal-grid">
+
+            <div class="animal">
+                <div class="emoji">🦋</div>
+                <div class="animal-name">Butterfly</div>
+            </div>
+
+            <div class="animal">
+                <div class="emoji">🕷️</div>
+                <div class="animal-name">Spider</div>
+            </div>
+
+            <div class="animal">
+                <div class="emoji">🐌</div>
+                <div class="animal-name">Snail</div>
+            </div>
+
+            <div class="animal">
+                <div class="emoji">🪱</div>
+                <div class="animal-name">Earthworm</div>
+            </div>
+
+            <div class="animal">
+                <div class="emoji">🐙</div>
+                <div class="animal-name">Octopus</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>👉 Which animals are invertebrates?</h2>
+
+        <div class="option-grid">
+
+            <button class="option"
+                onclick="checkOption(this,true,'invFeedback')">
+                🦋 Butterfly
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,false,'invFeedback')">
+                🐶 Dog
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,true,'invFeedback')">
+                🐙 Octopus
+            </button>
+
+        </div>
+
+        <div id="invFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 6 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 6</div>
+        <h1>🐜 Types of Invertebrates</h1>
+        <p class="subtitle">Invertebrates can look very different!</p>
+    </div>
+
+    <div class="two-column">
+
+        <div class="group-card">
+            <div class="emoji">🦋</div>
+            <h3>Insects</h3>
+            <ul>
+                <li>6 legs</li>
+                <li>3 main body parts</li>
+                <li>Example: butterfly</li>
+            </ul>
+        </div>
+
+        <div class="group-card">
+            <div class="emoji">🕷️</div>
+            <h3>Arachnids</h3>
+            <ul>
+                <li>8 legs</li>
+                <li>Example: spider</li>
+            </ul>
+        </div>
+
+        <div class="group-card">
+            <div class="emoji">🐌</div>
+            <h3>Molluscs</h3>
+            <ul>
+                <li>Soft bodies</li>
+                <li>Some have shells</li>
+                <li>Example: snail</li>
+            </ul>
+        </div>
+
+        <div class="group-card">
+            <div class="emoji">🪱</div>
+            <h3>Worms</h3>
+            <ul>
+                <li>Long, soft bodies</li>
+                <li>Example: earthworm</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="card center">
+
+        <h2>💭 Think!</h2>
+
+        <p class="big-question">
+            Does an insect have a backbone?
+        </p>
+
+        <button class="btn success" onclick="showThinkAnswer()">
+            Reveal Answer
+        </button>
+
+        <div id="thinkAnswer" class="feedback correct">
+            ➡️ No! Insects are invertebrates.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 7 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 7</div>
+        <h1>🌳 Follow the Classification Key</h1>
+        <p class="subtitle">Let's use a simple key!</p>
+    </div>
+
+    <div class="card">
+
+        <div class="tree">
+
+            <div class="tree-start">
+                START → Look at the animal 👀
+            </div>
+
+            <div style="font-size:2rem;">⬇️</div>
+
+            <div class="tree-question">
+                Does it have a backbone?
+            </div>
+
+            <div class="tree-branches">
+
+                <div class="branch yes">
+                    YES 🦴
+                    <br><br>
+                    VERTEBRATE
+                </div>
+
+                <div class="branch no">
+                    NO 🚫🦴
+                    <br><br>
+                    INVERTEBRATE
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>🧩 Try it!</h2>
+
+        <div class="animal-grid">
+
+            <div class="animal" onclick="classifyAnimal(this,'vertebrate')">
+                <div class="emoji">🐶</div>
+                <div class="animal-name">Dog</div>
+            </div>
+
+            <div class="animal" onclick="classifyAnimal(this,'invertebrate')">
+                <div class="emoji">🐙</div>
+                <div class="animal-name">Octopus</div>
+            </div>
+
+            <div class="animal" onclick="classifyAnimal(this,'vertebrate')">
+                <div class="emoji">🐟</div>
+                <div class="animal-name">Fish</div>
+            </div>
+
+            <div class="animal" onclick="classifyAnimal(this,'invertebrate')">
+                <div class="emoji">🦋</div>
+                <div class="animal-name">Butterfly</div>
+            </div>
+
+        </div>
+
+        <div id="classificationFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 8 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 8</div>
+        <h1>🧩 Can You Follow the Key?</h1>
+        <p class="subtitle">Animal: 🐸 Frog</p>
+    </div>
+
+    <div class="card">
+
+        <div class="tree">
+
+            <div class="tree-question">
+                Question 1:<br>
+                Does it have a backbone?
+            </div>
+
+            <div class="branch yes">
+                YES 🦴
+            </div>
+
+            <div style="font-size:2rem;">⬇️</div>
+
+            <div class="tree-question">
+                Question 2:<br>
+                What group of vertebrates does it belong to?
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="option-grid">
+
+            <button class="option"
+                onclick="checkOption(this,false,'frogFeedback')">
+                🐟 Fish
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,true,'frogFeedback')">
+                🐸 Amphibian
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,false,'frogFeedback')">
+                🦎 Reptile
+            </button>
+
+        </div>
+
+        <div id="frogFeedback" class="feedback"></div>
+
+        <div class="remember center" style="margin-top:20px;">
+            🐸 Frog → Vertebrate → Amphibian
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 9 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 9</div>
+        <h1>🔍 Let's Try Another!</h1>
+        <p class="subtitle">Animal: 🦋 Butterfly</p>
+    </div>
+
+    <div class="card">
+
+        <div class="tree">
+
+            <div class="tree-question">
+                Question 1:<br>
+                Does it have a backbone?
+            </div>
+
+            <div class="branch no">
+                NO 🚫🦴
+            </div>
+
+        </div>
+
+        <div class="remember center">
+            🦋 Butterfly → Invertebrate
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Look at its features:</h2>
+
+        <div class="three-column">
+
+            <div class="feature">
+                <div class="emoji">🦵</div>
+                <strong>6 legs</strong>
+            </div>
+
+            <div class="feature">
+                <div class="emoji">🧍</div>
+                <strong>3 main body parts</strong>
+            </div>
+
+            <div class="feature">
+                <div class="emoji">🪽</div>
+                <strong>Wings</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Which group?</h2>
+
+        <div class="option-grid">
+
+            <button class="option"
+                onclick="checkOption(this,false,'butterflyFeedback')">
+                🐌 Mollusc
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,false,'butterflyFeedback')">
+                🕷️ Arachnid
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,true,'butterflyFeedback')">
+                🦋 Insect
+            </button>
+
+        </div>
+
+        <div id="butterflyFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 10 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 10</div>
+        <h1>🧠 Your Turn: Use the Key</h1>
+        <p class="subtitle">Classify each animal!</p>
+    </div>
+
+    <div class="card">
+
+        <h2>1. 🐍 Snake</h2>
+
+        <p>Does it have a backbone?</p>
+
+        <select id="snakeBackbone">
+            <option value="">Choose...</option>
+            <option value="yes">YES</option>
+            <option value="no">NO</option>
+        </select>
+
+        <p>Then choose its group:</p>
+
+        <select id="snakeGroup">
+            <option value="">Choose...</option>
+            <option>Fish</option>
+            <option>Amphibian</option>
+            <option>Reptile</option>
+            <option>Bird</option>
+            <option>Mammal</option>
+        </select>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>2. 🕷️ Spider</h2>
+
+        <p>Does it have a backbone?</p>
+
+        <select id="spiderBackbone">
+            <option value="">Choose...</option>
+            <option value="yes">YES</option>
+            <option value="no">NO</option>
+        </select>
+
+        <p>Choose:</p>
+
+        <select id="spiderGroup">
+            <option value="">Choose...</option>
+            <option>Invertebrate</option>
+            <option>Vertebrate</option>
+        </select>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>3. 🐦 Parrot</h2>
+
+        <p>Does it have a backbone?</p>
+
+        <select id="parrotBackbone">
+            <option value="">Choose...</option>
+            <option value="yes">YES</option>
+            <option value="no">NO</option>
+        </select>
+
+        <p>Choose:</p>
+
+        <select id="parrotGroup">
+            <option value="">Choose...</option>
+            <option>Bird</option>
+            <option>Insect</option>
+            <option>Mollusc</option>
+        </select>
+
+    </div>
+
+    <div class="card">
+        <button class="btn primary" onclick="checkSlide10()">
+            Check My Answers
+        </button>
+
+        <div id="slide10Feedback" class="feedback"></div>
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 11 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 11</div>
+        <h1>🚦 Build Your Own Classification Key</h1>
+        <p class="subtitle">Can you make a key?</p>
+    </div>
+
+    <div class="card center">
+
+        <p class="big-question">
+            You have:
+        </p>
+
+        <div class="animal-grid">
+
+            <div class="animal">
+                <div class="emoji">🐟</div>
+                Fish
+            </div>
+
+            <div class="animal">
+                <div class="emoji">🐶</div>
+                Dog
+            </div>
+
+            <div class="animal">
+                <div class="emoji">🦋</div>
+                Butterfly
+            </div>
+
+            <div class="animal">
+                <div class="emoji">🐌</div>
+                Snail
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Start with:</h2>
+
+        <div class="tree-question">
+            Does it have a backbone?
+        </div>
+
+        <div class="match-row">
+
+            <strong>YES →</strong>
+
+            <input
+                id="keyYes"
+                type="text"
+                placeholder="What group?"
+            >
+
+        </div>
+
+        <div class="match-row">
+
+            <strong>NO →</strong>
+
+            <input
+                id="keyNo"
+                type="text"
+                placeholder="What group?"
+            >
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>💡 Add another question</h2>
+
+        <p>
+            Think about feathers, fur, shells, legs, or wings.
+        </p>
+
+        <input
+            id="ownQuestion"
+            type="text"
+            placeholder="Write your classification question here..."
+        >
+
+        <br><br>
+
+        <button class="btn primary" onclick="checkOwnKey()">
+            Check My Key
+        </button>
+
+        <div id="ownKeyFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 12 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 12</div>
+        <h1>🎯 Classification Challenge</h1>
+        <p class="subtitle">Secret Animal 🕵️</p>
+    </div>
+
+    <div class="card center">
+
+        <h2>I am an animal...</h2>
+
+        <div class="callout">
+
+            🦴 I have a backbone.<br><br>
+            🪶 I have feathers.<br><br>
+            🪽 I have wings.<br><br>
+            🥚 I lay eggs.
+
+        </div>
+
+        <h2>Who am I?</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div class="option-grid">
+
+            <button class="option"
+                onclick="checkOption(this,false,'secretFeedback')">
+                🐶 Dog
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,false,'secretFeedback')">
+                🐍 Snake
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,true,'secretFeedback')">
+                🐦 Bird
+            </button>
+
+            <button class="option"
+                onclick="checkOption(this,false,'secretFeedback')">
+                🐌 Snail
+            </button>
+
+        </div>
+
+        <div id="secretFeedback" class="feedback"></div>
+
+    </div>
+
+    <div class="remember center">
+        Vertebrate → Bird 🐦
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 13 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 13</div>
+        <h1>⚡ Quick Fire!</h1>
+        <p class="subtitle">Vertebrate or Invertebrate?</p>
+    </div>
+
+    <div class="card">
+
+        <div class="match-row">
+            <div class="animal-label">🐘 Elephant</div>
+            <select data-answer="Vertebrate">
+                <option value="">Choose...</option>
+                <option>Vertebrate</option>
+                <option>Invertebrate</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🦀 Crab</div>
+            <select data-answer="Invertebrate">
+                <option value="">Choose...</option>
+                <option>Vertebrate</option>
+                <option>Invertebrate</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🐸 Frog</div>
+            <select data-answer="Vertebrate">
+                <option value="">Choose...</option>
+                <option>Vertebrate</option>
+                <option>Invertebrate</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🪼 Jellyfish</div>
+            <select data-answer="Invertebrate">
+                <option value="">Choose...</option>
+                <option>Vertebrate</option>
+                <option>Invertebrate</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🦎 Lizard</div>
+            <select data-answer="Vertebrate">
+                <option value="">Choose...</option>
+                <option>Vertebrate</option>
+                <option>Invertebrate</option>
+            </select>
+        </div>
+
+        <div class="match-row">
+            <div class="animal-label">🦋 Butterfly</div>
+            <select data-answer="Invertebrate">
+                <option value="">Choose...</option>
+                <option>Vertebrate</option>
+                <option>Invertebrate</option>
+            </select>
+        </div>
+
+        <br>
+
+        <button class="btn primary" onclick="checkQuickFire()">
+            Check All 6
+        </button>
+
+        <div id="quickFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 14 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-header">
+        <div class="slide-number">Slide 14</div>
+        <h1>🏆 What Have We Learned?</h1>
+    </div>
+
+    <div class="card">
+
+        <h2>I can...</h2>
+
+        <div class="callout">
+            ✅ Explain what a <strong>vertebrate</strong> is.
+        </div>
+
+        <div class="callout">
+            ✅ Explain what an <strong>invertebrate</strong> is.
+        </div>
+
+        <div class="callout">
+            ✅ Identify animals with and without backbones.
+        </div>
+
+        <div class="callout">
+            ✅ Use a <strong>classification key</strong>.
+        </div>
+
+        <div class="callout">
+            ✅ Sort animals into groups.
+        </div>
+
+    </div>
+
+    <div class="remember center">
+
+        <div style="font-size:1.5rem;">
+            🦴 BACKBONE → VERTEBRATE
+        </div>
+
+        <br>
+
+        <div style="font-size:1.5rem;">
+            🚫🦴 NO BACKBONE → INVERTEBRATE
+        </div>
+
+    </div>
+
+    <div class="card center">
+
+        <h2>💭 Final Question</h2>
+
+        <p class="big-question">
+            Why do scientists use classification keys?
+        </p>
+
+        <textarea
+            id="finalAnswer"
+            style="width:100%; min-height:120px; padding:15px; border:3px solid #cbd5e1; border-radius:15px; font:inherit;"
+            placeholder="Type your answer here..."
+        ></textarea>
+
+        <br><br>
+
+        <button class="btn primary" onclick="finishDeck()">
+            🏆 Finish
+        </button>
+
+        <div id="finalFeedback" class="feedback"></div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- NAVIGATION -->
+
+<div class="navbar">
+
+    <button
+        class="btn secondary"
+        id="prevBtn"
+        onclick="previousSlide()">
+        ← Previous
+    </button>
+
+    <button
+        class="btn next"
+        id="nextBtn"
+        onclick="nextSlide()">
+        Next →
+    </button>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SLIDE NAVIGATION
+========================================================= */
+
+let currentSlide = 0;
+
+const slides = document.querySelectorAll(".slide");
+
+function showSlide(index) {
+
+    if (index < 0) index = 0;
+    if (index >= slides.length) index = slides.length - 1;
+
+    slides.forEach(slide => {
+        slide.classList.remove("active");
+    });
+
+    slides[index].classList.add("active");
+
+    currentSlide = index;
+
+    updateProgress();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+function nextSlide() {
+
+    if (currentSlide < slides.length - 1) {
+        showSlide(currentSlide + 1);
+    }
+
+}
+
+function previousSlide() {
+
+    if (currentSlide > 0) {
+        showSlide(currentSlide - 1);
+    }
+
+}
+
+function updateProgress() {
+
+    const percent =
+        ((currentSlide + 1) / slides.length) * 100;
+
+    document.getElementById("progressBar").style.width =
+        percent + "%";
+
+    document.getElementById("slideCount").textContent =
+        `${currentSlide + 1} / ${slides.length}`;
+
+    document.getElementById("prevBtn").disabled =
+        currentSlide === 0;
+
+    document.getElementById("nextBtn").textContent =
+        currentSlide === slides.length - 1
+            ? "Finish ✓"
+            : "Next →";
+}
+
+
+/* =========================================================
+   KEYBOARD NAVIGATION
+========================================================= */
+
+document.addEventListener("keydown", function(e) {
+
+    if (e.key === "ArrowRight") {
+        nextSlide();
+    }
+
+    if (e.key === "ArrowLeft") {
+        previousSlide();
+    }
+
+});
+
+
+/* =========================================================
+   GENERAL OPTION CHECKER
+========================================================= */
+
+function checkOption(button, correct, feedbackId) {
+
+    const parent = button.parentElement;
+
+    parent.querySelectorAll(".option").forEach(btn => {
+        btn.classList.remove("correct", "wrong");
+    });
+
+    const feedback =
+        document.getElementById(feedbackId);
+
+    if (correct) {
+
+        button.classList.add("correct");
+
+        feedback.textContent =
+            "✅ Correct! Great classification thinking!";
+
+        feedback.className =
+            "feedback show correct";
+
+    } else {
+
+        button.classList.add("wrong");
+
+        feedback.textContent =
+            "❌ Not quite. Think about the animal's features.";
+
+        feedback.className =
+            "feedback show wrong";
+    }
+}
+
+
+/* =========================================================
+   SLIDE 1 ANIMAL PREDICTION
+========================================================= */
+
+function animalGuess(element, answer) {
+
+    const feedback =
+        document.getElementById("animalFeedback");
+
+    if (answer === "vertebrate") {
+
+        feedback.innerHTML =
+            "🦴 This animal is a <strong>vertebrate</strong> because it has a backbone.";
+
+        feedback.className =
+            "feedback show correct";
+
+    } else {
+
+        feedback.innerHTML =
+            "🚫🦴 This animal is an <strong>invertebrate</strong> because it has no backbone.";
+
+        feedback.className =
+            "feedback show correct";
+    }
+
+    element.style.borderColor = "#16a34a";
+}
+
+
+/* =========================================================
+   SLIDE 3 BACKBONE
+========================================================= */
+
+let backboneCorrect = 0;
+
+function toggleBackbone(element, correct) {
+
+    const feedback =
+        document.getElementById("backboneFeedback");
+
+    if (correct) {
+
+        element.style.borderColor = "#16a34a";
+
+        feedback.textContent =
+            "✅ Correct! You found an animal with a backbone.";
+
+        feedback.className =
+            "feedback show correct";
+
+    } else {
+
+        element.style.borderColor = "#dc2626";
+
+        feedback.textContent =
+            "💡 This animal does not have a backbone.";
+
+        feedback.className =
+            "feedback show wrong";
+    }
+}
+
+
+/* =========================================================
+   MATCHING
+========================================================= */
+
+function checkMatching() {
+
+    const selects =
+        document.querySelectorAll(
+            '.match-row select[data-answer]'
+        );
+
+    let correct = 0;
+
+    selects.forEach(select => {
+
+        if (select.value === select.dataset.answer) {
+
+            select.style.borderColor = "#16a34a";
+            correct++;
+
+        } else {
+
+            select.style.borderColor = "#dc2626";
+
+        }
+
+    });
+
+    const feedback =
+        document.getElementById("matchingFeedback");
+
+    if (correct === selects.length) {
+
+        feedback.textContent =
+            "🎉 Excellent! All 5 matches are correct!";
+
+        feedback.className =
+            "feedback show correct";
+
+    } else {
+
+        feedback.textContent =
+            `You got ${correct} out of ${selects.length}. Check the highlighted answers and try again.`;
+
+        feedback.className =
+            "feedback show wrong";
+    }
+}
+
+
+/* =========================================================
+   SLIDE 6
+========================================================= */
+
+function showThinkAnswer() {
+
+    document.getElementById("thinkAnswer")
+        .classList.add("show");
+}
+
+
+/* =========================================================
+   SLIDE 7
+========================================================= */
+
+function classifyAnimal(element, answer) {
+
+    const feedback =
+        document.getElementById("classificationFeedback");
+
+    element.style.borderColor = "#16a34a";
+
+    if (answer === "vertebrate") {
+
+        feedback.innerHTML =
+            "🦴 Correct path: <strong>YES → VERTEBRATE</strong>";
+
+    } else {
+
+        feedback.innerHTML =
+            "🚫🦴 Correct path: <strong>NO → INVERTEBRATE</strong>";
+
+    }
+
+    feedback.className =
+        "feedback show correct";
+}
+
+
+/* =========================================================
+   SLIDE 10
+========================================================= */
+
+function checkSlide10() {
+
+    let score = 0;
+
+    if (
+        document.getElementById("snakeBackbone").value === "yes" &&
+        document.getElementById("snakeGroup").value === "Reptile"
+    ) {
+        score++;
+    }
+
+    if (
+        document.getElementById("spiderBackbone").value === "no" &&
+        document.getElementById("spiderGroup").value === "Invertebrate"
+    ) {
+        score++;
+    }
+
+    if (
+        document.getElementById("parrotBackbone").value === "yes" &&
+        document.getElementById("parrotGroup").value === "Bird"
+    ) {
+        score++;
+    }
+
+    const feedback =
+        document.getElementById("slide10Feedback");
+
+    if (score === 3) {
+
+        feedback.textContent =
+            "🎉 Perfect! You classified all 3 animals correctly!";
+
+        feedback.className =
+            "feedback show correct";
+
+    } else {
+
+        feedback.textContent =
+            `You got ${score}/3 correct. Look at the animal features and try again.`;
+
+        feedback.className =
+            "feedback show wrong";
+    }
+}
+
+
+/* =========================================================
+   SLIDE 11 OWN KEY
+========================================================= */
+
+function checkOwnKey() {
+
+    const yes =
+        document.getElementById("keyYes").value
+        .trim()
+        .toLowerCase();
+
+    const no =
+        document.getElementById("keyNo").value
+        .trim()
+        .toLowerCase();
+
+    const question =
+        document.getElementById("ownQuestion").value
+        .trim();
+
+    const feedback =
+        document.getElementById("ownKeyFeedback");
+
+    const yesCorrect =
+        yes.includes("vertebrate");
+
+    const noCorrect =
+        no.includes("invertebrate");
+
+    if (yesCorrect && noCorrect && question.length > 3) {
+
+        feedback.innerHTML =
+            "🎉 Great! You created a working first step for your classification key.";
+
+        feedback.className =
+            "feedback show correct";
+
+    } else {
+
+        feedback.innerHTML =
+            "💡 Check that YES leads to vertebrate, NO leads to invertebrate, and add another useful question.";
+
+        feedback.className =
+            "feedback show wrong";
+    }
+}
+
+
+/* =========================================================
+   SLIDE 13 QUICK FIRE
+========================================================= */
+
+function checkQuickFire() {
+
+    const selects =
+        document.querySelectorAll(
+            '#slide13 select[data-answer], .slide:nth-of-type(13) select[data-answer]'
+        );
+
+    let correct = 0;
+
+    selects.forEach(select => {
+
+        if (select.value === select.dataset.answer) {
+
+            select.style.borderColor = "#16a34a";
+            correct++;
+
+        } else {
+
+            select.style.borderColor = "#dc2626";
+        }
+
+    });
+
+    const feedback =
+        document.getElementById("quickFeedback");
+
+    if (correct === 6) {
+
+        feedback.textContent =
+            "🏆 Amazing! 6/6 correct! You can use the key confidently.";
+
+        feedback.className =
+            "feedback show correct";
+
+    } else {
+
+        feedback.textContent =
+            `You got ${correct}/6 correct. Try the ones marked red again.`;
+
+        feedback.className =
+            "feedback show wrong";
+    }
+}
+
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+function finishDeck() {
+
+    const answer =
+        document.getElementById("finalAnswer")
+        .value
+        .trim();
+
+    const feedback =
+        document.getElementById("finalFeedback");
+
+    if (answer.length >= 10) {
+
+        feedback.innerHTML =
+            "🎉 Great work! You completed the Animal Classification Key deck!";
+
+        feedback.className =
+            "feedback show correct";
+
+    } else {
+
+        feedback.innerHTML =
+            "💭 Add a little more detail. Explain how classification keys help scientists identify and group animals.";
+
+        feedback.className =
+            "feedback show wrong";
+    }
+}
+
+
+/* =========================================================
+   INITIALISE
+========================================================= */
+
+updateProgress();
+
+</script>
+
+</body>
+</html>

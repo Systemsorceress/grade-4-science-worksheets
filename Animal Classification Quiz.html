@@ -1,0 +1,2378 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animal Classification Quiz</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #2563eb;
+  --blue-light: #dbeafe;
+  --teal: #0f9f9a;
+  --teal-light: #ccfbf1;
+  --pink: #ec4899;
+  --pink-light: #fce7f3;
+  --yellow: #facc15;
+  --yellow-light: #fef9c3;
+  --green: #16a34a;
+  --green-light: #dcfce7;
+  --red: #ef4444;
+  --red-light: #fee2e2;
+  --text: #17324d;
+  --muted: #64748b;
+  --bg: #f4f8ff;
+  --white: #ffffff;
+  --border: #dbe4ef;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, #eff6ff, #f0fdfa, #fff1f7);
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  min-height: 100vh;
+  padding-bottom: 90px;
+}
+
+/* HEADER */
+
+header {
+  background: white;
+  padding: 16px 20px;
+  box-shadow: 0 4px 18px rgba(30, 64, 175, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner,
+.progress-container {
+  max-width: 1050px;
+  margin: auto;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  background: var(--blue);
+  color: white;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 27px;
+  box-shadow: 0 5px 12px #bfdbfe;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 3px;
+  font-size: 0.9rem;
+}
+
+.progress-container {
+  margin-top: 13px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.progress-track {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 7px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 20%;
+  background: linear-gradient(
+    90deg,
+    var(--blue),
+    var(--teal),
+    var(--pink)
+  );
+  transition: width 0.35s ease;
+}
+
+/* MAIN */
+
+main {
+  width: min(94%, 1000px);
+  margin: 28px auto;
+}
+
+.slide {
+  display: none;
+  animation: slideIn 0.3s ease;
+}
+
+.slide.active {
+  display: block;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 12px 35px rgba(30, 64, 175, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.slide-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.slide-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: var(--blue-light);
+  font-size: 24px;
+}
+
+h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.intro {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 5px;
+}
+
+/* QUESTIONS */
+
+.question {
+  background: #f8fafc;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  margin: 15px 0;
+}
+
+.question p {
+  margin: 0 0 12px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 13px 15px;
+  border: 2px solid #cbd5e1;
+  border-radius: 13px;
+  outline: none;
+  background: white;
+}
+
+input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px var(--blue-light);
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.option {
+  padding: 12px 18px;
+  border-radius: 13px;
+  background: white;
+  border: 2px solid #cbd5e1;
+  color: var(--text);
+  font-weight: 800;
+}
+
+.option:hover {
+  border-color: var(--blue);
+}
+
+.option.selected {
+  background: var(--blue-light);
+  border-color: var(--blue);
+}
+
+.option.correct {
+  background: var(--green-light);
+  border-color: var(--green);
+  color: #166534;
+}
+
+.option.incorrect {
+  background: var(--red-light);
+  border-color: var(--red);
+  color: #991b1b;
+}
+
+/* BUTTONS */
+
+.primary,
+.secondary,
+.pink,
+.retry {
+  border: 0;
+  border-radius: 13px;
+  padding: 12px 18px;
+  font-weight: 800;
+  margin-top: 8px;
+}
+
+.primary {
+  background: var(--blue);
+  color: white;
+  box-shadow: 0 5px 12px #bfdbfe;
+}
+
+.secondary {
+  background: #e2e8f0;
+  color: var(--text);
+}
+
+.pink {
+  background: var(--pink);
+  color: white;
+}
+
+.retry {
+  background: var(--pink-light);
+  color: #be185d;
+  display: none;
+}
+
+.retry.show {
+  display: inline-block;
+}
+
+/* FEEDBACK */
+
+.feedback {
+  min-height: 23px;
+  margin-top: 9px;
+  font-weight: 800;
+}
+
+.feedback.good {
+  color: var(--green);
+}
+
+.feedback.bad {
+  color: var(--red);
+}
+
+.summary {
+  display: none;
+  margin-top: 17px;
+  padding: 15px;
+  border-radius: 17px;
+  background: var(--green-light);
+  border: 2px solid #86efac;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* MATCHING */
+
+.matching {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 20px;
+}
+
+.match-title {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.match-item {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 15px;
+  padding: 14px;
+  margin-bottom: 10px;
+  font-weight: 800;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.match-item:hover {
+  transform: translateY(-2px);
+}
+
+.match-item.selected {
+  background: var(--blue-light);
+  border-color: var(--blue);
+}
+
+.match-item.matched {
+  background: var(--green-light);
+  border-color: var(--green);
+  cursor: default;
+}
+
+.match-status {
+  background: var(--yellow-light);
+  border: 2px solid #fde68a;
+  border-radius: 14px;
+  padding: 13px;
+  margin: 17px 0;
+  font-weight: 800;
+}
+
+.match-score {
+  text-align: center;
+  margin-top: 15px;
+  font-weight: 900;
+}
+
+/* CLASSIFIER */
+
+.animals {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 22px 0;
+}
+
+.animal {
+  background: white;
+  border: 3px solid var(--border);
+  border-radius: 20px;
+  padding: 17px 10px;
+  text-align: center;
+  font-weight: 900;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.animal:hover {
+  transform: translateY(-3px);
+}
+
+.animal.selected {
+  border-color: var(--pink);
+  background: var(--pink-light);
+}
+
+.animal.placed {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.animal-emoji {
+  display: block;
+  font-size: 42px;
+  margin-bottom: 7px;
+}
+
+.targets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.dropzone {
+  min-height: 180px;
+  border: 3px dashed #93c5fd;
+  border-radius: 22px;
+  padding: 17px;
+  text-align: center;
+  background: #eff6ff;
+  transition: 0.2s;
+}
+
+.dropzone.invertebrate {
+  background: #f0fdfa;
+  border-color: #5eead4;
+}
+
+.dropzone.over {
+  transform: scale(1.02);
+  border-style: solid;
+}
+
+.dropzone h3 {
+  margin-top: 0;
+}
+
+.placed-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+}
+
+.mini-animal {
+  background: white;
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-weight: 800;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+}
+
+/* FLASHCARDS */
+
+.flashcards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.flashcard {
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(145deg, #eff6ff, white);
+  border: 2px solid #bfdbfe;
+}
+
+.flashcard.spider {
+  background: linear-gradient(145deg, #fdf2f8, white);
+  border-color: #fbcfe8;
+}
+
+.flash-emoji {
+  font-size: 55px;
+}
+
+.flashcard h3 {
+  font-size: 1.4rem;
+}
+
+.number-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.number-label {
+  display: block;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.check-row {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* RIDDLE */
+
+.riddle {
+  background: linear-gradient(135deg, #fef3c7, #fce7f3);
+  border: 2px solid #f9a8d4;
+  padding: 21px;
+  border-radius: 22px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  font-weight: 800;
+}
+
+/* NAVIGATION */
+
+.navigation {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid #e2e8f0;
+  padding: 12px 18px;
+  z-index: 90;
+}
+
+.navigation-inner {
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.navigation button {
+  min-width: 120px;
+}
+
+.slide-number {
+  color: var(--muted);
+  font-weight: 900;
+}
+
+/* MOBILE */
+
+@media (max-width: 720px) {
+
+  .card {
+    padding: 19px;
+    border-radius: 22px;
+  }
+
+  .matching {
+    grid-template-columns: 1fr;
+  }
+
+  .animals {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .targets,
+  .flashcards {
+    grid-template-columns: 1fr;
+  }
+
+  .navigation button {
+    min-width: 95px;
+    padding: 11px;
+  }
+
+  .slide-number {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 430px) {
+
+  .header-inner {
+    gap: 9px;
+  }
+
+  .logo {
+    width: 42px;
+    height: 42px;
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 0.78rem;
+  }
+
+  main {
+    margin-top: 18px;
+  }
+
+  .animals {
+    gap: 9px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+
+  <div class="header-inner">
+
+    <div class="logo">🐾</div>
+
+    <div>
+      <h1>Animal Classification Quiz</h1>
+      <div class="subtitle">
+        Think • Match • Classify • Discover 🌟
+      </div>
+    </div>
+
+  </div>
+
+  <div class="progress-container">
+
+    <div class="progress-info">
+      <span id="progressText">Slide 1 of 5</span>
+      <span id="progressPercent">20%</span>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+  </div>
+
+</header>
+
+
+<main>
+
+<!-- ================= SLIDE 1 ================= -->
+
+<section class="slide active" id="slide1">
+
+<div class="card">
+
+  <div class="slide-heading">
+    <div class="slide-icon">🧠</div>
+    <h2>Quick Quiz</h2>
+  </div>
+
+  <p class="intro">
+    Complete the blanks and choose the correct answer.
+    Think carefully!
+  </p>
+
+
+  <div class="question">
+
+    <p>
+      1. What is an animal with a spine known as?
+    </p>
+
+    <input
+      type="text"
+      id="q1"
+      placeholder="Type your answer"
+    >
+
+    <div class="feedback" id="feedback1"></div>
+
+  </div>
+
+
+  <div class="question">
+
+    <p>
+      2. How many body sections does an insect have?
+    </p>
+
+    <input
+      type="text"
+      id="q2"
+      placeholder="Type a number or word"
+    >
+
+    <div class="feedback" id="feedback2"></div>
+
+  </div>
+
+
+  <div class="question">
+
+    <p>
+      3. The food eaten by an animal is its ______.
+    </p>
+
+    <div class="options">
+
+      <button
+        class="option"
+        data-answer="food chain"
+        onclick="selectDiet(this)"
+      >
+        food chain
+      </button>
+
+      <button
+        class="option"
+        data-answer="diet"
+        onclick="selectDiet(this)"
+      >
+        diet
+      </button>
+
+    </div>
+
+    <div class="feedback" id="feedback3"></div>
+
+  </div>
+
+
+  <div class="question">
+
+    <p>
+      4. What four things do mammals need to survive?
+    </p>
+
+    <input
+      type="text"
+      id="q4"
+      placeholder="food, water, air and shelter"
+    >
+
+    <div class="feedback" id="feedback4"></div>
+
+  </div>
+
+
+  <button class="primary" onclick="checkSlide1()">
+    ✓ Check Answers
+  </button>
+
+  <button
+    class="retry"
+    id="retry1"
+    onclick="retrySlide1()"
+  >
+    ↻ Retry
+  </button>
+
+  <div class="summary" id="summary1"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= SLIDE 2 ================= -->
+
+<section class="slide" id="slide2">
+
+<div class="card">
+
+  <div class="slide-heading">
+    <div class="slide-icon">🔗</div>
+    <h2>Match the Vocabulary</h2>
+  </div>
+
+  <p class="intro">
+    Click a vocabulary word and then click its matching definition.
+  </p>
+
+  <div class="match-status" id="matchStatus">
+    Choose a vocabulary word to begin.
+  </div>
+
+
+  <div class="matching">
+
+    <div>
+
+      <div class="match-title">
+        VOCABULARY
+      </div>
+
+      <div
+        class="match-item"
+        data-term="vertebrate"
+        onclick="selectTerm(this)"
+      >
+        vertebrate
+      </div>
+
+      <div
+        class="match-item"
+        data-term="invertebrate"
+        onclick="selectTerm(this)"
+      >
+        invertebrate
+      </div>
+
+      <div
+        class="match-item"
+        data-term="insect"
+        onclick="selectTerm(this)"
+      >
+        insect
+      </div>
+
+      <div
+        class="match-item"
+        data-term="spider"
+        onclick="selectTerm(this)"
+      >
+        spider
+      </div>
+
+      <div
+        class="match-item"
+        data-term="soft-bodied invertebrate"
+        onclick="selectTerm(this)"
+      >
+        soft-bodied invertebrate
+      </div>
+
+    </div>
+
+
+    <div>
+
+      <div class="match-title">
+        DEFINITIONS
+      </div>
+
+      <div
+        class="match-item"
+        data-answer="insect"
+        onclick="chooseDefinition(this)"
+      >
+        an invertebrate that has three body sections,
+        six legs and two antennae
+      </div>
+
+      <div
+        class="match-item"
+        data-answer="invertebrate"
+        onclick="chooseDefinition(this)"
+      >
+        an animal without a spine
+      </div>
+
+      <div
+        class="match-item"
+        data-answer="vertebrate"
+        onclick="chooseDefinition(this)"
+      >
+        an animal with a spine
+      </div>
+
+      <div
+        class="match-item"
+        data-answer="soft-bodied invertebrate"
+        onclick="chooseDefinition(this)"
+      >
+        an invertebrate with a soft body such as
+        a slug or a snail
+      </div>
+
+      <div
+        class="match-item"
+        data-answer="spider"
+        onclick="chooseDefinition(this)"
+      >
+        an invertebrate that has two body sections
+        and eight legs
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="match-score" id="matchScore">
+    0 / 5 matched
+  </div>
+
+  <button
+    class="retry"
+    id="retry2"
+    onclick="retryMatching()"
+  >
+    ↻ Retry Matching
+  </button>
+
+</div>
+
+</section>
+
+
+<!-- ================= SLIDE 3 ================= -->
+
+<section class="slide" id="slide3">
+
+<div class="card">
+
+  <div class="slide-heading">
+    <div class="slide-icon">🐾</div>
+    <h2>Classify the Animals</h2>
+  </div>
+
+  <p class="intro">
+    Drag each animal into the correct group.
+    On a phone, tap an animal and then tap a target.
+  </p>
+
+
+  <div class="animals">
+
+    <div
+      class="animal"
+      draggable="true"
+      data-animal="cat"
+      data-type="vertebrate"
+      onclick="selectAnimal(this)"
+    >
+      <span class="animal-emoji">🐱</span>
+      Cat
+    </div>
+
+
+    <div
+      class="animal"
+      draggable="true"
+      data-animal="ladybird"
+      data-type="invertebrate"
+      onclick="selectAnimal(this)"
+    >
+      <span class="animal-emoji">🐞</span>
+      Ladybird
+    </div>
+
+
+    <div
+      class="animal"
+      draggable="true"
+      data-animal="dolphin"
+      data-type="vertebrate"
+      onclick="selectAnimal(this)"
+    >
+      <span class="animal-emoji">🐬</span>
+      Dolphin
+    </div>
+
+
+    <div
+      class="animal"
+      draggable="true"
+      data-animal="spider"
+      data-type="invertebrate"
+      onclick="selectAnimal(this)"
+    >
+      <span class="animal-emoji">🕷️</span>
+      Spider
+    </div>
+
+  </div>
+
+
+  <div class="targets">
+
+    <div
+      class="dropzone"
+      data-type="vertebrate"
+      ondragover="allowDrop(event)"
+      ondrop="dropAnimal(event, this)"
+    >
+
+      <h3>🦴 Vertebrate</h3>
+
+      <div class="placed-list"></div>
+
+    </div>
+
+
+    <div
+      class="dropzone invertebrate"
+      data-type="invertebrate"
+      ondragover="allowDrop(event)"
+      ondrop="dropAnimal(event, this)"
+    >
+
+      <h3>🪲 Invertebrate</h3>
+
+      <div class="placed-list"></div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="feedback"
+    id="classifierFeedback"
+  ></div>
+
+
+  <button
+    class="retry"
+    id="retry3"
+    onclick="retryClassifier()"
+  >
+    ↻ Retry Classifier
+  </button>
+
+</div>
+
+</section>
+
+
+<!-- ================= SLIDE 4 ================= -->
+
+<section class="slide" id="slide4">
+
+<div class="card">
+
+  <div class="slide-heading">
+    <div class="slide-icon">🕷️</div>
+    <h2>Insect vs Spider</h2>
+  </div>
+
+  <p class="intro">
+    What is the difference between an insect and a spider?
+    Fill in the numbers.
+  </p>
+
+
+  <div class="flashcards">
+
+    <div class="flashcard">
+
+      <div class="flash-emoji">🐞</div>
+
+      <h3>Insects</h3>
+
+      <div class="number-grid">
+
+        <div>
+
+          <span class="number-label">
+            Legs
+          </span>
+
+          <input
+            type="number"
+            id="insectLegs"
+            placeholder="?"
+          >
+
+        </div>
+
+
+        <div>
+
+          <span class="number-label">
+            Body sections
+          </span>
+
+          <input
+            type="number"
+            id="insectSections"
+            placeholder="?"
+          >
+
+        </div>
+
+      </div>
+
+      <div
+        class="feedback"
+        id="feedback4a"
+      ></div>
+
+    </div>
+
+
+    <div class="flashcard spider">
+
+      <div class="flash-emoji">🕷️</div>
+
+      <h3>Spiders</h3>
+
+      <div class="number-grid">
+
+        <div>
+
+          <span class="number-label">
+            Legs
+          </span>
+
+          <input
+            type="number"
+            id="spiderLegs"
+            placeholder="?"
+          >
+
+        </div>
+
+
+        <div>
+
+          <span class="number-label">
+            Body sections
+          </span>
+
+          <input
+            type="number"
+            id="spiderSections"
+            placeholder="?"
+          >
+
+        </div>
+
+      </div>
+
+      <div
+        class="feedback"
+        id="feedback4b"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <div class="check-row">
+
+    <button
+      class="primary"
+      onclick="checkSlide4()"
+    >
+      ✓ Check Answers
+    </button>
+
+    <button
+      class="retry"
+      id="retry4"
+      onclick="retrySlide4()"
+    >
+      ↻ Retry
+    </button>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= SLIDE 5 ================= -->
+
+<section class="slide" id="slide5">
+
+<div class="card">
+
+  <div class="slide-heading">
+    <div class="slide-icon">🐌</div>
+    <h2>Animal Riddle</h2>
+  </div>
+
+  <p class="intro">
+    Read Amir's clues carefully and solve the mystery animal!
+  </p>
+
+
+  <div class="riddle">
+
+    Amir is thinking of an animal:
+
+    <br><br>
+
+    “I am an invertebrate.
+    I have a soft body.
+    I have no legs.
+    I have a large shell.”
+
+  </div>
+
+
+  <div class="question">
+
+    <p>
+      A. What animal is Amir thinking of?
+    </p>
+
+    <input
+      type="text"
+      id="riddleAnimal"
+      placeholder="Type the animal"
+    >
+
+    <div
+      class="feedback"
+      id="feedback5a"
+    ></div>
+
+  </div>
+
+
+  <div class="question">
+
+    <p>
+      B. What type of animal is a snail?
+    </p>
+
+    <input
+      type="text"
+      id="riddleType"
+      placeholder="Type the animal group"
+    >
+
+    <div
+      class="feedback"
+      id="feedback5b"
+    ></div>
+
+  </div>
+
+
+  <button
+    class="pink"
+    onclick="checkSlide5()"
+  >
+    ✓ Check Answers
+  </button>
+
+  <button
+    class="retry"
+    id="retry5"
+    onclick="retrySlide5()"
+  >
+    ↻ Retry
+  </button>
+
+
+  <div
+    class="summary"
+    id="summary5"
+  ></div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- NAVIGATION -->
+
+<div class="navigation">
+
+  <div class="navigation-inner">
+
+    <button
+      class="secondary"
+      id="previousButton"
+      onclick="previousSlide()"
+    >
+      ← Previous
+    </button>
+
+
+    <div
+      class="slide-number"
+      id="slideNumber"
+    >
+      1 / 5
+    </div>
+
+
+    <button
+      class="primary"
+      id="nextButton"
+      onclick="nextSlide()"
+    >
+      Next →
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SLIDE NAVIGATION
+===================================================== */
+
+let currentSlide = 1;
+
+const totalSlides = 5;
+
+function updateSlide() {
+
+  document
+    .querySelectorAll(".slide")
+    .forEach((slide, index) => {
+
+      slide.classList.toggle(
+        "active",
+        index === currentSlide - 1
+      );
+
+    });
+
+
+  const percentage =
+    currentSlide / totalSlides * 100;
+
+
+  document.getElementById("progressBar")
+    .style.width = percentage + "%";
+
+
+  document.getElementById("progressText")
+    .textContent =
+    `Slide ${currentSlide} of ${totalSlides}`;
+
+
+  document.getElementById("progressPercent")
+    .textContent =
+    Math.round(percentage) + "%";
+
+
+  document.getElementById("slideNumber")
+    .textContent =
+    `${currentSlide} / ${totalSlides}`;
+
+
+  document.getElementById("previousButton")
+    .disabled =
+    currentSlide === 1;
+
+
+  document.getElementById("nextButton")
+    .textContent =
+    currentSlide === totalSlides
+      ? "Finish ✓"
+      : "Next →";
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+function nextSlide() {
+
+  if (currentSlide < totalSlides) {
+
+    currentSlide++;
+
+    updateSlide();
+
+  } else {
+
+    alert(
+      "🎉 Amazing! You reached the end of the Animal Classification Quiz!"
+    );
+
+  }
+
+}
+
+
+function previousSlide() {
+
+  if (currentSlide > 1) {
+
+    currentSlide--;
+
+    updateSlide();
+
+  }
+
+}
+
+
+/* =====================================================
+   HELPER
+===================================================== */
+
+function normalize(value) {
+
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[.,]/g, "")
+    .replace(/\s+/g, " ");
+
+}
+
+
+function feedback(id, correct, message) {
+
+  const element =
+    document.getElementById(id);
+
+  element.textContent = message;
+
+  element.className =
+    "feedback " +
+    (correct ? "good" : "bad");
+
+}
+
+
+/* =====================================================
+   SLIDE 1
+===================================================== */
+
+let selectedDiet = "";
+
+
+function selectDiet(button) {
+
+  selectedDiet =
+    button.dataset.answer;
+
+
+  document
+    .querySelectorAll(".option")
+    .forEach(option => {
+
+      option.classList.remove(
+        "selected",
+        "correct",
+        "incorrect"
+      );
+
+    });
+
+
+  button.classList.add("selected");
+
+}
+
+
+function checkSlide1() {
+
+  let score = 0;
+
+
+  /* Question 1 */
+
+  const q1 =
+    normalize(
+      document.getElementById("q1").value
+    );
+
+
+  if (q1 === "vertebrate") {
+
+    score++;
+
+    feedback(
+      "feedback1",
+      true,
+      "✓ Correct! A vertebrate has a spine."
+    );
+
+  } else {
+
+    feedback(
+      "feedback1",
+      false,
+      "✗ Try again. Think about animals with a spine."
+    );
+
+  }
+
+
+  /* Question 2 */
+
+  const q2 =
+    normalize(
+      document.getElementById("q2").value
+    );
+
+
+  if (
+    q2 === "3" ||
+    q2 === "three"
+  ) {
+
+    score++;
+
+    feedback(
+      "feedback2",
+      true,
+      "✓ Correct! Insects have three body sections."
+    );
+
+  } else {
+
+    feedback(
+      "feedback2",
+      false,
+      "✗ Remember: insects have three body sections."
+    );
+
+  }
+
+
+  /* Question 3 */
+
+  document
+    .querySelectorAll("#slide1 .option")
+    .forEach(button => {
+
+      button.classList.remove(
+        "correct",
+        "incorrect"
+      );
+
+    });
+
+
+  if (selectedDiet === "diet") {
+
+    score++;
+
+    feedback(
+      "feedback3",
+      true,
+      "✓ Correct! The food an animal eats is its diet."
+    );
+
+
+    document
+      .querySelector('[data-answer="diet"]')
+      .classList.add("correct");
+
+  } else {
+
+    feedback(
+      "feedback3",
+      false,
+      "✗ Try again. Which word means the food an animal eats?"
+    );
+
+
+    if (selectedDiet) {
+
+      document
+        .querySelector(
+          `[data-answer="${selectedDiet}"]`
+        )
+        .classList.add("incorrect");
+
+    }
+
+  }
+
+
+  /* Question 4 */
+
+  const q4 =
+    normalize(
+      document.getElementById("q4").value
+    );
+
+
+  const requiredWords = [
+    "food",
+    "water",
+    "air",
+    "shelter"
+  ];
+
+
+  const hasAllWords =
+    requiredWords.every(
+      word => q4.includes(word)
+    );
+
+
+  if (hasAllWords) {
+
+    score++;
+
+    feedback(
+      "feedback4",
+      true,
+      "✓ Correct! You included all four things."
+    );
+
+  } else {
+
+    feedback(
+      "feedback4",
+      false,
+      "✗ Include food, water, air and shelter."
+    );
+
+  }
+
+
+  const summary =
+    document.getElementById("summary1");
+
+
+  summary.style.display = "block";
+
+
+  summary.textContent =
+    `You scored ${score} / 4! ${
+      score === 4
+        ? "🌟 Excellent work!"
+        : "Keep practising — you can retry!"
+    }`;
+
+
+  if (score < 4) {
+
+    document
+      .getElementById("retry1")
+      .classList.add("show");
+
+  }
+
+}
+
+
+function retrySlide1() {
+
+  document.getElementById("q1").value = "";
+  document.getElementById("q2").value = "";
+  document.getElementById("q4").value = "";
+
+
+  selectedDiet = "";
+
+
+  document
+    .querySelectorAll("#slide1 .option")
+    .forEach(button => {
+
+      button.classList.remove(
+        "selected",
+        "correct",
+        "incorrect"
+      );
+
+    });
+
+
+  [
+    "feedback1",
+    "feedback2",
+    "feedback3",
+    "feedback4"
+  ].forEach(id => {
+
+    document.getElementById(id).textContent = "";
+
+  });
+
+
+  document.getElementById("summary1")
+    .style.display = "none";
+
+
+  document.getElementById("retry1")
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   SLIDE 2 — MATCHING
+===================================================== */
+
+let selectedTerm = null;
+
+let matchCount = 0;
+
+
+function selectTerm(element) {
+
+  if (element.classList.contains("matched")) {
+    return;
+  }
+
+
+  document
+    .querySelectorAll("[data-term]")
+    .forEach(item =>
+      item.classList.remove("selected")
+    );
+
+
+  selectedTerm =
+    element.dataset.term;
+
+
+  element.classList.add("selected");
+
+
+  document.getElementById("matchStatus")
+    .textContent =
+    `Now choose the definition for "${selectedTerm}".`;
+
+}
+
+
+function chooseDefinition(element) {
+
+  if (
+    !selectedTerm ||
+    element.classList.contains("matched")
+  ) {
+
+    return;
+
+  }
+
+
+  const correctAnswer =
+    element.dataset.answer;
+
+
+  if (correctAnswer === selectedTerm) {
+
+    element.classList.add("matched");
+
+
+    const term =
+      document.querySelector(
+        `[data-term="${CSS.escape(selectedTerm)}"]`
+      );
+
+
+    term.classList.remove("selected");
+
+    term.classList.add("matched");
+
+
+    matchCount++;
+
+    selectedTerm = null;
+
+
+    document.getElementById("matchScore")
+      .textContent =
+      `${matchCount} / 5 matched`;
+
+
+    if (matchCount === 5) {
+
+      document.getElementById("matchStatus")
+        .textContent =
+        "🎉 Perfect! You matched everything correctly!";
+
+      document.getElementById("retry2")
+        .classList.add("show");
+
+    } else {
+
+      document.getElementById("matchStatus")
+        .textContent =
+        "✓ Correct! Choose another vocabulary word.";
+
+    }
+
+  } else {
+
+    element.animate(
+      [
+        { transform: "translateX(0)" },
+        { transform: "translateX(-6px)" },
+        { transform: "translateX(6px)" },
+        { transform: "translateX(0)" }
+      ],
+      {
+        duration: 250
+      }
+    );
+
+
+    document.getElementById("matchStatus")
+      .textContent =
+      "❌ Not quite. Try another definition.";
+
+  }
+
+}
+
+
+function retryMatching() {
+
+  selectedTerm = null;
+
+  matchCount = 0;
+
+
+  document
+    .querySelectorAll(".match-item")
+    .forEach(item => {
+
+      item.classList.remove(
+        "selected",
+        "matched"
+      );
+
+    });
+
+
+  document.getElementById("matchScore")
+    .textContent =
+    "0 / 5 matched";
+
+
+  document.getElementById("matchStatus")
+    .textContent =
+    "Choose a vocabulary word to begin.";
+
+
+  document.getElementById("retry2")
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   SLIDE 3 — DRAG & DROP
+===================================================== */
+
+let selectedAnimal = null;
+
+let draggedAnimal = null;
+
+
+document
+  .querySelectorAll(".animal")
+  .forEach(animal => {
+
+    animal.addEventListener(
+      "dragstart",
+      event => {
+
+        draggedAnimal = animal;
+
+        event.dataTransfer.setData(
+          "text/plain",
+          animal.dataset.animal
+        );
+
+      }
+    );
+
+  });
+
+
+function selectAnimal(animal) {
+
+  if (animal.classList.contains("placed")) {
+    return;
+  }
+
+
+  document
+    .querySelectorAll(".animal")
+    .forEach(item =>
+      item.classList.remove("selected")
+    );
+
+
+  selectedAnimal = animal;
+
+  animal.classList.add("selected");
+
+
+  document.getElementById("classifierFeedback")
+    .textContent =
+    "Now tap the Vertebrate or Invertebrate box.";
+
+}
+
+
+function allowDrop(event) {
+
+  event.preventDefault();
+
+}
+
+
+function dropAnimal(event, zone) {
+
+  event.preventDefault();
+
+
+  const animalName =
+    event.dataTransfer.getData("text/plain");
+
+
+  const animal =
+    document.querySelector(
+      `[data-animal="${animalName}"]`
+    );
+
+
+  placeAnimal(animal, zone);
+
+}
+
+
+document
+  .querySelectorAll(".dropzone")
+  .forEach(zone => {
+
+    zone.addEventListener(
+      "click",
+      () => {
+
+        if (selectedAnimal) {
+
+          placeAnimal(
+            selectedAnimal,
+            zone
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+
+function placeAnimal(animal, zone) {
+
+  if (
+    !animal ||
+    animal.classList.contains("placed")
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    animal.dataset.type ===
+    zone.dataset.type
+  ) {
+
+    const mini =
+      document.createElement("div");
+
+
+    mini.className =
+      "mini-animal";
+
+
+    mini.textContent =
+      animal.textContent.trim();
+
+
+    zone
+      .querySelector(".placed-list")
+      .appendChild(mini);
+
+
+    animal.classList.add("placed");
+
+    animal.classList.remove("selected");
+
+
+    selectedAnimal = null;
+
+
+    const feedbackElement =
+      document.getElementById(
+        "classifierFeedback"
+      );
+
+
+    feedbackElement.className =
+      "feedback good";
+
+
+    feedbackElement.textContent =
+      "✓ Correct classification!";
+
+
+    const placed =
+      document.querySelectorAll(
+        ".animal.placed"
+      ).length;
+
+
+    if (placed === 4) {
+
+      feedbackElement.textContent =
+        "🎉 Fantastic! All four animals are correctly classified!";
+
+      document
+        .getElementById("retry3")
+        .classList.add("show");
+
+    }
+
+  } else {
+
+    const feedbackElement =
+      document.getElementById(
+        "classifierFeedback"
+      );
+
+
+    feedbackElement.className =
+      "feedback bad";
+
+
+    feedbackElement.textContent =
+      "✗ Not quite. Does this animal have a backbone?";
+
+  }
+
+}
+
+
+function retryClassifier() {
+
+  selectedAnimal = null;
+
+
+  document
+    .querySelectorAll(".animal")
+    .forEach(animal => {
+
+      animal.classList.remove(
+        "placed",
+        "selected"
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(".placed-list")
+    .forEach(list => {
+
+      list.innerHTML = "";
+
+    });
+
+
+  document.getElementById(
+    "classifierFeedback"
+  ).textContent = "";
+
+
+  document.getElementById(
+    "classifierFeedback"
+  ).className = "feedback";
+
+
+  document.getElementById("retry3")
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   SLIDE 4 — INSECT VS SPIDER
+===================================================== */
+
+function checkSlide4() {
+
+  const insectLegs =
+    Number(
+      document.getElementById(
+        "insectLegs"
+      ).value
+    );
+
+
+  const insectSections =
+    Number(
+      document.getElementById(
+        "insectSections"
+      ).value
+    );
+
+
+  const spiderLegs =
+    Number(
+      document.getElementById(
+        "spiderLegs"
+      ).value
+    );
+
+
+  const spiderSections =
+    Number(
+      document.getElementById(
+        "spiderSections"
+      ).value
+    );
+
+
+  let score = 0;
+
+
+  if (
+    insectLegs === 6 &&
+    insectSections === 3
+  ) {
+
+    score++;
+
+    feedback(
+      "feedback4a",
+      true,
+      "✓ Correct! Insects have 6 legs and 3 body sections."
+    );
+
+  } else {
+
+    feedback(
+      "feedback4a",
+      false,
+      "✗ Insects have 6 legs and 3 body sections."
+    );
+
+  }
+
+
+  if (
+    spiderLegs === 8 &&
+    spiderSections === 2
+  ) {
+
+    score++;
+
+    feedback(
+      "feedback4b",
+      true,
+      "✓ Correct! Spiders have 8 legs and 2 body sections."
+    );
+
+  } else {
+
+    feedback(
+      "feedback4b",
+      false,
+      "✗ Spiders have 8 legs and 2 body sections."
+    );
+
+  }
+
+
+  if (score < 2) {
+
+    document.getElementById("retry4")
+      .classList.add("show");
+
+  } else {
+
+    document.getElementById("retry4")
+      .classList.remove("show");
+
+  }
+
+}
+
+
+function retrySlide4() {
+
+  [
+    "insectLegs",
+    "insectSections",
+    "spiderLegs",
+    "spiderSections"
+  ].forEach(id => {
+
+    document.getElementById(id).value = "";
+
+  });
+
+
+  [
+    "feedback4a",
+    "feedback4b"
+  ].forEach(id => {
+
+    document.getElementById(id).textContent = "";
+
+  });
+
+
+  document.getElementById("retry4")
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   SLIDE 5 — RIDDLE
+===================================================== */
+
+function checkSlide5() {
+
+  const animal =
+    normalize(
+      document.getElementById(
+        "riddleAnimal"
+      ).value
+    );
+
+
+  const type =
+    normalize(
+      document.getElementById(
+        "riddleType"
+      ).value
+    );
+
+
+  let score = 0;
+
+
+  if (
+    animal === "snail" ||
+    animal === "a snail"
+  ) {
+
+    score++;
+
+    feedback(
+      "feedback5a",
+      true,
+      "✓ Correct! Amir is thinking of a snail. 🐌"
+    );
+
+  } else {
+
+    feedback(
+      "feedback5a",
+      false,
+      "✗ Look at the clues: soft body, no legs and a large shell."
+    );
+
+  }
+
+
+  if (
+    type === "soft-bodied invertebrate" ||
+    type === "soft bodied invertebrate"
+  ) {
+
+    score++;
+
+    feedback(
+      "feedback5b",
+      true,
+      "✓ Correct!"
+    );
+
+  } else {
+
+    feedback(
+      "feedback5b",
+      false,
+      "✗ Think about the vocabulary from Slide 2."
+    );
+
+  }
+
+
+  const summary =
+    document.getElementById(
+      "summary5"
+    );
+
+
+  summary.style.display = "block";
+
+
+  summary.textContent =
+    `You scored ${score} / 2! ${
+      score === 2
+        ? "🌟 Brilliant! You solved the riddle!"
+        : "Keep trying — look carefully at the clues."
+    }`;
+
+
+  if (score < 2) {
+
+    document.getElementById("retry5")
+      .classList.add("show");
+
+  }
+
+}
+
+
+function retrySlide5() {
+
+  document.getElementById(
+    "riddleAnimal"
+  ).value = "";
+
+
+  document.getElementById(
+    "riddleType"
+  ).value = "";
+
+
+  document.getElementById(
+    "feedback5a"
+  ).textContent = "";
+
+
+  document.getElementById(
+    "feedback5b"
+  ).textContent = "";
+
+
+  document.getElementById(
+    "summary5"
+  ).style.display = "none";
+
+
+  document.getElementById("retry5")
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+updateSlide();
+
+</script>
+
+</body>
+</html>
+```
