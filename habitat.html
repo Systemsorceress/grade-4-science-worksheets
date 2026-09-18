@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Year 4 Science — Habitats</title>
+<style>
+:root{
+  --green:#5b9b68;--green2:#dff1df;--blue:#5b9fc4;--blue2:#e0f2f9;
+  --yellow:#f4c95d;--yellow2:#fff4cf;--orange:#ed9b54;--orange2:#ffead8;
+  --ink:#203238;--muted:#66777c;--white:#fff;--bg:#f5faf7;
+  --red:#d96b68;--red2:#fde5e4;--shadow:0 12px 30px rgba(38,71,64,.11);
+}
+*{box-sizing:border-box}
+img{max-width:100%;height:auto;display:block}
+html,body{margin:0;width:100%;height:100%;font-family:Arial,"Trebuchet MS",sans-serif;color:var(--ink);background:var(--bg)}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+#app{height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:66px;flex:0 0 66px;background:#fff;border-bottom:1px solid #dce9e4;display:flex;align-items:center;padding:0 24px;gap:16px;z-index:20}
+.brand{font-weight:800;font-size:19px;display:flex;align-items:center;gap:9px;white-space:nowrap}
+.brand span{background:var(--green2);border-radius:12px;padding:7px 9px}
+.section-pill{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--blue2);color:#34718d;padding:7px 12px;border-radius:20px}
+.score{margin-left:auto;background:var(--yellow2);border:1px solid #f2db94;border-radius:20px;padding:8px 14px;font-weight:800;min-width:90px;text-align:center}
+.progress-wrap{height:5px;background:#e8f0ed;position:absolute;top:61px;left:0;right:0}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .35s ease}
+main{flex:1;min-height:0;position:relative}
+.slide{position:absolute;inset:0;padding:30px 5.5% 82px;overflow:auto;display:none;animation:fade .35s ease}
+.slide.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.8);opacity:0}70%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+@keyframes float{50%{transform:translateY(-6px)}}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes grow{from{width:0}to{width:var(--w)}}
+.kicker{color:var(--green);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:13px;margin-bottom:8px}
+h1{font-size:clamp(32px,4vw,58px);line-height:1.02;margin:0 0 12px;letter-spacing:-.035em}
+h2{font-size:clamp(26px,3vw,42px);margin:0 0 10px;letter-spacing:-.025em}
+h3{margin:0 0 7px}
+.lead{font-size:clamp(16px,1.5vw,21px);line-height:1.5;color:#53676d;max-width:800px}
+.hero{height:100%;display:grid;place-items:center;text-align:center}
+.hero-inner{max-width:1000px}
+.hero-icon{font-size:clamp(65px,9vw,110px);animation:float 3s ease-in-out infinite;margin-bottom:8px}
+.hero h1{font-size:clamp(42px,6vw,78px)}
+.hero .lead{margin:0 auto 25px}
+button.primary,.primary{border:0;background:var(--green);color:#fff;border-radius:14px;padding:15px 25px;font-weight:800;box-shadow:0 7px 18px rgba(91,155,104,.25);transition:.2s}
+button.primary:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.btn{border:1px solid #d3e2dd;background:#fff;color:var(--ink);border-radius:12px;padding:11px 17px;font-weight:750;transition:.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,.08)}
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:#fff;border:1px solid #dce9e4;border-radius:20px;padding:20px;box-shadow:var(--shadow)}
+.click-card{cursor:pointer;transition:.22s;min-height:145px}
+.click-card:hover{transform:translateY(-4px);border-color:#a9cfc0}
+.click-card.selected{outline:3px solid #91c5a0;background:#f4fbf5}
+.icon{font-size:45px;line-height:1;margin-bottom:10px}
+.icon-img{width:100%;height:120px;object-fit:contain;background:#f3f8f6;border-radius:14px;margin-bottom:10px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.icon-img.small{width:60px;height:60px;border-radius:12px;margin-bottom:8px}
+.hero-img{width:100%;max-width:420px;height:220px;object-fit:contain;background:#f3f8f6;border-radius:22px;margin:0 auto 18px;display:block;box-shadow:var(--shadow);animation:float 3s ease-in-out infinite}
+.section-img{width:100%;max-width:520px;height:230px;object-fit:contain;background:#f3f8f6;border-radius:20px;margin:0 auto 18px;display:block;box-shadow:var(--shadow)}
+.large-img{width:100%;height:100%;min-height:190px;object-fit:contain;background:#f3f8f6;border-radius:20px;box-shadow:var(--shadow)}
+.thumb-img{width:32px;height:32px;object-fit:contain;background:#f3f8f6;border-radius:8px;vertical-align:middle;margin-right:8px}
+.panel-img{width:100%;height:150px;object-fit:contain;background:#f3f8f6;border-radius:14px;margin-bottom:10px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.hotspot-img{width:100%;height:100%;object-fit:contain;background:#f3f8f6;border-radius:50%}
+.scene-photo{background-size:contain;background-repeat:no-repeat;background-position:center;background-color:#f3f8f6}
+.card-img-emoji{width:56px;height:56px;object-fit:contain;background:#f3f8f6;border-radius:12px}
+.reveal{margin-top:12px;padding:12px;border-radius:12px;background:var(--green2);display:none;color:#34533b;line-height:1.45}
+.click-card.open .reveal{display:block;animation:pop .25s}
+.activity{margin-top:20px}
+.question{font-size:22px;font-weight:800;margin-bottom:15px}
+.choices{display:flex;flex-wrap:wrap;gap:11px}
+.choice{border:2px solid #d8e5e0;background:#fff;border-radius:13px;padding:12px 18px;font-weight:750;transition:.2s}
+.choice:hover{transform:translateY(-2px)}
+.choice.correct{border-color:var(--green);background:var(--green2)}
+.choice.wrong{border-color:var(--red);background:var(--red2)}
+.feedback{margin-top:13px;min-height:25px;font-weight:750;line-height:1.45}
+.feedback.good{color:#347542}.feedback.bad{color:#a74745}
+.small{font-size:14px;color:var(--muted);line-height:1.45}
+.tag{display:inline-block;padding:5px 9px;border-radius:9px;background:#edf5f2;font-size:12px;font-weight:800;margin:3px}
+.sort-area{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.dropzone{min-height:145px;border:2px dashed #b8cec7;border-radius:18px;background:#f9fcfb;padding:15px}
+.dropzone.over{background:var(--blue2);border-color:var(--blue)}
+.drop-title{font-weight:900;margin-bottom:10px}
+.draggable{background:#fff;border:1px solid #d7e4df;border-radius:12px;padding:11px 13px;margin:7px 0;cursor:grab;box-shadow:0 3px 10px rgba(0,0,0,.06);font-weight:700}
+.draggable:active{cursor:grabbing}
+.pool{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px}
+.pool .draggable{margin:0}
+.scene{position:relative;min-height:280px;border-radius:24px;overflow:hidden;padding:25px;background:linear-gradient(#dff4fa 0 48%,#b9d995 48%);border:1px solid #c9ded7}
+.scene.urban{background:linear-gradient(#dff4fa 0 46%,#cbd0d1 46%)}
+.tree{font-size:75px;position:absolute}
+.hotspot{position:absolute;border:0;background:#fff;border-radius:50%;width:48px;height:48px;font-size:25px;box-shadow:0 5px 14px rgba(0,0,0,.16);animation:float 2.5s ease-in-out infinite}
+.hotspot-info{position:absolute;left:20px;right:20px;bottom:15px;background:rgba(255,255,255,.96);padding:12px 16px;border-radius:13px;font-weight:700;display:none}
+.hotspot-info.show{display:block;animation:pop .2s}
+.branch{display:flex;flex-direction:column;align-items:center;gap:10px}
+.node{background:#fff;border:2px solid #bcd5ca;border-radius:14px;padding:13px 18px;font-weight:800;min-width:190px;text-align:center;box-shadow:0 5px 15px rgba(0,0,0,.06)}
+.branches{display:flex;gap:30px;justify-content:center;width:100%}
+.path{display:flex;flex-direction:column;align-items:center;gap:7px}
+.path button{border:0;border-radius:11px;padding:9px 15px;font-weight:800}
+.yes{background:var(--green2);color:#2d7040}.no{background:var(--orange2);color:#9a5b25}
+.flow-arrow{font-size:22px;color:#8da19a}
+.key-board{background:#f7fbf9;border:1px solid #dce9e4;border-radius:20px;padding:18px}
+.quiz-box{max-width:850px;margin:18px auto}
+.quiz-progress{height:8px;background:#e6efec;border-radius:10px;overflow:hidden;margin:12px 0 20px}
+.quiz-progress div{height:100%;background:var(--green);transition:.3s}
+.quiz-option{display:block;width:100%;text-align:left;margin:9px 0;border:2px solid #dce7e3;background:#fff;border-radius:14px;padding:14px 16px;font-weight:700}
+.quiz-option.correct{background:var(--green2);border-color:var(--green)}
+.quiz-option.wrong{background:var(--red2);border-color:var(--red)}
+.quiz-result{text-align:center;animation:pop .4s}
+.score-ring{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;margin:20px auto;background:conic-gradient(var(--green) var(--pct),#e5efeb 0);position:relative}
+.score-ring:after{content:"";position:absolute;width:116px;height:116px;border-radius:50%;background:#fff}
+.score-ring span{position:relative;z-index:2;font-size:31px;font-weight:900}
+input,textarea,select{border:2px solid #d6e4df;border-radius:12px;padding:12px 14px;background:#fff;color:var(--ink);outline:none}
+input:focus,textarea:focus,button:focus{outline:3px solid #9bc9b8;outline-offset:2px}
+textarea{width:100%;min-height:80px;resize:vertical}
+.input-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.field{display:flex;flex-direction:column;gap:7px;font-weight:800}
+.before-after{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{padding:25px;border-radius:20px;min-height:190px}
+.before{background:#e6f3dd}.after{background:#dff2f8}
+.action-card{min-height:125px;cursor:pointer}
+.action-card.open{outline:3px solid #9dc9b0}
+.action-card .reveal{display:none}.action-card.open .reveal{display:block}
+.chain{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:22px 0}
+.chain-step{background:#fff;border:1px solid #d7e5e0;border-radius:15px;padding:15px;text-align:center;min-width:105px;box-shadow:var(--shadow);cursor:pointer}
+.chain-step.active{background:var(--green2);transform:translateY(-3px)}
+.chain-arrow{font-size:25px;color:#8ba39a}
+.footer-nav{height:64px;flex:0 0 64px;background:#fff;border-top:1px solid #dce9e4;display:flex;align-items:center;padding:0 24px;gap:10px;z-index:20}
+.footer-nav .slide-count{margin:auto;font-weight:800;color:#64777a}
+.navbtn{border:1px solid #cfdfda;background:#fff;border-radius:12px;padding:10px 16px;font-weight:800}
+.navbtn:disabled{opacity:.4;cursor:not-allowed}
+.home-btn{background:#edf6f2}
+.reset{border:0;background:#fff0dc;color:#8d5a24;border-radius:11px;padding:9px 13px;font-weight:800}
+.hidden{display:none!important}
+.center{text-align:center}
+.two-col{display:grid;grid-template-columns:1.15fr .85fr;gap:25px;align-items:center}
+.large-emoji{font-size:clamp(80px,10vw,150px);text-align:center}
+.fact{padding:13px 15px;border-radius:13px;background:#f3f8f6;margin:8px 0}
+.goodbox{background:var(--green2);padding:15px;border-radius:15px}
+.warnbox{background:var(--yellow2);padding:15px;border-radius:15px}
+.dangerbox{background:var(--red2);padding:15px;border-radius:15px}
+.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.section-card{border-left:6px solid var(--green)}
+.match-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;margin:10px 0}
+.match-row select{width:100%}
+.nav-disabled{pointer-events:none}
+.menu-overlay{position:fixed;inset:0;background:rgba(27,49,44,.38);z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
+.menu-overlay.show{display:flex}
+.menu{background:#fff;border-radius:25px;padding:25px;max-width:800px;width:100%;max-height:85vh;overflow:auto;box-shadow:0 25px 60px rgba(0,0,0,.2)}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.menu-item{border:1px solid #dbe8e3;background:#f9fcfb;border-radius:13px;padding:12px;text-align:left;cursor:pointer}
+.menu-item:hover{background:var(--green2)}
+.menu-item b{display:block}.menu-item span{font-size:12px;color:var(--muted)}
+.celebrate{font-size:55px;animation:pop .5s}
+@media(max-width:800px){
+ .topbar{padding:0 12px;height:58px;flex-basis:58px}.brand{font-size:15px}.section-pill{display:none}
+ .score{font-size:13px;min-width:auto}.progress-wrap{top:53px}
+ .slide{padding:22px 18px 75px}.grid-4,.grid-3{grid-template-columns:repeat(2,1fr)}
+ .two-col,.before-after,.sort-area,.input-grid{grid-template-columns:1fr}
+ .menu-grid{grid-template-columns:1fr 1fr}.footer-nav{padding:0 10px}
+ .footer-nav .slide-count{font-size:12px}.navbtn{padding:9px 11px}
+}
+@media(max-width:520px){
+ .grid-4,.grid-3,.grid-2,.choice-grid{grid-template-columns:1fr}
+ h1{font-size:34px}.hero h1{font-size:43px}
+ .branches{gap:8px}.node{min-width:130px;font-size:13px;padding:10px}
+ .menu-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="app">
+<header class="topbar">
+  <div class="brand"><span>🌍</span> Habitat Detectives</div>
+  <div id="sectionPill" class="section-pill">Welcome</div>
+  <div id="scoreBadge" class="score">⭐ Score: 0</div>
+  <div class="progress-wrap"><div id="progress" class="progress"></div></div>
+</header>
+
+<main id="slides">
+
+<!-- 1 -->
+
+<section class="slide active" data-section="Welcome">
+<div class="hero"><div class="hero-inner">
+<img class="hero-img" src="https://img.magnific.com/free-vector/hand-drawn-biodiversity-illustration_23-2149424510.jpg?semt=ais_hybrid&w=740&q=80" alt="Collage of different habitats: woodland, field, city and pond">
+<div class="kicker">Year 4 Science</div>
+<h1>Welcome to Habitats!</h1>
+<p class="lead"><strong>Become a Habitat Detective 🔎</strong><br>What is a habitat? What lives there? How do habitats help living things?</p>
+<button class="primary" onclick="nextSlide()">START INVESTIGATION →</button>
+</div></div>
+</section>
+
+<!-- 2 -->
+
+<section class="slide" data-section="Living Things & Habitats">
+<div class="kicker">Section 1 • Living Things & Their Habitats</div><h1>What Is a Habitat?</h1>
+<p class="lead"><strong>A habitat is an area where animals and plants live.</strong> Habitats usually provide the things living things need to survive.</p>
+<img class="section-img" src="https://img.magnific.com/premium-vector/forest-ecosystem-miniature-with-trees-rivers-animals-learning-model_1296396-12064.jpg?semt=ais_hybrid&w=740&q=80" alt="Habitat ecosystem showing plants, animals, water, sunlight and shelter">
+<div class="grid grid-3 activity">
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">🌱</div><h3>Plants</h3><div class="reveal">Plants need suitable conditions such as light, water, space and nutrients.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">🐦</div><h3>Animals</h3><div class="reveal">Animals need things such as food, water, shelter and space.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">💧</div><h3>Water</h3><div class="reveal">Water is essential for living things. Different habitats provide it in different ways.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">☀️</div><h3>Light</h3><div class="reveal">Plants need light to make their food. Animals may also depend on plants.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">🍃</div><h3>Food</h3><div class="reveal">Habitats can provide plants or other organisms that animals can eat.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">🏠</div><h3>Shelter</h3><div class="reveal">Shelter can protect living things from weather and predators.</div></div>
+</div>
+</section>
+
+<!-- 3 -->
+
+<section class="slide" data-section="Living Things & Habitats">
+<div class="kicker">Section 1 • Investigation</div><h1>What Does a Living Thing Need?</h1>
+<p class="lead">Choose the things a living thing needs to survive. Think carefully!</p>
+<div class="two-col">
+<img class="large-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjWJBol9h9x7iag7CYkR86hhCECMaimxeq914At7_GbH6XEmHZTpZGp7w&s=10" alt="Animal in its habitat showing food, water, shelter and space">
+<div class="card activity">
+<div class="question">What does a living thing need to survive?</div>
+<div class="choices" id="needsChoices">
+<button class="choice" onclick="needsPick(this,true)">🍎 Food</button>
+<button class="choice" onclick="needsPick(this,true)">💧 Water</button>
+<button class="choice" onclick="needsPick(this,true)">🏠 Shelter</button>
+<button class="choice" onclick="needsPick(this,true)">📍 Space</button>
+<button class="choice" onclick="needsPick(this,false)">🎮 A video game</button>
+</div>
+<div id="needsFeedback" class="feedback"></div>
+<button class="reset" onclick="resetNeeds()">🔄 Reset Activity</button>
+</div>
+</div>
+</section>
+
+<!-- 4 -->
+
+<section class="slide" data-section="Living Things & Habitats">
+<div class="kicker">Section 1 • Explore</div><h1>Meet Different Habitats</h1>
+<p class="lead">Click a habitat to investigate what it can provide.</p>
+<div class="grid grid-4">
+<div class="card click-card" onclick="revealCard(this)"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTeH223YqkhNgOkM7gwzk7-57b0agKpphE-xdElRPwRw&s=10" alt="Woodland habitat"><h3>Woodland</h3><p class="small">Trees, shade and leaf litter.</p><div class="reveal">Plants may include trees, ferns and flowers. Animals may include owls, squirrels and insects. It can provide food and shelter.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIuIs1JOFLrIxrX60qry_q8zQbW_AZLwqRvmOQgL3EH6h8xfRqccKz8ece&s=10" alt="Countryside field habitat"><h3>Field</h3><p class="small">Open countryside and grasses.</p><div class="reveal">Grasses and wildflowers can grow here. Animals such as cows, rabbits and insects may find food and space.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><img class="icon-img" src="https://static.toiimg.com/thumb/msid-121459618,width-1070,height-580,imgsize-82856,resizemode-6,overlay-toi_sw,pt-32,y_pad-40/photo.jpg" alt="Urban city habitat with wildlife"><h3>Urban Area</h3><p class="small">Buildings, roads and people.</p><div class="reveal">Pigeons, insects and some plants can live in cities. Buildings, parks and gardens can provide shelter and food.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRsUwKZbB1WJAAUqWVa2BMzQuZEo3u17gmli-tZy1YZ8zMJsIR9zPmLa4&s=10" alt="Pond aquatic habitat"><h3>Aquatic Habitat</h3><p class="small">Water environments.</p><div class="reveal">Ponds, rivers and lakes are aquatic habitats. Fish, frogs, water plants and many small organisms can live there.</div></div>
+</div>
+</section>
+
+<!-- 5 -->
+
+<section class="slide" data-section="Living Things & Habitats">
+<div class="kicker">Section 1 • Sort It</div><h1>Urban or Rural?</h1>
+<p class="lead"><strong>Urban</strong> = an area with many buildings where people live and work. <strong>Rural</strong> = an area of countryside with few buildings.</p>
+<div class="pool" id="urbanPool"></div>
+<div class="sort-area">
+<div class="dropzone" data-sort="urban" ondragover="allowDrop(event)" ondrop="dropSort(event,'urban')"><div class="drop-title">🏙️ URBAN</div><div id="urbanDrop"></div></div>
+<div class="dropzone" data-sort="rural" ondragover="allowDrop(event)" ondrop="dropSort(event,'rural')"><div class="drop-title">🌳 RURAL</div><div id="ruralDrop"></div></div>
+</div>
+<div class="feedback" id="sortFeedback"></div>
+<button class="primary" onclick="checkUrbanRural()">CHECK SORT</button>
+<button class="reset" onclick="resetUrbanRural()">🔄 Reset Activity</button>
+</section>
+
+<!-- 6 -->
+
+<section class="slide" data-section="Living Things & Habitats">
+<div class="kicker">Section 1 • Key Vocabulary</div><h1>What Is Biodiversity?</h1>
+<p class="lead"><strong>Biodiversity = the variety of living things in a habitat.</strong></p>
+<div class="before-after">
+<div class="panel before"><h2>Habitat A</h2><img class="panel-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrLz9XKqrtxJYbSI7AJ916SiUpNYs8MtUX5zz5JDsvYgW2POZ0xCjE0jw0&s=10" alt="Low-biodiversity grassland habitat with few species"><p>Only a few different types of living things are shown.</p><span class="tag">LOWER variety</span></div>
+<div class="panel after"><h2>Habitat B</h2><img class="panel-img" src="https://static.vecteezy.com/system/resources/thumbnails/018/892/001/small/ecosystem-of-pond-illustration-vector.jpg" alt="High-biodiversity woodland and pond ecosystem"><p>Many different plants and animals are shown.</p><span class="tag">GREATER variety</span></div>
+</div>
+<div class="card activity"><div class="question">Which habitat has greater biodiversity?</div>
+<div class="choices"><button class="choice" onclick="biodiversity(this,false)">Habitat A</button><button class="choice" onclick="biodiversity(this,true)">Habitat B</button></div><div id="bioFeedback" class="feedback"></div></div>
+</section>
+
+<!-- 7 -->
+
+<section class="slide" data-section="Living Things & Habitats">
+<div class="kicker">Section 1 • Habitat Detective</div><h1>Explore the Habitat 🔎</h1>
+<p class="lead">Click the hotspots to discover what this habitat provides.</p>
+<div class="scene scene-photo" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgIEIzO7WDhPqY3U29H3hefI9WeEouCKQXFLgfd1_EIHnSRIRqhWLAOEV2&s=10')">
+<button class="hotspot" style="left:13%;top:45%" onclick="hotspot('Plants can provide food and shelter.')">🌱</button>
+<button class="hotspot" style="right:14%;top:46%" onclick="hotspot('Animals can find food and places to shelter here.')">🐾</button>
+<button class="hotspot" style="left:49%;top:63%" onclick="hotspot('Plants and animals need water to survive.')">💧</button>
+<button class="hotspot" style="right:47%;top:18%" onclick="hotspot('Flowers and other plants can provide food for insects.')">🍃</button>
+<div id="hotspotInfo" class="hotspot-info"></div>
+</div>
+<div class="card activity"><div class="question">Why might living things live here?</div><p class="small">Look for the resources and conditions the habitat provides: food, water, shelter, light and space.</p></div>
+</section>
+
+<!-- 8 -->
+
+<section class="slide" data-section="Living Things & Habitats">
+<div class="kicker">Section 1 • Think Like a Scientist</div><h1>Would a Pigeon Live Here?</h1>
+<div class="two-col">
+<img class="large-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBYfNp5KM6GkfswYHBqk9kd2J6kVy6xvpetZXlI1wP-x-VBYHv0dwZLbY&s=10" alt="Pigeon in an urban environment">
+<div class="card">
+<div class="question">Would a pigeon live in an aquatic habitat?</div>
+<div class="choices"><button class="choice" onclick="pigeon(this,false)">Yes, aquatic habitats are water.</button><button class="choice" onclick="pigeon(this,true)">It could visit water, but an urban habitat can provide suitable food, shelter and space.</button></div>
+<div id="pigeonFeedback" class="feedback"></div>
+<img class="panel-img" style="margin-top:14px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs5nurfnGi5RZnT76lBmWVBqFunRQti9-4vuFG_WtXA9i4bweeyrqH7u8&s=10" alt="Pigeon near water, for habitat comparison">
+</div>
+</div>
+</section>
+
+<!-- 9 -->
+
+<section class="slide" data-section="Living Things & Habitats">
+<div class="kicker">Section 1 • Challenge</div><h1>Habitat Matching Challenge</h1>
+<p class="lead">Drag each animal to a habitat where it can find suitable conditions.</p>
+<div class="pool" id="matchPool"></div>
+<div class="grid grid-4">
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropMatch(event,'aquatic')"><div class="drop-title">🌊 Aquatic</div><div id="aquaticDrop"></div></div>
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropMatch(event,'woodland')"><div class="drop-title">🌳 Woodland</div><div id="woodlandDrop"></div></div>
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropMatch(event,'field')"><div class="drop-title">🌾 Field</div><div id="fieldDrop"></div></div>
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropMatch(event,'urban')"><div class="drop-title">🏙️ Urban</div><div id="matchUrbanDrop"></div></div>
+</div>
+<div id="matchFeedback" class="feedback"></div>
+<button class="primary" onclick="checkMatches()">CHECK ANSWERS</button>
+<button class="reset" onclick="resetMatches()">🔄 Reset Activity</button>
+</section>
+
+<!-- 10 -->
+
+<section class="slide" data-section="Classification Keys • Animals">
+<div class="kicker">Section 2 • Classification Keys — Animals</div><h1>What Is Classification?</h1>
+<p class="lead"><strong>Classification means grouping living things based on their characteristics.</strong></p>
+<div class="grid grid-3 activity">
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">🐕 🐈</div><h3>Fur</h3><div class="reveal">You could group animals by whether they have fur.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">🐟 🐸</div><h3>Water</h3><div class="reveal">You could group animals by where they live or spend much of their time.</div></div>
+<div class="card click-card" onclick="revealCard(this)"><div class="icon">🦅 🐧</div><h3>Features</h3><div class="reveal">You can use observable characteristics such as feathers, wings or a spine.</div></div>
+</div>
+<div class="goodbox activity">💡 Scientists classify living things using features that can be observed and described.</div>
+</section>
+
+<!-- 11 -->
+
+<section class="slide" data-section="Classification Keys • Animals">
+<div class="kicker">Section 2 • Learn the Tool</div><h1>What Is a Classification Key?</h1>
+<p class="lead">A classification key helps us identify or group living things. It uses <strong>closed YES/NO questions</strong>.</p>
+<div class="key-board activity">
+<div class="center"><div class="node">Does the animal have fur?</div><div class="flow-arrow">↓</div>
+<div class="branches">
+<div class="path"><button class="yes">YES</button><div class="node">🐶 Fur group</div></div>
+<div class="path"><button class="no">NO</button><div class="node">🐟 No-fur group</div></div>
+</div></div>
+</div>
+<div class="card activity"><strong>Why YES/NO?</strong> A closed question gives a clear choice, so we can follow one pathway through the key.</div>
+</section>
+
+<!-- 12 -->
+
+<section class="slide" data-section="Classification Keys • Animals">
+<div class="kicker">Section 2 • Good Science Questions</div><h1>Open or Closed?</h1>
+<p class="lead">A useful classification question should be based on an observable characteristic and have a YES/NO answer.</p>
+<div class="card">
+<div class="grid grid-2" id="questionSort">
+<button class="choice" onclick="classifyQuestion(this,true)">Does it have wings? ✅</button>
+<button class="choice" onclick="classifyQuestion(this,false)">Is it cute? ❌</button>
+<button class="choice" onclick="classifyQuestion(this,true)">Does it have feathers? ✅</button>
+<button class="choice" onclick="classifyQuestion(this,false)">What does it eat? ❌</button>
+<button class="choice" onclick="classifyQuestion(this,true)">Does it have a spine? ✅</button>
+</div>
+<div id="questionFeedback" class="feedback"></div>
+</div>
+</section>
+
+<!-- 13 -->
+
+<section class="slide" data-section="Classification Keys • Animals">
+<div class="kicker">Section 2 • Mini Key</div><h1>Bee or Ant?</h1>
+<p class="lead">Use the question to identify the insect.</p>
+<div class="grid grid-2" style="max-width:400px;margin:0 auto 18px">
+<img class="icon-img small" style="width:100%;height:110px;margin:0" src="https://www.vtpestcontrol.com/wp-content/uploads/2019/04/honey-bee.jpg" alt="Bee">
+<img class="icon-img small" style="width:100%;height:110px;margin:0" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdURLud7ZOpgwvPBkQqgfw4WiRazhG1CJqwtL9ydsYdaICUKhx_Jtpq5Ci&s=10" alt="Ant">
+</div>
+<div class="card center">
+<div class="node" style="margin:auto">Does it have wings?</div>
+<div class="flow-arrow">↓</div>
+<div class="branches">
+<div class="path"><button class="yes" onclick="beeAnt(this,true)">YES → Bee</button></div>
+<div class="path"><button class="no" onclick="beeAnt(this,false)">NO → Ant</button></div>
+</div>
+<div id="beeFeedback" class="feedback"></div>
+</div>
+</section>
+
+<!-- 14 -->
+
+<section class="slide" data-section="Classification Keys • Animals">
+<div class="kicker">Section 2 • Vertebrates & Invertebrates</div><h1>Vertebrate or Invertebrate?</h1>
+<p class="lead"><strong>Vertebrate</strong> = an animal with a spine. <strong>Invertebrate</strong> = an animal without a spine.</p>
+<div class="pool" id="vertebratePool"></div>
+<div class="sort-area">
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropVertebrate(event,'vertebrate')"><div class="drop-title">🦴 VERTEBRATE</div><div id="vDrop"></div></div>
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropVertebrate(event,'invertebrate')"><div class="drop-title">🦋 INVERTEBRATE</div><div id="iDrop"></div></div>
+</div>
+<div id="vertebrateFeedback" class="feedback"></div>
+<button class="primary" onclick="checkVertebrates()">CHECK ANSWERS</button>
+<button class="reset" onclick="resetVertebrates()">🔄 Reset Activity</button>
+</section>
+
+<!-- 15 -->
+
+<section class="slide" data-section="Classification Keys • Animals">
+<div class="kicker">Section 2 • Build a Key</div><h1>Build the Animal Key</h1>
+<p class="lead">Choose a YES/NO question to split the animals into useful groups.</p>
+<div class="card">
+<div class="question">Animals: 🐶 Dog • 🐟 Fish • 🦅 Eagle • 🦋 Butterfly</div>
+<div class="choices" id="animalKeyChoices">
+<button class="choice" onclick="animalKey(this,'spine')">Does it have a spine?</button>
+<button class="choice" onclick="animalKey(this,'feathers')">Does it have feathers?</button>
+<button class="choice" onclick="animalKey(this,'fur')">Does it have fur?</button>
+<button class="choice" onclick="animalKey(this,'wings')">Does it have wings?</button>
+</div>
+<div id="animalKeyResult" class="key-board hidden"></div>
+</div>
+</section>
+
+<!-- 16 -->
+
+<section class="slide" data-section="Classification Keys • Animals">
+<div class="kicker">Section 2 • Mystery Game</div><h1>Guess My Animal 🕵️</h1>
+<p class="lead">The computer has secretly chosen an animal. Ask up to <strong>5 YES/NO questions</strong>, then make your guess.</p>
+<div class="card quiz-box">
+<div id="mysteryStatus" class="question">Question 1 of 5</div>
+<div class="choices">
+<button class="choice" onclick="mysteryAsk('wings')">Does it have wings?</button>
+<button class="choice" onclick="mysteryAsk('fur')">Does it have fur?</button>
+<button class="choice" onclick="mysteryAsk('spine')">Does it have a spine?</button>
+<button class="choice" onclick="mysteryAsk('feathers')">Does it have feathers?</button>
+</div>
+<div id="mysteryAnswers" class="fact">Your answers will appear here.</div>
+<div class="feedback" id="mysteryFeedback"></div>
+<div id="mysteryGuesses" class="choices hidden"></div>
+<button class="reset" onclick="resetMystery()">🔄 New Mystery Animal</button>
+</div>
+</section>
+
+<!-- 17 -->
+
+<section class="slide" data-section="Classification Keys • Animals">
+<div class="kicker">Section 2 • Final Animal Challenge</div><h1>Animal Classification Challenge</h1>
+<p class="lead">Can you choose a useful pathway for all six animals?</p>
+<div class="grid grid-3">
+<div class="card"><img class="icon-img" style="height:80px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQICkaUbgThug-7A4RDuBF0I3GoyG1QESBGc90XMuluyg4h4IoSTYbwp8I&s=10" alt="Dog"><b>Dog</b></div><div class="card"><img class="icon-img" style="height:80px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSFoYXspHb7yGTLrDYPyyzR7W_4DFh6K0DF5yjxdsyPg8YIH7uchh22GML&s=10" alt="Fish"><b>Fish</b></div><div class="card"><div class="icon">🦅</div><b>Eagle</b></div>
+<div class="card"><img class="icon-img" style="height:80px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRACyAqxe-xa9vGZHsXmNpioB9B81yQN47MBqLMKVrgBkmFuu9W0Y92m1A&s=10" alt="Butterfly"><b>Butterfly</b></div><div class="card"><div class="icon">🐸</div><b>Frog</b></div><div class="card"><div class="icon">🐌</div><b>Snail</b></div>
+</div>
+<div class="card activity">
+<div class="question">Which first question would separate vertebrates from invertebrates?</div>
+<div class="choices">
+<button class="choice" onclick="animalChallenge(this,true)">Does it have a spine?</button>
+<button class="choice" onclick="animalChallenge(this,false)">Is it interesting?</button>
+<button class="choice" onclick="animalChallenge(this,false)">Is it fast?</button>
+</div><div id="animalChallengeFeedback" class="feedback"></div>
+</div>
+</section>
+
+<!-- 18 -->
+
+<section class="slide" data-section="Classification Keys • Plants">
+<div class="kicker">Section 3 • Classification Keys — Plants</div><h1>Plants Can Be Classified Too!</h1>
+<div class="two-col">
+<div class="grid grid-3">
+<img class="icon-img" style="height:150px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8pRNtDnVnYMJfnuP8V1s9CuHM7_VpPs7eoq0VjwGDBA&s=10" alt="Oak tree">
+<img class="icon-img" style="height:150px" src="https://images.unsplash.com/photo-1755004609166-f20e6ecd22c4?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8" alt="Fern">
+<img class="icon-img" style="height:150px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdIxOY0yEmnZVmeKTHT5ArzfE3fbl6NepDts-L98s9-AUgEWNcbVPY9yQp&s=10" alt="Rose">
+</div>
+<div class="card">
+<div class="question">Do all plants look the same?</div>
+<div class="choices"><button class="choice" onclick="plantSame(this,false)">Yes</button><button class="choice" onclick="plantSame(this,true)">No</button></div>
+<div id="plantSameFeedback" class="feedback"></div>
+<p class="small">Plants have different observable characteristics. These can help us classify them.</p>
+</div>
+</div>
+</section>
+
+<!-- 19 -->
+
+<section class="slide" data-section="Classification Keys • Plants">
+<div class="kicker">Section 3 • Observe</div><h1>Look at Plant Features</h1>
+<p class="lead">Click a feature to learn what scientists can observe.</p>
+<div class="card" style="position:relative;min-height:310px;text-align:center;overflow:hidden">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8pRNtDnVnYMJfnuP8V1s9CuHM7_VpPs7eoq0VjwGDBA&s=10" alt="Oak tree" style="width:260px;height:260px;object-fit:contain;background:#f3f8f6;border-radius:20px;margin:20px auto;display:block;box-shadow:var(--shadow)">
+<button class="hotspot" style="left:29%;top:35%" onclick="plantFeature('A trunk is a strong woody stem that supports a tree.')">🌳</button>
+<button class="hotspot" style="right:25%;top:23%" onclick="plantFeature('Leaves are plant structures that help the plant make food.')">🌿</button>
+<button class="hotspot" style="left:46%;top:14%" onclick="plantFeature('Flowers are observable structures that some plants produce.')">🌼</button>
+<button class="hotspot" style="right:38%;bottom:23%" onclick="plantFeature('Thorns are sharp structures found on some plants, such as roses.')">🌵</button>
+<button class="hotspot" style="left:30%;bottom:15%" onclick="plantFeature('Fruit develops from the flower in flowering plants and can contain seeds.')">🍎</button>
+<div id="plantFeatureInfo" class="hotspot-info"></div>
+</div>
+</section>
+
+<!-- 20 -->
+
+<section class="slide" data-section="Classification Keys • Plants">
+<div class="kicker">Section 3 • Plant Key</div><h1>Plant Classification Key</h1>
+<p class="lead">Follow the pathways by answering YES or NO.</p>
+<div class="key-board">
+<div class="center"><div class="node">Does the plant have a trunk?</div>
+<div class="branches" style="margin-top:12px">
+<div class="path"><button class="yes" onclick="plantKeyStep(1)">YES</button><div class="node">🌳 Tree pathway</div></div>
+<div class="path"><button class="no" onclick="plantKeyStep(2)">NO</button><div class="node">🌿 Non-trunk pathway</div></div>
+</div>
+<div id="plantKeyNext" class="activity"></div></div>
+</div>
+<div id="plantKeyFeedback" class="feedback"></div>
+</section>
+
+<!-- 21 -->
+
+<section class="slide" data-section="Classification Keys • Plants">
+<div class="kicker">Section 3 • Flowering Plants</div><h1>Flowering or Non-Flowering?</h1>
+<p class="lead"><strong>Flowering plant</strong> = a plant that can produce flowers and fruit. <strong>Non-flowering plant</strong> = a plant that does not produce flowers and fruit.</p>
+<div class="pool" id="plantSortPool"></div>
+<div class="sort-area">
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropPlantSort(event,'flowering')"><div class="drop-title">🌼 FLOWERING</div><div id="flowerDrop"></div></div>
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropPlantSort(event,'nonflowering')"><div class="drop-title">🌿 NON-FLOWERING</div><div id="nonflowerDrop"></div></div>
+</div>
+<div id="plantSortFeedback" class="feedback"></div>
+<button class="primary" onclick="checkPlantSort()">CHECK ANSWERS</button>
+<button class="reset" onclick="resetPlantSort()">🔄 Reset Activity</button>
+</section>
+
+<!-- 22 -->
+
+<section class="slide" data-section="Classification Keys • Plants">
+<div class="kicker">Section 3 • Mystery Plant</div><h1>Plant Detective 🔎</h1>
+<p class="lead">Answer YES/NO questions about the mystery plant. The clues will narrow down the group.</p>
+<div class="card quiz-box">
+<img class="large-img" id="mysteryPlantEmoji" style="max-height:200px;height:200px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdIxOY0yEmnZVmeKTHT5ArzfE3fbl6NepDts-L98s9-AUgEWNcbVPY9yQp&s=10" alt="Mystery plant">
+<div class="question">Does the plant have...</div>
+<div class="choices">
+<button class="choice" onclick="plantMystery('trunk')">🌳 a trunk?</button>
+<button class="choice" onclick="plantMystery('flowers')">🌼 flowers?</button>
+<button class="choice" onclick="plantMystery('thorns')">🌵 thorns?</button>
+<button class="choice" onclick="plantMystery('leaves')">🌿 leaves?</button>
+</div>
+<div id="plantMysteryInfo" class="fact">Choose a clue.</div>
+<div id="plantMysteryResult" class="feedback"></div>
+<button class="reset" onclick="resetPlantMystery()">🔄 New Mystery Plant</button>
+</div>
+</section>
+
+<!-- 23 -->
+
+<section class="slide" data-section="Classification Keys • Plants">
+<div class="kicker">Section 3 • Build a Key</div><h1>Build a Plant Key</h1>
+<p class="lead">Plants: Oak • Rose • Dandelion • Fern</p>
+<div class="grid grid-4" style="max-width:600px;margin:0 auto 16px">
+<img class="icon-img small" style="width:100%;height:80px;margin:0" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8pRNtDnVnYMJfnuP8V1s9CuHM7_VpPs7eoq0VjwGDBA&s=10" alt="Oak">
+<img class="icon-img small" style="width:100%;height:80px;margin:0" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdIxOY0yEmnZVmeKTHT5ArzfE3fbl6NepDts-L98s9-AUgEWNcbVPY9yQp&s=10" alt="Rose">
+<img class="icon-img small" style="width:100%;height:80px;margin:0" src="https://cdn.mos.cms.futurecdn.net/v2/t:0,l:147,cw:887,ch:887,q:80,w:887/Ar3M9KZxZv8cj5RMXomg7B.jpg" alt="Dandelion">
+<img class="icon-img small" style="width:100%;height:80px;margin:0" src="https://images.unsplash.com/photo-1755004609166-f20e6ecd22c4?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8" alt="Fern">
+</div>
+<div class="card">
+<div class="question">Choose the first question.</div>
+<div class="choices">
+<button class="choice" onclick="plantBuildKey(this,'trunk')">Does it have a trunk?</button>
+<button class="choice" onclick="plantBuildKey(this,'thorns')">Does it have thorns?</button>
+<button class="choice" onclick="plantBuildKey(this,'flowers')">Does it have flowers?</button>
+<button class="choice" onclick="plantBuildKey(this,'leaves')">Does it have leaves?</button>
+</div>
+<div id="plantBuildResult" class="key-board hidden"></div>
+</div>
+</section>
+
+<!-- 24 -->
+
+<section class="slide" data-section="Classification Keys • Plants">
+<div class="kicker">Section 3 • Scientific Thinking</div><h1>Which Question Should We Ask?</h1>
+<div class="two-col">
+<img class="large-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdIxOY0yEmnZVmeKTHT5ArzfE3fbl6NepDts-L98s9-AUgEWNcbVPY9yQp&s=10" alt="Rose">
+<div class="card">
+<div class="question">We are classifying a mystery rose. Which question is useful?</div>
+<div class="choices" style="flex-direction:column;align-items:stretch">
+<button class="choice" onclick="roseQuestion(this,false)">A. Is it pretty?</button>
+<button class="choice" onclick="roseQuestion(this,true)">B. Does it have thorns?</button>
+<button class="choice" onclick="roseQuestion(this,false)">C. Do you like it?</button>
+</div>
+<div id="roseFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- 25 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Human Impact</div><h1>Humans and Habitats</h1>
+<p class="lead">Can humans affect habitats? <strong>YES!</strong> Human actions can both help and damage habitats.</p>
+<div class="grid grid-2 activity">
+<div class="card section-card"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4XrIMZ-YmHvnK6gwO9oI435zXGTlqapB3lT1Ho-rNkBIcIRHJR57CNRw&s=10" alt="Nature reserve"><h2>HELP</h2><p>People can protect and restore habitats.</p><div class="tag">Nature reserves</div><div class="tag">Ponds</div><div class="tag">Wildflowers</div><div class="tag">Rewilding</div></div>
+<div class="card" style="border-left:6px solid var(--red)"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw4cMQdxAqacNUujHNgEDjZI89jDuhkIDGOWLIFlGU_eqLs0C7yiHwv5aU&s=10" alt="Deforestation"><h2>DAMAGE</h2><p>Some human activities can reduce habitat quality or biodiversity.</p><div class="tag">Deforestation</div><div class="tag">Habitat destruction</div><div class="tag">Resource extraction</div></div>
+</div>
+</section>
+
+<!-- 26 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Negative Impact</div><h1>Negative Human Impact</h1>
+<div class="grid grid-3">
+<div class="card click-card action-card" onclick="revealCard(this)"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw4cMQdxAqacNUujHNgEDjZI89jDuhkIDGOWLIFlGU_eqLs0C7yiHwv5aU&s=10" alt="Deforestation"><h3>Deforestation</h3><p class="small">Clearing trees from a woodland or forest habitat.</p><div class="reveal"><strong>Deforestation</strong> means clearing trees so the land can be used by humans.</div></div>
+<div class="card click-card action-card" onclick="revealCard(this)"><div class="icon">🏗️</div><h3>Destroying habitats</h3><p class="small">Changing or removing places where organisms live.</p><div class="reveal">When habitats are destroyed, living things can lose food, shelter, water or space.</div></div>
+<div class="card click-card action-card" onclick="revealCard(this)"><div class="icon">⛏️</div><h3>Resource extraction</h3><p class="small">Removing useful natural resources from the environment.</p><div class="reveal">Extracting resources can change habitats. Using too many limited resources can cause problems.</div></div>
+</div>
+</section>
+
+<!-- 27 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Before & After</div><h1>What Happens When Trees Are Removed?</h1>
+<div class="before-after">
+<div class="panel before"><h2>BEFORE</h2><img class="panel-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTeH223YqkhNgOkM7gwzk7-57b0agKpphE-xdElRPwRw&s=10" alt="Woodland full of trees and wildlife"><p>Trees provide places for living things to feed, shelter and live.</p></div>
+<div class="panel after"><h2>AFTER</h2><img class="panel-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw4cMQdxAqacNUujHNgEDjZI89jDuhkIDGOWLIFlGU_eqLs0C7yiHwv5aU&s=10" alt="Land after deforestation"><p>Animals may lose habitat. Plants may be removed and biodiversity can be affected.</p></div>
+</div>
+<div class="card activity">
+<div class="question">Click a question to reveal an idea.</div>
+<div class="choices">
+<button class="choice" onclick="revealQuestion('Where might animals go?','Some animals may move to another suitable habitat if one is available.')">🐿️ Where might animals go?</button>
+<button class="choice" onclick="revealQuestion('What happens to their habitat?','Parts of the habitat, such as trees and shelter, may be removed.')">🌳 What happens to their habitat?</button>
+<button class="choice" onclick="revealQuestion('What might happen to biodiversity?','If living things lose suitable places to live, the variety of living things can decrease.')">🦋 What might happen to biodiversity?</button>
+</div>
+<div id="impactQuestion" class="feedback"></div>
+</div>
+</section>
+
+<!-- 28 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Natural Resources</div><h1>Natural Resources</h1>
+<p class="lead"><strong>Natural resources are materials humans use that have been removed from the environment.</strong></p>
+<div class="grid grid-3 activity">
+<div class="card"><div class="icon">🌳</div><h3>Wood</h3><p>Comes from trees and can be used by people.</p></div>
+<div class="card"><div class="icon">🪨</div><h3>Rocks & minerals</h3><p>Can be extracted from the Earth.</p></div>
+<div class="card"><div class="icon">💧</div><h3>Water</h3><p>People and ecosystems depend on water.</p></div>
+</div>
+<div class="card activity">
+<div class="question">Why could using too many natural resources cause problems?</div>
+<div class="choices">
+<button class="choice" onclick="resourceQ(this,true)">It can damage habitats or use resources faster than they can be replaced.</button>
+<button class="choice" onclick="resourceQ(this,false)">It always makes biodiversity increase.</button>
+<button class="choice" onclick="resourceQ(this,false)">It means habitats no longer need water.</button>
+</div>
+<div id="resourceFeedback" class="feedback"></div>
+</div>
+</section>
+
+<!-- 29 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Positive Impact</div><h1>Humans Can Help Too! 🌱</h1>
+<p class="lead">Click each action to discover how it can help habitats.</p>
+<div class="grid grid-3">
+<div class="card click-card action-card" onclick="revealCard(this)"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4XrIMZ-YmHvnK6gwO9oI435zXGTlqapB3lT1Ho-rNkBIcIRHJR57CNRw&s=10" alt="Nature reserve"><h3>Nature reserves</h3><div class="reveal">Areas where living things are protected from human activity.</div></div>
+<div class="card click-card action-card" onclick="revealCard(this)"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSovJewu0D46inPGbcZ6Y7dYb2c-Dih-ImaXd8GJjrJeQ&s=10" alt="Wildflower planting"><h3>Wildflower areas</h3><div class="reveal">Wildflowers can provide food and habitat for insects and other organisms.</div></div>
+<div class="card click-card action-card" onclick="revealCard(this)"><img class="icon-img" src="https://www.vtpestcontrol.com/wp-content/uploads/2019/04/honey-bee.jpg" alt="Bee, a pollinator that benefits from wildlife spaces"><h3>Wildlife spaces</h3><div class="reveal">Wildlife-friendly areas can give organisms food, shelter and places to reproduce.</div></div>
+<div class="card click-card action-card" onclick="revealCard(this)"><img class="icon-img" src="https://images.unsplash.com/photo-1755004609166-f20e6ecd22c4?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8" alt="Regrowing natural vegetation"><h3>Rewilding</h3><div class="reveal">A method of increasing biodiversity by reducing human activity.</div></div>
+<div class="card click-card action-card" onclick="revealCard(this)"><img class="icon-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrqi4nk_1XW6WsOCdeMghZVrHdZM-Ib97DH1jlwEzBBZR5WqShDHYuCbo&s=10" alt="Wildlife pond"><h3>Ponds</h3><div class="reveal">Ponds can provide water and habitats for plants, insects, frogs and other organisms.</div></div>
+</div>
+</section>
+
+<!-- 30 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Rewilding</div><h1>What Is Rewilding?</h1>
+<p class="lead"><strong>Rewilding is a method of increasing biodiversity by reducing human activity.</strong></p>
+<div class="card">
+<div class="before-after">
+<div class="panel before"><h2>BEFORE</h2><img class="panel-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTheb7r6mHhy3XLzRySC3sgOPZnrGcONdvKD3DgKOVxZPYMqJ9z6dLHByef&s=10" alt="Managed farmland"><p>More human management and activity.</p></div>
+<div class="panel after"><h2>AFTER</h2><img class="panel-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4XrIMZ-YmHvnK6gwO9oI435zXGTlqapB3lT1Ho-rNkBIcIRHJR57CNRw&s=10" alt="A wilder, natural habitat"><p>A more natural habitat can support a wider variety of living things.</p></div>
+</div>
+<div class="center activity"><button class="primary" onclick="showRewilding()">SHOW THE CHANGE →</button><div id="rewildingFeedback" class="feedback"></div></div>
+</div>
+</section>
+
+<!-- 31 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Protection</div><h1>Nature Reserve 🏞️</h1>
+<div class="two-col">
+<img class="large-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4XrIMZ-YmHvnK6gwO9oI435zXGTlqapB3lT1Ho-rNkBIcIRHJR57CNRw&s=10" alt="Nature reserve">
+<div class="card">
+<p class="lead"><strong>A nature reserve is an area where living things are protected from human activity.</strong></p>
+<div class="question">How could this help wildlife?</div>
+<div class="choices">
+<button class="choice" onclick="reserveQ(this,true)">It can provide a safer place for plants and animals to live.</button>
+<button class="choice" onclick="reserveQ(this,false)">It removes every living thing.</button>
+<button class="choice" onclick="reserveQ(this,false)">It makes every habitat exactly the same.</button>
+</div>
+<div id="reserveFeedback" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- 32 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Biodiversity Chain</div><h1>Build a Pond! 💧</h1>
+<p class="lead"><strong>Your school creates a small pond.</strong> How could this increase biodiversity?</p>
+<div class="chain" id="pondChain">
+<div class="chain-step" onclick="chainStep(this,'A pond provides water and a new habitat.')"><img class="thumb-img" style="width:32px;height:32px;display:block;margin:0 auto 6px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrqi4nk_1XW6WsOCdeMghZVrHdZM-Ib97DH1jlwEzBBZR5WqShDHYuCbo&s=10" alt=""><b>Pond</b></div><div class="chain-arrow">→</div>
+<div class="chain-step" onclick="chainStep(this,'Water and suitable conditions can support plants.')">🌱<br><b>Plants</b></div><div class="chain-arrow">→</div>
+<div class="chain-step" onclick="chainStep(this,'Frogs can use ponds as habitats.')">🐸<br><b>Frogs</b></div><div class="chain-arrow">→</div>
+<div class="chain-step" onclick="chainStep(this,'Ponds can support insects and other small organisms.')"><img class="thumb-img" style="width:32px;height:32px;display:block;margin:0 auto 6px" src="https://www.vtpestcontrol.com/wp-content/uploads/2019/04/honey-bee.jpg" alt=""><b>Insects</b></div><div class="chain-arrow">→</div>
+<div class="chain-step" onclick="chainStep(this,'Birds may find food around a pond.')">🐦<br><b>Birds</b></div>
+</div>
+<div id="chainFeedback" class="goodbox center">Click each stage to explore the connection.</div>
+</section>
+
+<!-- 33 -->
+
+<section class="slide" data-section="Human Impact on Habitats">
+<div class="kicker">Section 4 • Sort It</div><h1>Help or Harm?</h1>
+<p class="lead">Drag each action into the category that best describes its possible impact on habitats.</p>
+<div class="pool" id="impactPool"></div>
+<div class="sort-area">
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropImpact(event,'help')"><div class="drop-title">🟢 CAN HELP HABITATS</div><div id="helpDrop"></div></div>
+<div class="dropzone" ondragover="allowDrop(event)" ondrop="dropImpact(event,'harm')"><div class="drop-title">🔴 CAN DAMAGE HABITATS</div><div id="harmDrop"></div></div>
+</div>
+<div id="impactSortFeedback" class="feedback"></div>
+<button class="primary" onclick="checkImpactSort()">CHECK ANSWERS</button>
+<button class="reset" onclick="resetImpactSort()">🔄 Reset Activity</button>
+</section>
+
+<!-- 34 -->
+
+<section class="slide" data-section="Final Investigation">
+<div class="kicker">Final Investigation • Local Environment</div><h1>Habitat Investigation 🔎</h1>
+<p class="lead">Imagine you are investigating a habitat near your school. Record what you observe.</p>
+<div class="card">
+<div class="input-grid">
+<label class="field">🌱 Plants found<input id="investPlants" placeholder="e.g. grass, trees..."></label>
+<label class="field">🐦 Animals found<input id="investAnimals" placeholder="e.g. birds, insects..."></label>
+<label class="field">🏠 Habitat type<select id="investHabitat"><option value="">Choose...</option><option>Woodland</option><option>Field</option><option>Urban area</option><option>Aquatic habitat</option></select></label>
+<label class="field">🦋 Biodiversity<select id="investBio"><option value="">Choose...</option><option>Low variety</option><option>Some variety</option><option>High variety</option></select></label>
+</div>
+<label class="field" style="margin-top:15px">💧 What does this habitat provide?<textarea id="investProvide" placeholder="Food, water, shelter, space, light..."></textarea></label>
+<button class="primary" style="margin-top:15px" onclick="checkInvestigation()">SAVE INVESTIGATION</button>
+<div id="investFeedback" class="feedback"></div>
+</div>
+</section>
+
+<!-- 35 -->
+
+<section class="slide" data-section="Final Investigation">
+<div class="kicker">Final Investigation • Big Enquiry Question</div><h1>What Impacts Do Humans Have?</h1>
+<p class="lead">Complete the sentences using your own science ideas.</p>
+<div class="card">
+<div class="field">Humans can affect habitats by...<textarea id="big1" placeholder="Type your answer..."></textarea></div>
+<div class="field" style="margin-top:12px">One negative impact is...<textarea id="big2" placeholder="Type your answer..."></textarea></div>
+<div class="field" style="margin-top:12px">One positive impact is...<textarea id="big3" placeholder="Type your answer..."></textarea></div>
+<div class="field" style="margin-top:12px">This can affect biodiversity because...<textarea id="big4" placeholder="Type your answer..."></textarea></div>
+<button class="primary" style="margin-top:15px" onclick="checkBigQuestion()">CHECK MY THINKING</button>
+<div id="bigFeedback" class="feedback"></div>
+</div>
+</section>
+
+<!-- 36 -->
+
+<section class="slide" data-section="Final Quiz">
+<div class="kicker">Final Quiz • 10 Questions</div><h1>Habitat Master Quiz 🏆</h1>
+<div id="quizArea" class="quiz-box"></div>
+</section>
+
+</main>
+
+<footer class="footer-nav">
+<button class="navbtn home-btn" onclick="openMenu()" aria-label="Open slide menu">☰ Menu</button>
+<button class="navbtn" id="prevBtn" onclick="prevSlide()">← Previous</button>
+<div class="slide-count" id="slideCount">1 / 36</div>
+<button class="navbtn" id="nextBtn" onclick="nextSlide()">Next →</button>
+</footer>
+
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu(event)">
+<div class="menu">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+<h2>Lesson Menu</h2><button class="navbtn" onclick="closeMenu()">✕</button>
+</div>
+<div class="menu-grid" id="menuGrid"></div>
+</div>
+</div>
+
+<script>
+"use strict";
+
+/* =========================
+   SLIDE NAVIGATION
+========================= */
+const slides=[...document.querySelectorAll(".slide")];
+let current=0;
+let globalScore=0;
+const completedPoints=new Set();
+
+const sectionNames={
+  "Living Things & Habitats":"Living Things & Habitats",
+  "Classification Keys • Animals":"Classification Keys • Animals",
+  "Classification Keys • Plants":"Classification Keys • Plants",
+  "Human Impact on Habitats":"Human Impact on Habitats",
+  "Final Investigation":"Final Investigation",
+  "Final Quiz":"Final Quiz"
+};
+
+function updateUI(){
+  slides.forEach((s,i)=>s.classList.toggle("active",i===current));
+  const section=slides[current].dataset.section;
+  document.getElementById("sectionPill").textContent=section;
+  document.getElementById("scoreBadge").textContent=`⭐ Score: ${globalScore}`;
+  document.getElementById("slideCount").textContent=`${current+1} / ${slides.length}`;
+  document.getElementById("progress").style.width=`${((current+1)/slides.length)*100}%`;
+  document.getElementById("prevBtn").disabled=current===0;
+  document.getElementById("nextBtn").disabled=current===slides.length-1;
+  if(current===35) initQuiz();
+}
+function nextSlide(){if(current<slides.length-1){current++;updateUI()}}
+function prevSlide(){if(current>0){current--;updateUI()}}
+function goToSlide(n){current=n;updateUI();closeMenu()}
+document.addEventListener("keydown",e=>{
+  if(e.target.matches("input,textarea,select"))return;
+  if(e.key==="ArrowRight")nextSlide();
+  if(e.key==="ArrowLeft")prevSlide();
+  if(e.key==="Home"){e.preventDefault();goToSlide(0)}
+  if(e.key==="End"){e.preventDefault();goToSlide(slides.length-1)}
+});
+function openMenu(){
+  const grid=document.getElementById("menuGrid");
+  grid.innerHTML=slides.map((s,i)=>`
+    <button class="menu-item" onclick="goToSlide(${i})">
+      <b>${i+1}. ${getSlideTitle(s)}</b><span>${s.dataset.section}</span>
+    </button>`).join("");
+  document.getElementById("menuOverlay").classList.add("show");
+}
+function closeMenu(e){
+  if(!e||e.target.id==="menuOverlay"||e.target.closest(".menu button:not(.menu-item)"))
+    document.getElementById("menuOverlay").classList.remove("show");
+}
+function getSlideTitle(s){
+  const h=s.querySelector("h1");
+  return h?h.textContent:"Welcome";
+}
+
+/* =========================
+   SCORING & FEEDBACK
+========================= */
+function award(id){
+  if(!completedPoints.has(id)){
+    completedPoints.add(id);
+    globalScore++;
+    updateUI();
+  }
+}
+function markChoice(btn,correct,feedbackEl,messageGood,messageBad,id){
+  const parent=btn.parentElement;
+  [...parent.querySelectorAll(".choice")].forEach(x=>x.disabled=true);
+  btn.classList.add(correct?"correct":"wrong");
+  const el=document.getElementById(feedbackEl);
+  el.className="feedback "+(correct?"good":"bad");
+  el.textContent=correct?"✅ "+(messageGood||"Correct! Great science thinking."):"❌ "+(messageBad||"Not quite. Think about the observable evidence.");
+  if(correct&&id)award(id);
+}
+
+/* =========================
+   GENERAL REVEALS
+========================= */
+function revealCard(card){card.classList.toggle("open")}
+function hotspot(text){
+  const el=document.getElementById("hotspotInfo");
+  el.textContent=text;el.classList.add("show");
+}
+function plantFeature(text){
+  const el=document.getElementById("plantFeatureInfo");
+  el.textContent=text;el.classList.add("show");
+}
+
+/* =========================
+   SLIDE 3
+========================= */
+let needsPicked=new Set();
+function needsPick(btn,correct){
+  if(btn.classList.contains("correct")||btn.classList.contains("wrong"))return;
+  if(correct){btn.classList.add("correct");needsPicked.add(btn.textContent);award("need-"+btn.textContent)}
+  else btn.classList.add("wrong");
+  const el=document.getElementById("needsFeedback");
+  if(correct){
+    el.className="feedback good";el.textContent="✅ Yes! Living things need resources and suitable conditions to survive.";
+  }else{
+    el.className="feedback bad";el.textContent="❌ A video game is not a survival need. Think about resources living things use.";
+  }
+}
+function resetNeeds(){
+  document.querySelectorAll("#needsChoices .choice").forEach(b=>b.classList.remove("correct","wrong"));
+  document.getElementById("needsFeedback").textContent="";
+  needsPicked.clear();
+}
+
+/* =========================
+   SLIDE 5 URBAN/RURAL
+========================= */
+const urbanItems=[
+ ["city street","urban","https://thumbs.dreamstime.com/b/small-city-street-pedestrians-people-walking-urban-street-downtown-street-view-china-scenery-modern-47029445.jpg"],
+ ["apartment buildings","urban","https://static.toiimg.com/thumb/msid-121459618,width-1070,height-580,imgsize-82856,resizemode-6,overlay-toi_sw,pt-32,y_pad-40/photo.jpg"],
+ ["countryside","rural","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTheb7r6mHhy3XLzRySC3sgOPZnrGcONdvKD3DgKOVxZPYMqJ9z6dLHByef&s=10"],
+ ["farm field","rural","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJaK2kaHO7bAqVCY81kIufzqrcvQ--l5XQUD8HX5bMcFD6Jk-_vYHPy17W&s=10"],
+ ["woodland","rural","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3RMETvIlpU3pnpCEkfLsoQyU4-IfdLT33I5bjdy8qXbeff9ejmj04RDs&s=10"],
+ ["busy road","urban","https://thumbs.dreamstime.com/b/small-city-street-pedestrians-people-walking-urban-street-downtown-street-view-china-scenery-modern-47029445.jpg"]
+];
+function setupUrbanRural(){
+ const p=document.getElementById("urbanPool");
+ p.innerHTML="";
+ urbanItems.forEach((x,i)=>p.appendChild(makeDrag(x[0],x[1],`ur${i}`,x[2])));
+}
+function makeDrag(label,type,id,img){
+ const d=document.createElement("div");
+ d.className="draggable";d.draggable=true;d.id=id;d.dataset.type=type;d.dataset.label=label;
+ d.innerHTML=img?`<img class="thumb-img" src="${img}" alt="">${label}`:label;
+ d.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",id));
+ return d;
+}
+function allowDrop(e){e.preventDefault();e.currentTarget.classList.add("over")}
+document.addEventListener("dragend",()=>document.querySelectorAll(".dropzone").forEach(x=>x.classList.remove("over")));
+function dropSort(e,zone){
+ e.preventDefault();e.currentTarget.classList.remove("over");
+ const id=e.dataTransfer.getData("text/plain"),el=document.getElementById(id);
+ if(el)e.currentTarget.querySelector("div[id$='Drop'],div[id='urbanDrop'],div[id='ruralDrop']").appendChild(el);
+}
+function checkUrbanRural(){
+ let total=urbanItems.length,correct=0;
+ urbanItems.forEach((x,i)=>{const el=document.getElementById("ur"+i);if(el&&el.parentElement.id===(x[1]==="urban"?"urbanDrop":"ruralDrop"))correct++});
+ const f=document.getElementById("sortFeedback");
+ if(correct===total){f.className="feedback good";f.textContent="✅ Excellent! You sorted all six places correctly.";award("urban-sort")}
+ else {f.className="feedback bad";f.textContent=`You have ${correct} of ${total} in the right place. Check the meanings of urban and rural.`}
+}
+function resetUrbanRural(){setupUrbanRural();document.getElementById("sortFeedback").textContent=""}
+
+/* =========================
+   SLIDE 6,8
+========================= */
+function biodiversity(btn,correct){markChoice(btn,correct,"bioFeedback","Habitat B has greater biodiversity because it shows a greater variety of living things.","Biodiversity means variety — look for the habitat with more different kinds of living things.","biodiversity")}
+function pigeon(btn,correct){markChoice(btn,correct,"pigeonFeedback","Good thinking! Pigeons are commonly found in urban habitats, although they may visit water.","An animal needs suitable conditions, not simply a place that contains water.","pigeon")}
+
+/* =========================
+   SLIDE 9 MATCHING
+========================= */
+const matchItems=[
+ ["🐟 Fish","aquatic","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSFoYXspHb7yGTLrDYPyyzR7W_4DFh6K0DF5yjxdsyPg8YIH7uchh22GML&s=10"],
+ ["🦉 Owl","woodland","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxnlY3dqAxbE6qVP9CPlJhN-rdGG_7Ln0Tbrx2xfoo28osB2XcwQ6Vk6Y&s=10"],
+ ["🐄 Cow","field","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrclXse8wm0bsgxPqznEWAugcBeQh2A1-NwXFgIQGvqsghyFcly75wVR0o&s=10"],
+ ["🐦 Pigeon","urban","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuaeg_xGDtnRohc-XI42Cq8vAhHS7uqHZqp-mhPc_k2Q&s=10"]
+];
+function setupMatches(){
+ const p=document.getElementById("matchPool");p.innerHTML="";
+ ["aquaticDrop","woodlandDrop","fieldDrop","matchUrbanDrop"].forEach(id=>document.getElementById(id).innerHTML="");
+ matchItems.forEach((x,i)=>{
+  const d=makeDrag(x[0],x[1],"ma"+i,x[2]);p.appendChild(d);
+ });
+}
+function dropMatch(e,zone){
+ e.preventDefault();e.currentTarget.classList.remove("over");
+ const el=document.getElementById(e.dataTransfer.getData("text/plain"));
+ const target={aquatic:"aquaticDrop",woodland:"woodlandDrop",field:"fieldDrop",urban:"matchUrbanDrop"}[zone];
+ if(el)document.getElementById(target).appendChild(el);
+}
+function checkMatches(){
+ let correct=0;
+ matchItems.forEach((x,i)=>{
+  const el=document.getElementById("ma"+i);
+  if(el&&el.parentElement.id==={aquatic:"aquaticDrop",woodland:"woodlandDrop",field:"fieldDrop",urban:"matchUrbanDrop"}[x[1]])correct++;
+ });
+ const f=document.getElementById("matchFeedback");
+ if(correct===4){f.className="feedback good";f.textContent="✅ Perfect matching! Each animal has a suitable habitat.";award("habitat-match")}
+ else {f.className="feedback bad";f.textContent=`${correct}/4 correct. Think about where each animal can find the conditions it needs.`}
+}
+function resetMatches(){setupMatches();document.getElementById("matchFeedback").textContent=""}
+
+/* =========================
+   ANIMAL CLASSIFICATION
+========================= */
+function classifyQuestion(btn,correct){
+ markChoice(btn,correct,"questionFeedback","Correct! These questions can be answered YES or NO using observable characteristics.","That question is not suitable because it is based on an opinion or does not give a simple YES/NO classification.","question-"+btn.textContent);
+}
+function beeAnt(btn,correct){
+ const all=btn.parentElement.parentElement.querySelectorAll("button");all.forEach(x=>x.disabled=true);
+ btn.classList.add(correct?"correct":"wrong");
+ const f=document.getElementById("beeFeedback");
+ f.className="feedback "+(correct?"good":"bad");
+ f.textContent=correct?"✅ Correct pathway! Wings lead to Bee.":"❌ Follow the key carefully: YES means Bee and NO means Ant.";
+ if(correct)award("bee-ant");
+}
+const vertebrates=[
+ ["🐶 Dog","vertebrate","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQICkaUbgThug-7A4RDuBF0I3GoyG1QESBGc90XMuluyg4h4IoSTYbwp8I&s=10"],
+ ["🐟 Fish","vertebrate","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSFoYXspHb7yGTLrDYPyyzR7W_4DFh6K0DF5yjxdsyPg8YIH7uchh22GML&s=10"],
+ ["🐦 Bird","vertebrate",""],["🐸 Frog","vertebrate",""],
+ ["🦋 Butterfly","invertebrate","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRACyAqxe-xa9vGZHsXmNpioB9B81yQN47MBqLMKVrgBkmFuu9W0Y92m1A&s=10"],
+ ["🐌 Snail","invertebrate",""]
+];
+function setupVertebrates(){
+ document.getElementById("vertebratePool").innerHTML="";
+ document.getElementById("vDrop").innerHTML="";document.getElementById("iDrop").innerHTML="";
+ vertebrates.forEach((x,i)=>document.getElementById("vertebratePool").appendChild(makeDrag(x[0],x[1],"ve"+i,x[2])));
+}
+function dropVertebrate(e,zone){
+ e.preventDefault();e.currentTarget.classList.remove("over");
+ const el=document.getElementById(e.dataTransfer.getData("text/plain"));
+ if(el)document.getElementById(zone==="vertebrate"?"vDrop":"iDrop").appendChild(el);
+}
+function checkVertebrates(){
+ let c=0;
+ vertebrates.forEach((x,i)=>{const el=document.getElementById("ve"+i);const target=x[1]==="vertebrate"?"vDrop":"iDrop";if(el&&el.parentElement.id===target)c++});
+ const f=document.getElementById("vertebrateFeedback");
+ if(c===vertebrates.length){f.className="feedback good";f.textContent="✅ Brilliant! All six animals are classified correctly.";award("vertebrate-sort")}
+ else{f.className="feedback bad";f.textContent=`${c}/6 correct. Remember: vertebrates have a spine.`}
+}
+function resetVertebrates(){setupVertebrates();document.getElementById("vertebrateFeedback").textContent=""}
+
+function animalKey(btn,key){
+ [...btn.parentElement.children].forEach(b=>b.disabled=true);
+ btn.classList.add("correct");
+ const result=document.getElementById("animalKeyResult");result.classList.remove("hidden");
+ const data={
+ spine:["Does it have a spine?","YES → 🐶 Dog, 🐟 Fish, 🦅 Eagle","NO → 🦋 Butterfly","This is a useful first split because it separates vertebrates from invertebrates."],
+ feathers:["Does it have feathers?","YES → 🦅 Eagle","NO → 🐶 Dog, 🐟 Fish, 🦋 Butterfly","Then you can ask another YES/NO question to separate the remaining animals."],
+ fur:["Does it have fur?","YES → 🐶 Dog","NO → 🐟 Fish, 🦅 Eagle, 🦋 Butterfly","A useful characteristic, but further questions are needed."],
+ wings:["Does it have wings?","YES → 🦅 Eagle, 🦋 Butterfly","NO → 🐶 Dog, 🐟 Fish","A second question could separate eagle from butterfly."]
+ };
+ const d=data[key];
+ result.innerHTML=`<div class="node" style="margin:auto">${d[0]}</div><div class="branches" style="margin-top:14px"><div class="path"><button class="yes">${d[1]}</button></div><div class="path"><button class="no">${d[2]}</button></div></div><div class="goodbox" style="margin-top:15px">💡 ${d[3]}</div>`;
+ award("animal-key");
+}
+
+const mysteryAnimals=[
+ {name:"Dog",emoji:"🐶",wings:false,fur:true,spine:true,feathers:false},
+ {name:"Eagle",emoji:"🦅",wings:true,fur:false,spine:true,feathers:true},
+ {name:"Fish",emoji:"🐟",wings:false,fur:false,spine:true,feathers:false},
+ {name:"Butterfly",emoji:"🦋",wings:true,fur:false,spine:false,feathers:false}
+];
+let mysteryAnimal,mysteryCount=0,mysteryUsed=new Set();
+function resetMystery(){
+ mysteryAnimal=mysteryAnimals[Math.floor(Math.random()*mysteryAnimals.length)];
+ mysteryCount=0;mysteryUsed.clear();
+ document.getElementById("mysteryStatus").textContent="Question 1 of 5";
+ document.getElementById("mysteryAnswers").innerHTML="Your answers will appear here.";
+ document.getElementById("mysteryFeedback").textContent="";
+ document.getElementById("mysteryGuesses").classList.add("hidden");
+ document.querySelectorAll("#mysteryGuesses button").forEach(x=>x.remove());
+ document.querySelectorAll(".quiz-box .choices button").forEach(x=>x.disabled=false);
+}
+function mysteryAsk(prop){
+ if(mysteryUsed.has(prop)||mysteryCount>=5)return;
+ mysteryUsed.add(prop);mysteryCount++;
+ const ans=mysteryAnimal[prop]?"YES":"NO";
+ const labels={wings:"wings",fur:"fur",spine:"a spine",feathers:"feathers"};
+ document.getElementById("mysteryAnswers").innerHTML+=`<div class="tag">${labels[prop]}: ${ans}</div>`;
+ document.getElementById("mysteryStatus").textContent=`Question ${Math.min(mysteryCount+1,5)} of 5`;
+ if(mysteryCount>=2){
+   const g=document.getElementById("mysteryGuesses");g.classList.remove("hidden");
+   if(!g.children.length)mysteryAnimals.forEach(a=>{const b=document.createElement("button");b.className="choice";b.textContent=`${a.emoji} ${a.name}`;b.onclick=()=>guessMystery(a);g.appendChild(b)});
+ }
+}
+function guessMystery(a){
+ const f=document.getElementById("mysteryFeedback");
+ [...document.querySelectorAll("#mysteryGuesses button")].forEach(b=>b.disabled=true);
+ if(a.name===mysteryAnimal.name){f.className="feedback good";f.textContent=`🎉 Correct! The mystery animal was ${a.emoji} ${a.name}.`;award("mystery-animal")}
+ else{f.className="feedback bad";f.textContent=`❌ Not quite. The mystery animal was ${mysteryAnimal.emoji} ${mysteryAnimal.name}. Use the clues to narrow the choices.`}
+}
+function animalChallenge(btn,correct){markChoice(btn,correct,"animalChallengeFeedback","Excellent! A spine is an observable characteristic that separates vertebrates from invertebrates.","Classification questions should use observable characteristics, not opinions.","animal-challenge")}
+
+/* =========================
+   PLANT CLASSIFICATION
+========================= */
+function plantSame(btn,correct){markChoice(btn,correct,"plantSameFeedback","Correct! Plants have many different observable characteristics.","Plants have different features that can be used in classification.","plant-same")}
+function plantKeyStep(n){
+ const box=document.getElementById("plantKeyNext");
+ if(n===1)box.innerHTML=`<div class="node" style="margin:10px auto">Does it have flowers?</div><div class="branches"><div class="path"><button class="yes" onclick="plantKeyAnswer(true)">YES → flowering tree</button></div><div class="path"><button class="no" onclick="plantKeyAnswer(false)">NO → continue investigating</button></div></div>`;
+ else box.innerHTML=`<div class="node" style="margin:10px auto">Does it have thorns?</div><div class="branches"><div class="path"><button class="yes" onclick="plantKeyAnswer(true)">YES → thorny plant</button></div><div class="path"><button class="no" onclick="plantKeyAnswer(false)">NO → another group</button></div></div>`;
+}
+function plantKeyAnswer(correct){
+ const f=document.getElementById("plantKeyFeedback");
+ f.className="feedback good";f.textContent="✅ Good! You followed a YES/NO pathway using an observable feature.";
+ award("plant-key");
+}
+const plantSort=[
+ ["🌳 Oak","flowering","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8pRNtDnVnYMJfnuP8V1s9CuHM7_VpPs7eoq0VjwGDBA&s=10"],
+ ["🌹 Rose","flowering","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdIxOY0yEmnZVmeKTHT5ArzfE3fbl6NepDts-L98s9-AUgEWNcbVPY9yQp&s=10"],
+ ["🌼 Dandelion","flowering","https://cdn.mos.cms.futurecdn.net/v2/t:0,l:147,cw:887,ch:887,q:80,w:887/Ar3M9KZxZv8cj5RMXomg7B.jpg"],
+ ["🌿 Fern","nonflowering","https://images.unsplash.com/photo-1755004609166-f20e6ecd22c4?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8"]
+];
+function setupPlantSort(){
+ document.getElementById("plantSortPool").innerHTML="";document.getElementById("flowerDrop").innerHTML="";document.getElementById("nonflowerDrop").innerHTML="";
+ plantSort.forEach((x,i)=>document.getElementById("plantSortPool").appendChild(makeDrag(x[0],x[1],"ps"+i,x[2])));
+}
+function dropPlantSort(e,zone){
+ e.preventDefault();e.currentTarget.classList.remove("over");
+ const el=document.getElementById(e.dataTransfer.getData("text/plain"));
+ if(el)document.getElementById(zone==="flowering"?"flowerDrop":"nonflowerDrop").appendChild(el);
+}
+function checkPlantSort(){
+ let c=0;
+ plantSort.forEach((x,i)=>{const el=document.getElementById("ps"+i);const t=x[1]==="flowering"?"flowerDrop":"nonflowerDrop";if(el&&el.parentElement.id===t)c++});
+ const f=document.getElementById("plantSortFeedback");
+ if(c===4){f.className="feedback good";f.textContent="✅ Great! All four plants are in the correct groups.";award("plant-sort")}
+ else{f.className="feedback bad";f.textContent=`${c}/4 correct. Remember the definition of a flowering plant.`}
+}
+function resetPlantSort(){setupPlantSort();document.getElementById("plantSortFeedback").textContent=""}
+
+const plantMysteries=[
+ {name:"Rose",emoji:"🌹",img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdIxOY0yEmnZVmeKTHT5ArzfE3fbl6NepDts-L98s9-AUgEWNcbVPY9yQp&s=10",trunk:false,flowers:true,thorns:true,leaves:true},
+ {name:"Oak",emoji:"🌳",img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8pRNtDnVnYMJfnuP8V1s9CuHM7_VpPs7eoq0VjwGDBA&s=10",trunk:true,flowers:true,thorns:false,leaves:true},
+ {name:"Fern",emoji:"🌿",img:"https://images.unsplash.com/photo-1755004609166-f20e6ecd22c4?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8",trunk:false,flowers:false,thorns:false,leaves:true}
+];
+let mysteryPlant;
+function resetPlantMystery(){
+ mysteryPlant=plantMysteries[Math.floor(Math.random()*plantMysteries.length)];
+ document.getElementById("mysteryPlantEmoji").src=mysteryPlant.img;
+ document.getElementById("plantMysteryInfo").textContent="Choose a clue.";
+ document.getElementById("plantMysteryResult").textContent="";
+}
+function plantMystery(prop){
+ const labels={trunk:"a trunk",flowers:"flowers",thorns:"thorns",leaves:"leaves"};
+ const ans=mysteryPlant[prop]?"YES":"NO";
+ document.getElementById("plantMysteryInfo").innerHTML=`🔎 Does it have ${labels[prop]}? <strong>${ans}</strong>`;
+ document.getElementById("plantMysteryResult").className="feedback good";
+ document.getElementById("plantMysteryResult").textContent=`Clue recorded. Keep investigating — this mystery plant is ${mysteryPlant.name}.`;
+ if(ans==="YES")award("plant-clue-"+prop);
+}
+function plantBuildKey(btn,key){
+ [...btn.parentElement.children].forEach(b=>b.disabled=true);btn.classList.add("correct");
+ const result=document.getElementById("plantBuildResult");result.classList.remove("hidden");
+ const text={
+ trunk:["Does it have a trunk?","YES → 🌳 Oak pathway","NO → 🌹 Rose / 🌼 Dandelion / 🌿 Fern"],
+ thorns:["Does it have thorns?","YES → 🌹 Rose","NO → 🌳 Oak / 🌼 Dandelion / 🌿 Fern"],
+ flowers:["Does it have flowers?","YES → 🌳 Oak / 🌹 Rose / 🌼 Dandelion","NO → 🌿 Fern"],
+ leaves:["Does it have leaves?","YES → continue with another feature","NO → continue with another feature"]
+ }[key];
+ result.innerHTML=`<div class="node" style="margin:auto">${text[0]}</div><div class="branches" style="margin-top:14px"><div class="path"><button class="yes">${text[1]}</button></div><div class="path"><button class="no">${text[2]}</button></div></div><div class="goodbox" style="margin-top:15px">💡 A key can use several questions, one after another.</div>`;
+ award("plant-build");
+}
+function roseQuestion(btn,correct){markChoice(btn,correct,"roseFeedback","Correct! Thorns are an observable characteristic.","Pretty and likeable are opinions, not observable classification features.","rose-question")}
+
+/* =========================
+   HUMAN IMPACT
+========================= */
+function revealQuestion(title,text){
+ const f=document.getElementById("impactQuestion");
+ f.className="feedback good";f.innerHTML=`<strong>${title}</strong><br>${text}`;
+}
+function resourceQ(btn,correct){markChoice(btn,correct,"resourceFeedback","Correct. Using too many resources can damage habitats or reduce available resources.","Think about what can happen when resources are used faster than they can be replaced or when extraction changes habitats.","resource-q")}
+function showRewilding(){
+ const f=document.getElementById("rewildingFeedback");f.className="feedback good";f.textContent="🌿 Change shown! Reducing human activity can allow habitats to become more natural and support greater biodiversity.";award("rewilding")}
+function reserveQ(btn,correct){markChoice(btn,correct,"reserveFeedback","Correct! Protection can give plants and animals a safer place to live.","A nature reserve is designed to protect living things, not remove them.","reserve-q")}
+function chainStep(el,text){
+ document.querySelectorAll(".chain-step").forEach(x=>x.classList.remove("active"));el.classList.add("active");
+ document.getElementById("chainFeedback").textContent=text;
+}
+
+const impactItems=[
+ ["🌳 Cutting down a forest","harm","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw4cMQdxAqacNUujHNgEDjZI89jDuhkIDGOWLIFlGU_eqLs0C7yiHwv5aU&s=10"],
+ ["🌼 Planting wildflowers","help","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSovJewu0D46inPGbcZ6Y7dYb2c-Dih-ImaXd8GJjrJeQ&s=10"],
+ ["🏞️ Creating a nature reserve","help","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4XrIMZ-YmHvnK6gwO9oI435zXGTlqapB3lT1Ho-rNkBIcIRHJR57CNRw&s=10"],
+ ["⛏️ Extracting resources","harm",""],["🌿 Rewilding","help",""],
+ ["💧 Building a wildlife pond","help","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrqi4nk_1XW6WsOCdeMghZVrHdZM-Ib97DH1jlwEzBBZR5WqShDHYuCbo&s=10"],
+ ["🏗️ Building over a habitat","harm",""]
+];
+function setupImpactSort(){
+ document.getElementById("impactPool").innerHTML="";document.getElementById("helpDrop").innerHTML="";document.getElementById("harmDrop").innerHTML="";
+ impactItems.forEach((x,i)=>document.getElementById("impactPool").appendChild(makeDrag(x[0],x[1],"im"+i,x[2])));
+}
+function dropImpact(e,zone){
+ e.preventDefault();e.currentTarget.classList.remove("over");
+ const el=document.getElementById(e.dataTransfer.getData("text/plain"));
+ if(el)document.getElementById(zone==="help"?"helpDrop":"harmDrop").appendChild(el);
+}
+function checkImpactSort(){
+ let c=0;
+ impactItems.forEach((x,i)=>{const el=document.getElementById("im"+i);const t=x[1]==="help"?"helpDrop":"harmDrop";if(el&&el.parentElement.id===t)c++});
+ const f=document.getElementById("impactSortFeedback");
+ if(c===impactItems.length){f.className="feedback good";f.textContent="🎉 Excellent! You identified all the possible impacts correctly.";award("impact-sort")}
+ else{f.className="feedback bad";f.textContent=`${c}/${impactItems.length} correct. Think about whether the action protects or removes habitat.`}
+}
+function resetImpactSort(){setupImpactSort();document.getElementById("impactSortFeedback").textContent=""}
+
+/* =========================
+   FINAL INVESTIGATION
+========================= */
+function checkInvestigation(){
+ const ids=["investPlants","investAnimals","investHabitat","investBio","investProvide"];
+ const filled=ids.filter(id=>document.getElementById(id).value.trim()).length;
+ const f=document.getElementById("investFeedback");
+ if(filled===ids.length){f.className="feedback good";f.textContent="🔎 Investigation saved! You recorded observations, habitat type, resources and biodiversity.";award("investigation")}
+ else{f.className="feedback bad";f.textContent="Add an observation to every field so your investigation is complete."}
+}
+function checkBigQuestion(){
+ const vals=["big1","big2","big3","big4"].map(id=>document.getElementById(id).value.trim());
+ const f=document.getElementById("bigFeedback");
+ if(vals.every(Boolean)){f.className="feedback good";f.textContent="✅ Great scientific explanation! You connected human actions with habitat change and biodiversity.";award("big-question")}
+ else{f.className="feedback bad";f.textContent="Complete all four sentences. Use specific examples such as deforestation, nature reserves, ponds or rewilding."}
+}
+
+/* =========================
+   FINAL QUIZ
+========================= */
+const quizQuestions=[
+ {q:"What is a habitat?",o:["A place where only people live","An area where animals and plants live","A type of animal","A classification question"],a:1,e:"A habitat is an area where animals and plants live."},
+ {q:"What does biodiversity mean?",o:["The size of a habitat","The weather in a habitat","The variety of living things in a habitat","The number of buildings in a habitat"],a:2,e:"Biodiversity means the variety of living things in a habitat."},
+ {q:"Which description is urban?",o:["Countryside with few buildings","An area with many buildings where people live and work","A pond","A forest with no buildings"],a:1,e:"Urban areas have many buildings where people live and work."},
+ {q:"Which can a habitat provide?",o:["Food, water, shelter and space","Only sunlight","Only buildings","Only roads"],a:0,e:"Habitats usually provide the things living things need to survive."},
+ {q:"What is a classification key?",o:["A map of a city","A tool that helps identify or group living things","A food chain","A weather chart"],a:1,e:"Classification keys help classify living things."},
+ {q:"What kind of questions do classification keys use?",o:["Opinion questions","Long story questions","Closed YES/NO questions","Questions with no answer"],a:2,e:"Classification keys use closed YES/NO questions based on observable characteristics."},
+ {q:"Which is a vertebrate?",o:["Butterfly","Snail","Dog","Ant"],a:2,e:"A dog has a spine, so it is a vertebrate."},
+ {q:"What is deforestation?",o:["Planting wildflowers","Protecting a pond","Clearing trees from a woodland or forest habitat","Creating a nature reserve"],a:2,e:"Deforestation is clearing trees so land can be used by humans."},
+ {q:"How can rewilding help?",o:["By reducing biodiversity","By increasing biodiversity through reduced human activity","By removing all plants","By building more roads"],a:1,e:"Rewilding is a method of increasing biodiversity by reducing human activity."},
+ {q:"How can humans protect habitats?",o:["Create nature reserves and wildlife-friendly areas","Destroy all ponds","Remove every tree","Always build over habitats"],a:0,e:"Nature reserves and wildlife-friendly areas can protect and restore habitats."}
+];
+let quizIndex=0,quizScore=0,quizAnswered=false,quizStarted=false;
+function initQuiz(){
+ if(!quizStarted){quizStarted=true;quizIndex=0;quizScore=0;quizAnswered=false;renderQuiz()}
+}
+function renderQuiz(){
+ const area=document.getElementById("quizArea");
+ if(quizIndex>=quizQuestions.length){renderQuizResult();return}
+ const q=quizQuestions[quizIndex];
+ area.innerHTML=`
+ <div class="card">
+ <div style="display:flex;justify-content:space-between;gap:10px"><b>Question ${quizIndex+1} of ${quizQuestions.length}</b><span class="tag">Quiz score: ${quizScore}</span></div>
+ <div class="quiz-progress"><div style="width:${quizIndex/quizQuestions.length*100}%"></div></div>
+ <h2>${q.q}</h2>
+ <div id="quizOptions">${q.o.map((x,i)=>`<button class="quiz-option" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${x}</button>`).join("")}</div>
+ <div id="quizFeedback" class="feedback"></div>
+ <div style="margin-top:14px;text-align:right"><button id="quizNext" class="primary hidden" onclick="nextQuizQuestion()">${quizIndex===quizQuestions.length-1?"SEE RESULT":"NEXT QUESTION →"}</button></div>
+ </div>`;
+ quizAnswered=false;
+}
+function answerQuiz(i){
+ if(quizAnswered)return;
+ quizAnswered=true;
+ const q=quizQuestions[quizIndex];
+ const buttons=[...document.querySelectorAll("#quizOptions button")];
+ buttons.forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add("correct")});
+ const f=document.getElementById("quizFeedback");
+ if(i===q.a){quizScore++;f.className="feedback good";f.textContent="✅ Correct! "+q.e}
+ else{buttons[i].classList.add("wrong");f.className="feedback bad";f.textContent="❌ Not quite. "+q.e}
+ document.getElementById("quizNext").classList.remove("hidden");
+}
+function nextQuizQuestion(){quizIndex++;renderQuiz()}
+function renderQuizResult(){
+ const pct=Math.round(quizScore/quizQuestions.length*100);
+ const msg=pct===100?"🎉 Outstanding! You are a Habitat Master!":pct>=80?"🌟 Fantastic science work!":pct>=60?"👏 Great work! Keep exploring habitats.":"🌱 Good effort! Review the key ideas and try again.";
+ document.getElementById("quizArea").innerHTML=`
+ <div class="quiz-result">
+ <div class="celebrate">🏆</div><h2>Habitat Master!</h2>
+ <div class="score-ring" style="--pct:${pct}%"><span>${pct}%</span></div>
+ <h3>${msg}</h3>
+ <div class="grid grid-2" style="max-width:500px;margin:20px auto">
+ <div class="goodbox"><strong>${quizScore}</strong><br>Correct</div>
+ <div class="warnbox"><strong>${quizQuestions.length-quizScore}</strong><br>Incorrect</div>
+ </div>
+ <p class="lead">Quiz result: <strong>${quizScore} / ${quizQuestions.length}</strong></p>
+ <button class="primary" onclick="restartQuiz()">🔄 Restart Quiz</button>
+ </div>`;
+}
+function restartQuiz(){
+ quizStarted=true;quizIndex=0;quizScore=0;quizAnswered=false;renderQuiz();
+}
+
+/* =========================
+   RESET / INITIALISE
+========================= */
+function initialiseActivities(){
+ setupUrbanRural();
+ setupMatches();
+ setupVertebrates();
+ setupPlantSort();
+ setupImpactSort();
+ resetMystery();
+ resetPlantMystery();
+}
+initialiseActivities();
+updateUI();
+</script>
+
+</body>
+</html>

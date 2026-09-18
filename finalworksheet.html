@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animal & Plant Classification — Science Worksheet</title>
+<style>
+  * { box-sizing: border-box; }
+
+:root {
+--green: #65c18c;
+--green-dark: #32865a;
+--blue: #69b7e8;
+--blue-dark: #2879aa;
+--yellow: #ffd76a;
+--orange: #ffad66;
+--purple: #a78bfa;
+--pink: #f49ac2;
+--ink: #25364a;
+--muted: #6b7b8c;
+--bg: #f4f9fc;
+--card: #ffffff;
+--correct: #dff6e7;
+--correct-border: #54b978;
+--wrong: #ffe5e5;
+--wrong-border: #e77a7a;
+--shadow: 0 8px 25px rgba(42, 75, 98, .10);
+}
+
+body {
+margin: 0;
+padding: 0 0 110px;
+font-family: "Trebuchet MS", Arial, sans-serif;
+color: var(--ink);
+background:
+radial-gradient(circle at 10% 5%, rgba(105,183,232,.16), transparent 25%),
+radial-gradient(circle at 90% 15%, rgba(101,193,140,.14), transparent 25%),
+var(--bg);
+line-height: 1.5;
+}
+
+.header {
+background: linear-gradient(135deg, #4e9fd0, #66c58c);
+color: white;
+padding: 35px 20px 45px;
+text-align: center;
+border-radius: 0 0 35px 35px;
+box-shadow: 0 8px 25px rgba(48, 104, 130, .18);
+}
+
+.header .emoji {
+font-size: 48px;
+margin-bottom: 5px;
+}
+
+.header h1 {
+margin: 0;
+font-size: clamp(28px, 5vw, 44px);
+}
+
+.header p {
+margin: 8px auto 0;
+max-width: 750px;
+font-size: 17px;
+opacity: .95;
+}
+
+.container {
+width: min(1150px, calc(100% - 28px));
+margin: 25px auto;
+}
+
+.question {
+background: var(--card);
+border-radius: 22px;
+margin: 22px 0;
+padding: 25px;
+box-shadow: var(--shadow);
+border: 2px solid transparent;
+transition: .25s;
+}
+
+.question.correct {
+background: var(--correct);
+border-color: var(--correct-border);
+}
+
+.question.incorrect {
+background: var(--wrong);
+border-color: var(--wrong-border);
+}
+
+.q-header {
+display: flex;
+align-items: flex-start;
+gap: 14px;
+margin-bottom: 20px;
+}
+
+.q-number {
+flex: 0 0 45px;
+height: 45px;
+display: grid;
+place-items: center;
+border-radius: 14px;
+color: white;
+font-size: 21px;
+font-weight: bold;
+background: linear-gradient(135deg, var(--blue), var(--purple));
+}
+
+.q-title {
+margin: 0;
+font-size: 21px;
+}
+
+.prompt {
+color: var(--muted);
+margin: 3px 0 0;
+}
+
+.mc-option {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 15px;
+margin: 9px 0;
+background: #f7fafc;
+border: 2px solid #e3ebf0;
+border-radius: 14px;
+cursor: pointer;
+transition: .2s;
+}
+
+.mc-option:hover {
+transform: translateX(3px);
+border-color: var(--blue);
+background: #f0f8fd;
+}
+
+.mc-option input {
+width: 20px;
+height: 20px;
+accent-color: var(--green-dark);
+}
+
+.feedback {
+display: none;
+margin-top: 14px;
+padding: 11px 14px;
+border-radius: 12px;
+font-weight: bold;
+}
+
+.correct .feedback.correct-msg,
+.incorrect .feedback.wrong-msg {
+display: block;
+}
+
+.feedback.correct-msg {
+background: #c8efd6;
+color: #22663e;
+}
+
+.feedback.wrong-msg {
+background: #ffd0d0;
+color: #963e3e;
+}
+
+/* Matching */
+.matching-grid {
+display: grid;
+grid-template-columns: minmax(150px, .7fr) minmax(250px, 1.5fr);
+gap: 12px;
+}
+
+.match-item {
+padding: 15px;
+border-radius: 14px;
+background: #eef7fc;
+border: 2px solid #d5e8f3;
+font-weight: bold;
+display: flex;
+align-items: center;
+}
+
+.match-select {
+width: 100%;
+padding: 13px;
+border-radius: 12px;
+border: 2px solid #d9e4eb;
+font: inherit;
+color: var(--ink);
+background: white;
+cursor: pointer;
+}
+
+/* Sorting */
+.animal-bank {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+gap: 14px;
+margin: 18px 0 25px;
+min-height: 145px;
+padding: 15px;
+border-radius: 18px;
+background: #f1f6f9;
+border: 2px dashed #cbd9e1;
+}
+
+.animal-card {
+background: white;
+border: 2px solid #dae6ed;
+border-radius: 16px;
+padding: 9px;
+text-align: center;
+cursor: grab;
+user-select: none;
+touch-action: manipulation;
+box-shadow: 0 4px 12px rgba(0,0,0,.06);
+transition: .2s;
+}
+
+.animal-card:hover {
+transform: translateY(-4px);
+border-color: var(--blue);
+}
+
+.animal-card.selected {
+outline: 4px solid rgba(105,183,232,.35);
+border-color: var(--blue-dark);
+transform: translateY(-3px);
+}
+
+.animal-card.dragging { opacity: .45; }
+
+.animal-card img {
+width: 100%;
+height: 90px;
+object-fit: contain;
+border-radius: 11px;
+display: block;
+background: #f8fbfd;
+}
+
+.animal-name {
+font-weight: bold;
+margin-top: 7px;
+}
+
+.category-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+gap: 15px;
+}
+
+.drop-zone {
+min-height: 165px;
+padding: 12px;
+border-radius: 18px;
+border: 3px dashed #c8d9e4;
+background: #fbfdfe;
+transition: .2s;
+}
+
+.drop-zone h3 {
+margin: 0 0 10px;
+text-align: center;
+font-size: 17px;
+}
+
+.drop-zone.drag-over,
+.tree-target.drag-over {
+border-color: var(--green-dark);
+background: #eaf9ef;
+transform: scale(1.02);
+}
+
+.drop-zone .animal-card {
+display: inline-block;
+width: 105px;
+margin: 4px;
+vertical-align: top;
+}
+
+.drop-zone .animal-card img {
+height: 65px;
+}
+
+/* Short answers */
+.answer-list {
+display: grid;
+gap: 18px;
+}
+
+.answer-row {
+background: #f8fbfd;
+padding: 15px;
+border-radius: 15px;
+border: 2px solid #e3edf2;
+}
+
+.answer-row label {
+display: block;
+font-weight: bold;
+margin-bottom: 9px;
+}
+
+.text-input {
+width: 100%;
+padding: 12px 14px;
+border: 2px solid #d6e2e9;
+border-radius: 11px;
+font: inherit;
+outline: none;
+transition: .2s;
+}
+
+.text-input:focus {
+border-color: var(--blue);
+box-shadow: 0 0 0 3px rgba(105,183,232,.15);
+}
+
+.two-inputs {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+}
+
+.answer-row.answer-correct {
+background: var(--correct);
+border-color: var(--correct-border);
+}
+
+.answer-row.answer-wrong {
+background: var(--wrong);
+border-color: var(--wrong-border);
+}
+
+/* Classification Trees */
+.tree-wrapper {
+overflow-x: auto;
+padding: 15px 4px 25px;
+}
+
+.tree {
+min-width: 850px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.tree-box {
+background: white;
+border: 3px solid var(--blue);
+border-radius: 15px;
+padding: 12px 20px;
+text-align: center;
+min-width: 190px;
+box-shadow: 0 5px 14px rgba(0,0,0,.07);
+font-weight: bold;
+}
+
+.tree-root {
+border-color: var(--purple);
+background: #f7f3ff;
+}
+
+.branch-row {
+width: 100%;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+position: relative;
+margin-top: 34px;
+}
+
+.branch-row.three {
+grid-template-columns: 1fr 1fr;
+}
+
+.branch {
+position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.branch::before {
+content: "";
+position: absolute;
+top: -35px;
+width: 2px;
+height: 35px;
+background: #aebfca;
+}
+
+.branch-label {
+position: absolute;
+top: -27px;
+background: white;
+padding: 2px 9px;
+border-radius: 9px;
+font-size: 12px;
+font-weight: bold;
+color: var(--muted);
+z-index: 2;
+}
+
+.target-label {
+margin: 13px 0 6px;
+font-size: 13px;
+color: var(--muted);
+}
+
+.tree-target {
+min-width: 170px;
+min-height: 70px;
+border: 3px dashed var(--green);
+border-radius: 15px;
+background: #f5fff8;
+padding: 8px;
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+transition: .2s;
+}
+
+.tree-target .choice-card {
+width: 100%;
+}
+
+.choice-bank {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 10px;
+margin: 10px 0 25px;
+padding: 15px;
+border-radius: 17px;
+background: #f2f7fa;
+border: 2px dashed #ccdbe3;
+}
+
+.choice-card {
+background: white;
+border: 2px solid #d5e2e8;
+border-radius: 12px;
+padding: 10px 17px;
+font-weight: bold;
+cursor: grab;
+user-select: none;
+transition: .2s;
+text-align: center;
+}
+
+.choice-card:hover {
+transform: translateY(-2px);
+border-color: var(--purple);
+}
+
+.choice-card.selected {
+border-color: var(--purple);
+background: #f3efff;
+box-shadow: 0 0 0 3px rgba(167,139,250,.2);
+}
+
+.choice-card.dragging { opacity: .4; }
+
+.instructions {
+background: #fff8df;
+border: 2px solid #f4d678;
+border-radius: 14px;
+padding: 12px 15px;
+margin-bottom: 17px;
+color: #725c1e;
+}
+
+.mini-note {
+font-size: 13px;
+color: var(--muted);
+text-align: center;
+margin-top: 8px;
+}
+
+/* Floating action bar */
+.action-bar {
+position: fixed;
+left: 0;
+right: 0;
+bottom: 0;
+z-index: 100;
+background: rgba(255,255,255,.95);
+backdrop-filter: blur(10px);
+border-top: 1px solid #dce7ed;
+box-shadow: 0 -8px 25px rgba(39,65,82,.12);
+padding: 13px 18px;
+}
+
+.action-inner {
+width: min(1150px, 100%);
+margin: auto;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 15px;
+}
+
+.score-box {
+font-weight: bold;
+color: var(--ink);
+}
+
+.score {
+font-size: 23px;
+color: var(--green-dark);
+}
+
+.actions {
+display: flex;
+gap: 10px;
+}
+
+button {
+border: 0;
+border-radius: 13px;
+padding: 13px 19px;
+font: inherit;
+font-weight: bold;
+cursor: pointer;
+transition: .2s;
+}
+
+button:hover {
+transform: translateY(-2px);
+}
+
+.check-btn {
+background: linear-gradient(135deg, #54b879, #32955c);
+color: white;
+box-shadow: 0 5px 13px rgba(50,149,92,.25);
+}
+
+.reset-btn {
+background: #edf2f5;
+color: #405363;
+}
+
+.result-banner {
+display: none;
+margin: 15px 0 25px;
+background: white;
+border-radius: 20px;
+padding: 20px;
+text-align: center;
+box-shadow: var(--shadow);
+border: 2px solid #dce7ed;
+}
+
+.result-banner.show { display: block; }
+
+.result-percent {
+font-size: 40px;
+font-weight: bold;
+color: var(--green-dark);
+}
+
+@media (max-width: 650px) {
+.question { padding: 18px; }
+.matching-grid { grid-template-columns: 1fr; }
+.two-inputs { grid-template-columns: 1fr; }
+.action-inner { flex-direction: column; }
+.actions { width: 100%; }
+.actions button { flex: 1; }
+.score-box { text-align: center; }
+} </style>
+
+</head>
+
+<body>
+
+<header class="header">
+  <div class="emoji">🦊 🐸 🐟 🌱</div>
+  <h1>Animal & Plant Classification</h1>
+  <p>Explore spines, vertebrates, invertebrates, plants and classification keys!</p>
+</header>
+
+<main class="container">
+
+  <div id="resultBanner" class="result-banner">
+    <div>🎉 Worksheet Complete!</div>
+    <div class="result-percent" id="resultPercent">0%</div>
+    <div id="resultText">Check the highlighted questions and try again.</div>
+  </div>
+
+  <!-- QUESTION 1 -->
+
+  <section class="question" id="q1">
+    <div class="q-header">
+      <div class="q-number">1</div>
+      <div>
+        <h2 class="q-title">What is a spine?</h2>
+        <p class="prompt">Tick the correct definition of <strong>spine</strong>.</p>
+      </div>
+    </div>
+
+```
+<label class="mc-option">
+  <input type="radio" name="q1" value="correct">
+  <span>Group of small bones in the back, stacked on top of each other</span>
+</label>
+<label class="mc-option">
+  <input type="radio" name="q1" value="wrong">
+  <span>Bones in the head that protect the brain</span>
+</label>
+<label class="mc-option">
+  <input type="radio" name="q1" value="wrong">
+  <span>Long bone in the upper leg</span>
+</label>
+
+<div class="feedback correct-msg">✓ Correct! The spine is a group of small bones in the back.</div>
+<div class="feedback wrong-msg">✗ Try again. Think about the bones running down your back.</div>
+```
+
+  </section>
+
+  <!-- QUESTION 2 -->
+
+  <section class="question" id="q2">
+    <div class="q-header">
+      <div class="q-number">2</div>
+      <div>
+        <h2 class="q-title">Match the animal groups</h2>
+        <p class="prompt">Choose the correct definition for each group.</p>
+      </div>
+    </div>
+
+```
+<div class="matching-grid">
+  <div class="match-item">🐶 Mammal</div>
+  <div>
+    <select class="match-select" data-answer="mammal">
+      <option value="">Choose a definition...</option>
+      <option value="mammal">Animal with a spine, fur or hair on its body and that feeds its offspring on milk</option>
+      <option value="fish">Animal that lives in water and has fins and gills</option>
+      <option value="amphibian">Animal with a spine that lives on land and in water</option>
+    </select>
+  </div>
+
+  <div class="match-item">🐟 Fish</div>
+  <div>
+    <select class="match-select" data-answer="fish">
+      <option value="">Choose a definition...</option>
+      <option value="mammal">Animal with a spine, fur or hair on its body and that feeds its offspring on milk</option>
+      <option value="fish">Animal that lives in water and has fins and gills</option>
+      <option value="amphibian">Animal with a spine that lives on land and in water</option>
+    </select>
+  </div>
+
+  <div class="match-item">🐸 Amphibian</div>
+  <div>
+    <select class="match-select" data-answer="amphibian">
+      <option value="">Choose a definition...</option>
+      <option value="mammal">Animal with a spine, fur or hair on its body and that feeds its offspring on milk</option>
+      <option value="fish">Animal that lives in water and has fins and gills</option>
+      <option value="amphibian">Animal with a spine that lives on land and in water</option>
+    </select>
+  </div>
+</div>
+
+<div class="feedback correct-msg">✓ All three matches are correct!</div>
+<div class="feedback wrong-msg">✗ Check the highlighted matching choices.</div>
+```
+
+  </section>
+
+  <!-- QUESTION 3 -->
+
+  <section class="question" id="q3">
+    <div class="q-header">
+      <div class="q-number">3</div>
+      <div>
+        <h2 class="q-title">Sort the animals</h2>
+        <p class="prompt">Drag each animal into its correct classification category.</p>
+      </div>
+    </div>
+
+```
+<div class="instructions">
+  💡 <strong>Touch-screen tip:</strong> Tap an animal, then tap the category where you want to place it.
+</div>
+
+<div class="animal-bank" id="animalBank">
+  <div class="animal-card" draggable="true" data-animal="fox">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBmZFI1aDAzmLRxclLYTzsAUp3NhG45fsQ8OtSMZyHBUBT3SnUSQCQ_aD_&s=10" alt="Fox">
+    <div class="animal-name">Fox</div>
+  </div>
+
+  <div class="animal-card" draggable="true" data-animal="frog">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqDxqfEa7eY1OCK5wx3f6buL_K36EI688IchlbzUtzFiGiQk96PW0HOcbL3B0EWIB7xR8I5CcTIjfIb5XqthhaMqCXS6Tj4zMptj09guo&s=10" alt="Frog">
+    <div class="animal-name">Frog</div>
+  </div>
+
+  <div class="animal-card" draggable="true" data-animal="snake">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz_5z_pOCUdRUTjlcCUCuXJK9SHjFv6tDEkKo5MMi1NQ&s=10" alt="Snake">
+    <div class="animal-name">Snake</div>
+  </div>
+
+  <div class="animal-card" draggable="true" data-animal="tortoise">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3icY_ARp8HS8e5QO9RKZzGGf2dsJq1RJ-M1pH4YBKGEjc7NvSdxD24fc&s=10" alt="Tortoise">
+    <div class="animal-name">Tortoise</div>
+  </div>
+
+  <div class="animal-card" draggable="true" data-animal="pigeon">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKLtoWKH8fkWeNL1aDCtrkxyogkSELvhD9Xs7xmgdYSrih7M_Jrfi8DUQ3&s=10" alt="Pigeon">
+    <div class="animal-name">Pigeon</div>
+  </div>
+
+  <div class="animal-card" draggable="true" data-animal="dolphin">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIoftq9knlndNOJcZ5vGJy3HnI5LWaywM0TG8VlFv8YJYW-ti7X944EA8&s=10" alt="Dolphin">
+    <div class="animal-name">Dolphin</div>
+  </div>
+
+  <div class="animal-card" draggable="true" data-animal="shark">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSs9DydQhVQvlGO0I558nEK_-leyNRM-17kMCKaBmCH3y_84T_p_4ihpZXpK&s=10" alt="Shark">
+    <div class="animal-name">Shark</div>
+  </div>
+
+  <div class="animal-card" draggable="true" data-animal="robin">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX2qBwJywJoKKDExjvKA6SopRBsl9epvR6cG9Hl71WhnAqdJbw7ZG9wG-3&s=10" alt="Robin">
+    <div class="animal-name">Robin</div>
+  </div>
+</div>
+
+<div class="category-grid">
+  <div class="drop-zone" data-category="mammals">
+    <h3>🐕 Mammals</h3>
+  </div>
+  <div class="drop-zone" data-category="birds">
+    <h3>🐦 Birds</h3>
+  </div>
+  <div class="drop-zone" data-category="fish">
+    <h3>🐟 Fish</h3>
+  </div>
+  <div class="drop-zone" data-category="amphibians">
+    <h3>🐸 Amphibians</h3>
+  </div>
+  <div class="drop-zone" data-category="reptiles">
+    <h3>🐍 Reptiles</h3>
+  </div>
+</div>
+
+<div class="feedback correct-msg">✓ Excellent sorting! Every animal is in the correct group.</div>
+<div class="feedback wrong-msg">✗ Some animals are in the wrong category. Move the highlighted cards.</div>
+```
+
+  </section>
+
+  <!-- QUESTION 4 -->
+
+  <section class="question" id="q4">
+    <div class="q-header">
+      <div class="q-number">4</div>
+      <div>
+        <h2 class="q-title">Short Answer Concepts</h2>
+        <p class="prompt">Write your answers in the boxes. Spelling does not need to be perfect.</p>
+      </div>
+    </div>
+
+```
+<div class="answer-list">
+
+  <div class="answer-row keyword-answer" data-keywords="no backbone|without backbone|no spine">
+    <label>1. What is an invertebrate?</label>
+    <input class="text-input" type="text" placeholder="An invertebrate is an animal...">
+  </div>
+
+  <div class="answer-row examples-answer" data-type="invertebrate">
+    <label>2. Give two different examples of invertebrates.</label>
+    <div class="two-inputs">
+      <input class="text-input example-input" type="text" placeholder="Example 1">
+      <input class="text-input example-input" type="text" placeholder="Example 2">
+    </div>
+  </div>
+
+  <div class="answer-row examples-answer" data-type="insect">
+    <label>3. Write the names of two different insects.</label>
+    <div class="two-inputs">
+      <input class="text-input example-input" type="text" placeholder="Insect 1">
+      <input class="text-input example-input" type="text" placeholder="Insect 2">
+    </div>
+  </div>
+
+  <div class="answer-row keyword-answer" data-keywords="produces flowers|has flowers|makes seeds in flowers">
+    <label>4. What is a flowering plant?</label>
+    <input class="text-input" type="text" placeholder="A flowering plant...">
+  </div>
+
+  <div class="answer-row keyword-answer" data-keywords="rose|sunflower|daffodil|tulip|apple|mango|tomato|bean|pea|daisy|lily|cherry|orange|plant">
+    <label>5. Give an example of a flowering plant.</label>
+    <input class="text-input" type="text" placeholder="For example...">
+  </div>
+
+  <div class="answer-row keyword-answer" data-keywords="no flowers|does not produce flowers|spores">
+    <label>6. What is a non-flowering plant?</label>
+    <input class="text-input" type="text" placeholder="A non-flowering plant...">
+  </div>
+
+  <div class="answer-row keyword-answer" data-keywords="fern|moss|liverwort|horsetail">
+    <label>7. Give an example of a non-flowering plant.</label>
+    <input class="text-input" type="text" placeholder="For example...">
+  </div>
+
+</div>
+
+<div class="feedback correct-msg">✓ Great work! Your concept answers are correct.</div>
+<div class="feedback wrong-msg">✗ Check the red answer boxes. Add the important idea or a suitable example.</div>
+```
+
+  </section>
+
+  <!-- QUESTION 5 -->
+
+  <section class="question" id="q5">
+    <div class="q-header">
+      <div class="q-number">5</div>
+      <div>
+        <h2 class="q-title">Classification Key Tree 1</h2>
+        <p class="prompt">Vertebrate characteristics</p>
+      </div>
+    </div>
+
+```
+<div class="instructions">
+  🔎 Follow each <strong>Yes</strong> or <strong>No</strong> path. Drag the correct animal group to each final target.
+</div>
+
+<div class="choice-bank" id="vertebrateChoices">
+  <div class="choice-card" draggable="true" data-choice="fish">🐟 Fish</div>
+  <div class="choice-card" draggable="true" data-choice="reptile">🐍 Reptile</div>
+  <div class="choice-card" draggable="true" data-choice="amphibians">🐸 Amphibians</div>
+  <div class="choice-card" draggable="true" data-choice="duck">🦆 Duck</div>
+  <div class="choice-card" draggable="true" data-choice="mammals">🐕 Mammals</div>
+  <div class="choice-card" draggable="true" data-choice="birds">🐦 Birds</div>
+</div>
+
+<div class="tree-wrapper">
+  <div class="tree">
+
+    <div class="tree-box tree-root">Does it have scales?</div>
+
+    <div class="branch-row">
+
+      <div class="branch">
+        <span class="branch-label">YES</span>
+        <div class="tree-box">Does it have gills?</div>
+
+        <div class="branch-row">
+          <div class="branch">
+            <span class="branch-label">YES</span>
+            <div class="target-label">Answer</div>
+            <div class="tree-target" data-tree="v-fish"></div>
+          </div>
+
+          <div class="branch">
+            <span class="branch-label">NO</span>
+            <div class="target-label">Answer</div>
+            <div class="tree-target" data-tree="v-reptile"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch">
+        <span class="branch-label">NO</span>
+        <div class="tree-box">Does it have webbed feet?</div>
+
+        <div class="branch-row">
+          <div class="branch">
+            <span class="branch-label">YES</span>
+            <div class="target-label">Answer</div>
+            <div class="tree-target" data-tree="v-amphibian"></div>
+          </div>
+
+          <div class="branch">
+            <span class="branch-label">NO</span>
+            <div class="target-label">Answer</div>
+            <div class="tree-target" data-tree="v-land"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<p class="mini-note">For the final NO path, either Mammals or Birds is accepted.</p>
+
+<div class="feedback correct-msg">✓ Classification tree completed correctly!</div>
+<div class="feedback wrong-msg">✗ Check the final target boxes and follow the clues again.</div>
+```
+
+  </section>
+
+  <!-- QUESTION 6 -->
+
+  <section class="question" id="q6">
+    <div class="q-header">
+      <div class="q-number">6</div>
+      <div>
+        <h2 class="q-title">Classification Key Tree 2</h2>
+        <p class="prompt">Invertebrate sorting</p>
+      </div>
+    </div>
+
+```
+<div class="instructions">
+  🕷️ Use the clues to sort the invertebrates. Drag each option to the correct final box.
+</div>
+
+<div class="choice-bank" id="invertebrateChoices">
+  <div class="choice-card" draggable="true" data-choice="worm">🪱 Worm</div>
+  <div class="choice-card" draggable="true" data-choice="spider">🕷️ Spider</div>
+  <div class="choice-card" draggable="true" data-choice="snail">🐌 Snail</div>
+  <div class="choice-card" draggable="true" data-choice="beetle">🪲 Beetle</div>
+</div>
+
+<div class="tree-wrapper">
+  <div class="tree">
+
+    <div class="tree-box tree-root">Does it have legs?</div>
+
+    <div class="branch-row">
+
+      <div class="branch">
+        <span class="branch-label">YES</span>
+        <div class="tree-box">Does it have 6 legs?</div>
+
+        <div class="branch-row">
+          <div class="branch">
+            <span class="branch-label">YES</span>
+            <div class="target-label">Answer</div>
+            <div class="tree-target" data-tree="i-beetle"></div>
+          </div>
+
+          <div class="branch">
+            <span class="branch-label">NO</span>
+            <div class="target-label">Answer</div>
+            <div class="tree-target" data-tree="i-spider"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch">
+        <span class="branch-label">NO</span>
+        <div class="tree-box">Does it have a shell?</div>
+
+        <div class="branch-row">
+          <div class="branch">
+            <span class="branch-label">YES</span>
+            <div class="target-label">Answer</div>
+            <div class="tree-target" data-tree="i-snail"></div>
+          </div>
+
+          <div class="branch">
+            <span class="branch-label">NO</span>
+            <div class="target-label">Answer</div>
+            <div class="tree-target" data-tree="i-worm"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="feedback correct-msg">✓ Excellent! The classification key works!</div>
+<div class="feedback wrong-msg">✗ Check the misplaced invertebrates and follow the questions carefully.</div>
+```
+
+  </section>
+
+</main>
+
+<div class="action-bar">
+  <div class="action-inner">
+    <div class="score-box">
+      Score: <span class="score" id="scoreDisplay">Not checked</span>
+    </div>
+    <div class="actions">
+      <button class="check-btn" id="checkBtn">✓ Check Answers</button>
+      <button class="reset-btn" id="resetBtn">↻ Reset Worksheet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   INTERACTIVE SCIENCE WORKSHEET
+   ========================================================= */
+
+const correctAnimals = {
+  fox: "mammals",
+  dolphin: "mammals",
+  pigeon: "birds",
+  robin: "birds",
+  shark: "fish",
+  frog: "amphibians",
+  snake: "reptiles",
+  tortoise: "reptiles"
+};
+
+const treeAnswers = {
+  "v-fish": ["fish"],
+  "v-reptile": ["reptile"],
+  "v-amphibian": ["amphibians", "duck"],
+  "v-land": ["mammals", "birds"],
+  "i-beetle": ["beetle"],
+  "i-spider": ["spider"],
+  "i-snail": ["snail"],
+  "i-worm": ["worm"]
+};
+
+let draggedItem = null;
+let selectedItem = null;
+
+/* ---------- DRAG AND DROP ---------- */
+
+document.addEventListener("dragstart", e => {
+  const card = e.target.closest(".animal-card, .choice-card");
+  if (!card) return;
+
+  draggedItem = card;
+  card.classList.add("dragging");
+
+  try {
+    e.dataTransfer.setData("text/plain", card.dataset.animal || card.dataset.choice);
+    e.dataTransfer.effectAllowed = "move";
+  } catch (_) {}
+});
+
+document.addEventListener("dragend", e => {
+  const card = e.target.closest(".animal-card, .choice-card");
+  if (card) card.classList.remove("dragging");
+  document.querySelectorAll(".drag-over").forEach(x => x.classList.remove("drag-over"));
+  draggedItem = null;
+});
+
+document.querySelectorAll(".drop-zone, .tree-target").forEach(zone => {
+  zone.addEventListener("dragover", e => {
+    e.preventDefault();
+    zone.classList.add("drag-over");
+  });
+
+  zone.addEventListener("dragleave", e => {
+    if (!zone.contains(e.relatedTarget)) {
+      zone.classList.remove("drag-over");
+    }
+  });
+
+  zone.addEventListener("drop", e => {
+    e.preventDefault();
+    zone.classList.remove("drag-over");
+
+    if (!draggedItem) return;
+    placeItem(draggedItem, zone);
+  });
+});
+
+/* ---------- TOUCH / CLICK FALLBACK ---------- */
+
+document.addEventListener("click", e => {
+  const card = e.target.closest(".animal-card, .choice-card");
+
+  if (card) {
+    if (selectedItem === card) {
+      card.classList.remove("selected");
+      selectedItem = null;
+      return;
+    }
+
+    document.querySelectorAll(".selected").forEach(x => x.classList.remove("selected"));
+    selectedItem = card;
+    card.classList.add("selected");
+    return;
+  }
+
+  const target = e.target.closest(".drop-zone, .tree-target");
+
+  if (target && selectedItem) {
+    placeItem(selectedItem, target);
+    selectedItem = null;
+  }
+});
+
+function placeItem(item, target) {
+  /* Prevent duplicate placement in tree target */
+  if (target.classList.contains("tree-target")) {
+    const existing = target.querySelector(".choice-card");
+
+    if (existing) {
+      const bank = existing.closest(".question").querySelector(".choice-bank");
+      if (bank) bank.appendChild(existing);
+    }
+
+    target.appendChild(item);
+    item.classList.remove("selected");
+    return;
+  }
+
+  /* Animal sorting zones */
+  if (target.classList.contains("drop-zone")) {
+    target.appendChild(item);
+    item.classList.remove("selected");
+  }
+}
+
+/* ---------- FEEDBACK HELPERS ---------- */
+
+function markQuestion(id, correct) {
+  const q = document.getElementById(id);
+  q.classList.remove("correct", "incorrect");
+  q.classList.add(correct ? "correct" : "incorrect");
+}
+
+function clearAnswerStyles() {
+  document.querySelectorAll(".answer-row").forEach(row => {
+    row.classList.remove("answer-correct", "answer-wrong");
+  });
+}
+
+/* ---------- Q4 KEYWORD CHECKING ---------- */
+
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[.,!?;:()]/g, " ")
+    .replace(/\s+/g, " ");
+}
+
+function keywordMatch(text, keywords) {
+  const value = normalize(text);
+  return keywords.some(keyword => value.includes(normalize(keyword)));
+}
+
+const commonInvertebrates = [
+  "ant", "bee", "butterfly", "fly", "mosquito", "beetle",
+  "spider", "snail", "worm", "slug", "crab", "lobster",
+  "octopus", "squid", "jellyfish", "starfish", "centipede",
+  "millipede", "grasshopper", "ladybird", "ladybug"
+];
+
+const insects = [
+  "ant", "bee", "butterfly", "fly", "mosquito", "beetle",
+  "grasshopper", "ladybird", "ladybug", "dragonfly", "moth",
+  "wasp", "cricket", "cockroach", "termite"
+];
+
+function validDifferentExamples(row, list) {
+  const inputs = [...row.querySelectorAll(".example-input")];
+  const values = inputs.map(x => normalize(x.value));
+
+  if (values.some(v => !v)) return false;
+  if (values[0] === values[1]) return false;
+
+  return values.every(value =>
+    list.some(item => value === item || value.includes(item))
+  );
+}
+
+function checkQ4() {
+  const q = document.getElementById("q4");
+  const rows = [...q.querySelectorAll(".answer-row")];
+
+  let correctCount = 0;
+
+  rows.forEach(row => {
+    row.classList.remove("answer-correct", "answer-wrong");
+
+    let correct = false;
+
+    if (row.classList.contains("keyword-answer")) {
+      const input = row.querySelector("input");
+      const keywords = row.dataset.keywords.split("|");
+      correct = keywordMatch(input.value, keywords);
+    }
+
+    if (row.classList.contains("examples-answer")) {
+      if (row.dataset.type === "invertebrate") {
+        correct = validDifferentExamples(row, commonInvertebrates);
+      }
+
+      if (row.dataset.type === "insect") {
+        correct = validDifferentExamples(row, insects);
+      }
+    }
+
+    row.classList.add(correct ? "answer-correct" : "answer-wrong");
+
+    if (correct) correctCount++;
+  });
+
+  const allCorrect = correctCount === rows.length;
+  markQuestion("q4", allCorrect);
+
+  return allCorrect;
+}
+
+/* ---------- QUESTION 1 ---------- */
+
+function checkQ1() {
+  const selected = document.querySelector('input[name="q1"]:checked');
+  const correct = selected && selected.value === "correct";
+  markQuestion("q1", !!correct);
+  return !!correct;
+}
+
+/* ---------- QUESTION 2 ---------- */
+
+function checkQ2() {
+  const selects = [...document.querySelectorAll("#q2 .match-select")];
+  const correct = selects.every(select => select.value === select.dataset.answer);
+
+  selects.forEach(select => {
+    select.style.borderColor =
+      select.value === select.dataset.answer ? "#54b978" : "#e77a7a";
+    select.style.background =
+      select.value === select.dataset.answer ? "#effcf3" : "#fff1f1";
+  });
+
+  markQuestion("q2", correct);
+  return correct;
+}
+
+/* ---------- QUESTION 3 ---------- */
+
+function checkQ3() {
+  const zones = [...document.querySelectorAll("#q3 .drop-zone")];
+  let placed = 0;
+  let correct = true;
+
+  zones.forEach(zone => {
+    const category = zone.dataset.category;
+
+    zone.querySelectorAll(".animal-card").forEach(card => {
+      placed++;
+
+      const isCorrect = correctAnimals[card.dataset.animal] === category;
+
+      card.style.borderColor = isCorrect ? "#54b978" : "#e77a7a";
+      card.style.background = isCorrect ? "#effcf3" : "#fff1f1";
+
+      if (!isCorrect) correct = false;
+    });
+  });
+
+  const total = Object.keys(correctAnimals).length;
+
+  if (placed !== total) correct = false;
+
+  markQuestion("q3", correct);
+  return correct;
+}
+
+/* ---------- TREE CHECKING ---------- */
+
+function checkTree(questionId) {
+  const targets = [...document.querySelectorAll("#" + questionId + " .tree-target")];
+  let correct = true;
+
+  targets.forEach(target => {
+    const card = target.querySelector(".choice-card");
+    const accepted = treeAnswers[target.dataset.tree] || [];
+
+    const value = card ? card.dataset.choice : "";
+    const isCorrect = accepted.includes(value);
+
+    target.style.borderColor = isCorrect ? "#54b978" : "#e77a7a";
+    target.style.background = isCorrect ? "#effcf3" : "#fff1f1";
+
+    if (!isCorrect) correct = false;
+  });
+
+  markQuestion(questionId, correct);
+  return correct;
+}
+
+/* ---------- CHECK ALL ---------- */
+
+document.getElementById("checkBtn").addEventListener("click", () => {
+  const results = [
+    checkQ1(),
+    checkQ2(),
+    checkQ3(),
+    checkQ4(),
+    checkTree("q5"),
+    checkTree("q6")
+  ];
+
+  const correctSections = results.filter(Boolean).length;
+  const percentage = Math.round((correctSections / results.length) * 100);
+
+  document.getElementById("scoreDisplay").textContent =
+    percentage + "%";
+
+  document.getElementById("resultPercent").textContent =
+    percentage + "%";
+
+  const resultText = document.getElementById("resultText");
+
+  if (percentage === 100) {
+    resultText.textContent =
+      "🌟 Amazing! You got every section correct!";
+  } else if (percentage >= 80) {
+    resultText.textContent =
+      "👏 Great work! Review the highlighted sections and polish your answers.";
+  } else if (percentage >= 50) {
+    resultText.textContent =
+      "💪 Good effort! Use the clues and try the highlighted sections again.";
+  } else {
+    resultText.textContent =
+      "🌱 Keep practising! Read each clue carefully and try again.";
+  }
+
+  document.getElementById("resultBanner").classList.add("show");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+
+/* ---------- RESET ---------- */
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Reset the whole worksheet? Your answers will be cleared.")) return;
+
+  /* Reset Q1 */
+  document.querySelectorAll('input[name="q1"]').forEach(x => x.checked = false);
+
+  /* Reset Q2 */
+  document.querySelectorAll(".match-select").forEach(select => {
+    select.value = "";
+    select.style.borderColor = "";
+    select.style.background = "";
+  });
+
+  /* Reset Q3 */
+  const bank = document.getElementById("animalBank");
+  document.querySelectorAll("#q3 .animal-card").forEach(card => {
+    card.style.borderColor = "";
+    card.style.background = "";
+    bank.appendChild(card);
+  });
+
+  /* Reset text answers */
+  document.querySelectorAll(".text-input").forEach(input => {
+    input.value = "";
+  });
+
+  /* Reset trees */
+  ["q5", "q6"].forEach(id => {
+    const question = document.getElementById(id);
+    const choiceBank = question.querySelector(".choice-bank");
+
+    question.querySelectorAll(".tree-target").forEach(target => {
+      const card = target.querySelector(".choice-card");
+      if (card) choiceBank.appendChild(card);
+
+      target.style.borderColor = "";
+      target.style.background = "";
+    });
+  });
+
+  clearAnswerStyles();
+
+  document.querySelectorAll(".question").forEach(q => {
+    q.classList.remove("correct", "incorrect");
+  });
+
+  document.querySelectorAll(".selected").forEach(x => {
+    x.classList.remove("selected");
+  });
+
+  selectedItem = null;
+
+  document.getElementById("scoreDisplay").textContent = "Not checked";
+  document.getElementById("resultBanner").classList.remove("show");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+
+/* ---------- KEYBOARD ACCESSIBILITY ---------- */
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    document.querySelectorAll(".selected").forEach(x => x.classList.remove("selected"));
+    selectedItem = null;
+  }
+});
+</script>
+
+</body>
+</html>
