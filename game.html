@@ -1,0 +1,1160 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animal Classification Shooter</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #b3e5fc, #c8f7c5);
+    min-height: 100vh;
+    overflow: hidden;
+    color: #183b56;
+}
+
+/* START SCREEN */
+#startScreen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #b3e5fc, #c2f0b4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+.start-card {
+    background: white;
+    width: min(90%, 600px);
+    padding: 40px;
+    border-radius: 28px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,.15);
+}
+
+.start-card h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.animals {
+    font-size: 55px;
+    margin: 20px 0;
+}
+
+.start-card p {
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 14px;
+    padding: 14px 28px;
+    font-size: 18px;
+}
+
+#startBtn {
+    background: #4caf50;
+    color: white;
+}
+
+#startBtn:hover {
+    background: #388e3c;
+}
+
+/* GAME */
+#game {
+    display: none;
+    height: 100vh;
+    position: relative;
+}
+
+.topbar {
+    height: 85px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 3px 12px rgba(0,0,0,.15);
+    position: relative;
+    z-index: 10;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat span {
+    display: block;
+    font-size: 13px;
+    color: #607d8b;
+}
+
+.stat strong {
+    font-size: 24px;
+}
+
+#question {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 12px 25px;
+    border-radius: 18px;
+    font-size: 21px;
+    font-weight: bold;
+    z-index: 8;
+    box-shadow: 0 5px 15px rgba(0,0,0,.12);
+    text-align: center;
+    white-space: nowrap;
+}
+
+#arena {
+    position: absolute;
+    top: 85px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+/* MOVING ANIMAL */
+.target {
+    position: absolute;
+    width: 92px;
+    height: 92px;
+
+    background: white;
+    border: 4px solid white;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 52px;
+    cursor: crosshair;
+    user-select: none;
+
+    box-shadow: 0 6px 18px rgba(0,0,0,.22);
+
+    will-change: transform, left, top;
+
+    transition: transform .12s;
+}
+
+.target:hover {
+    transform: scale(1.12);
+}
+
+/* HIT ANIMATION */
+.correct-hit {
+    animation: explode .35s forwards;
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5) rotate(15deg);
+        opacity: .8;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.wrong-hit {
+    animation: shake .25s;
+}
+
+@keyframes shake {
+    0%,100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+/* MESSAGE */
+#message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: white;
+    padding: 22px 32px;
+    border-radius: 20px;
+
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+
+    z-index: 15;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+
+    display: none;
+}
+
+.good {
+    border: 5px solid #4caf50;
+}
+
+.bad {
+    border: 5px solid #ef5350;
+}
+
+/* PROGRESS */
+#progressBox {
+    position: absolute;
+    top: 155px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: min(500px, 75%);
+    height: 12px;
+
+    background: rgba(255,255,255,.7);
+    border-radius: 20px;
+
+    z-index: 8;
+}
+
+#progress {
+    height: 100%;
+    width: 0%;
+    background: #4caf50;
+    border-radius: 20px;
+    transition: width .25s;
+}
+
+/* GAME OVER */
+#gameOver {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(24,59,86,.88);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 30;
+}
+
+.over-card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    width: min(90%, 500px);
+}
+
+.over-card h2 {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+
+#finalScore {
+    font-size: 30px;
+    margin: 20px;
+}
+
+#restartBtn {
+    background: #ffb300;
+    color: #183b56;
+}
+
+/* CROSSHAIR */
+#crosshair {
+    position: fixed;
+
+    width: 32px;
+    height: 32px;
+
+    border: 3px solid #ef5350;
+    border-radius: 50%;
+
+    pointer-events: none;
+    z-index: 50;
+
+    display: none;
+
+    transform: translate(-50%, -50%);
+}
+
+#crosshair::before,
+#crosshair::after {
+    content: "";
+    position: absolute;
+    background: #ef5350;
+}
+
+#crosshair::before {
+    width: 3px;
+    height: 42px;
+    left: 12px;
+    top: -8px;
+}
+
+#crosshair::after {
+    width: 42px;
+    height: 3px;
+    left: -8px;
+    top: 12px;
+}
+
+@media(max-width:600px) {
+
+    .topbar {
+        height: 70px;
+    }
+
+    .stat strong {
+        font-size: 17px;
+    }
+
+    #question {
+        top: 82px;
+        font-size: 16px;
+        white-space: normal;
+        width: 90%;
+    }
+
+    #arena {
+        top: 70px;
+    }
+
+    .target {
+        width: 70px;
+        height: 70px;
+        font-size: 40px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- START -->
+<div id="startScreen">
+
+    <div class="start-card">
+
+        <div class="animals">
+            🐶 🐟 🦋 🐙 🐦
+        </div>
+
+        <h1>🎯 Animal Classifier</h1>
+
+        <p>
+            Animals are moving! 🎯<br><br>
+
+            Read the question and
+            <b>shoot the correct animals</b>.
+
+            <br><br>
+
+            🦴 <b>Vertebrates</b> = have a backbone<br>
+            🐌 <b>Invertebrates</b> = do not have a backbone
+        </p>
+
+        <button id="startBtn">
+            🚀 Start Game
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- GAME -->
+<div id="game">
+
+    <div class="topbar">
+
+        <div class="stat">
+            <span>⭐ SCORE</span>
+            <strong id="score">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>❤️ LIVES</span>
+            <strong id="lives">❤️❤️❤️</strong>
+        </div>
+
+        <div class="stat">
+            <span>⏱️ TIME</span>
+            <strong id="timer">60</strong>
+        </div>
+
+        <div class="stat">
+            <span>🏆 LEVEL</span>
+            <strong id="level">1</strong>
+        </div>
+
+    </div>
+
+
+    <div id="question">
+        🎯 Shoot all the <b>VERTEBRATES</b>!
+    </div>
+
+
+    <div id="progressBox">
+        <div id="progress"></div>
+    </div>
+
+
+    <div id="arena"></div>
+
+</div>
+
+
+<div id="crosshair"></div>
+
+
+<div id="message"></div>
+
+
+<!-- GAME OVER -->
+<div id="gameOver">
+
+    <div class="over-card">
+
+        <h2>🎉 Game Complete!</h2>
+
+        <div id="finalScore"></div>
+
+        <p id="finalMessage"></p>
+
+        <br>
+
+        <button id="restartBtn">
+            🔄 Play Again
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const animals = [
+
+    {emoji:"🐶", name:"Dog", type:"vertebrate"},
+    {emoji:"🐱", name:"Cat", type:"vertebrate"},
+    {emoji:"🐟", name:"Fish", type:"vertebrate"},
+    {emoji:"🐦", name:"Bird", type:"vertebrate"},
+    {emoji:"🐸", name:"Frog", type:"vertebrate"},
+    {emoji:"🐢", name:"Turtle", type:"vertebrate"},
+    {emoji:"🦁", name:"Lion", type:"vertebrate"},
+    {emoji:"🐍", name:"Snake", type:"vertebrate"},
+
+    {emoji:"🦋", name:"Butterfly", type:"invertebrate"},
+    {emoji:"🐌", name:"Snail", type:"invertebrate"},
+    {emoji:"🐙", name:"Octopus", type:"invertebrate"},
+    {emoji:"🕷️", name:"Spider", type:"invertebrate"},
+    {emoji:"🪲", name:"Beetle", type:"invertebrate"},
+    {emoji:"🦀", name:"Crab", type:"invertebrate"},
+    {emoji:"🪱", name:"Worm", type:"invertebrate"},
+    {emoji:"🐝", name:"Bee", type:"invertebrate"}
+
+];
+
+
+let score = 0;
+let lives = 3;
+let time = 60;
+let level = 1;
+
+let currentType = "vertebrate";
+
+let correctTargets = 0;
+let totalCorrectTargets = 0;
+
+let timerInterval;
+let animationFrame;
+
+let movingTargets = [];
+
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const game =
+    document.getElementById("game");
+
+const arena =
+    document.getElementById("arena");
+
+const scoreEl =
+    document.getElementById("score");
+
+const livesEl =
+    document.getElementById("lives");
+
+const timerEl =
+    document.getElementById("timer");
+
+const levelEl =
+    document.getElementById("level");
+
+const questionEl =
+    document.getElementById("question");
+
+const progressEl =
+    document.getElementById("progress");
+
+const message =
+    document.getElementById("message");
+
+const gameOver =
+    document.getElementById("gameOver");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const finalMessage =
+    document.getElementById("finalMessage");
+
+const crosshair =
+    document.getElementById("crosshair");
+
+
+/* CROSSHAIR */
+
+document.addEventListener("mousemove", function(e) {
+
+    crosshair.style.left =
+        e.clientX + "px";
+
+    crosshair.style.top =
+        e.clientY + "px";
+
+});
+
+
+/* BUTTONS */
+
+document.getElementById("startBtn")
+    .addEventListener("click", startGame);
+
+document.getElementById("restartBtn")
+    .addEventListener("click", function() {
+
+        location.reload();
+
+    });
+
+
+/* START GAME */
+
+function startGame() {
+
+    startScreen.style.display = "none";
+
+    game.style.display = "block";
+
+    crosshair.style.display = "block";
+
+    score = 0;
+    lives = 3;
+    time = 60;
+    level = 1;
+
+    updateStats();
+
+    startRound();
+
+    startMovement();
+
+    timerInterval = setInterval(function() {
+
+        time--;
+
+        timerEl.textContent = time;
+
+        if(time <= 0) {
+
+            endGame();
+
+        }
+
+    }, 1000);
+
+}
+
+
+/* START ROUND */
+
+function startRound() {
+
+    arena.innerHTML = "";
+
+    movingTargets = [];
+
+    correctTargets = 0;
+
+    currentType =
+        Math.random() < 0.5
+        ? "vertebrate"
+        : "invertebrate";
+
+
+    const label =
+        currentType === "vertebrate"
+        ? "VERTEBRATES 🦴"
+        : "INVERTEBRATES 🐌";
+
+
+    questionEl.innerHTML =
+        `🎯 Shoot all the <b>${label}</b>!`;
+
+
+    /*
+        More animals appear at higher levels.
+    */
+
+    const numberOfAnimals =
+        Math.min(12, 7 + level);
+
+
+    /*
+        Make sure there are always
+        several correct animals.
+    */
+
+    let correctAnimals =
+        animals
+        .filter(a => a.type === currentType)
+        .sort(() => Math.random() - .5)
+        .slice(0, 4);
+
+
+    let wrongAnimals =
+        animals
+        .filter(a => a.type !== currentType)
+        .sort(() => Math.random() - .5)
+        .slice(
+            0,
+            numberOfAnimals - correctAnimals.length
+        );
+
+
+    let selected =
+        [...correctAnimals, ...wrongAnimals]
+        .sort(() => Math.random() - .5);
+
+
+    correctTargets =
+        correctAnimals.length;
+
+
+    totalCorrectTargets =
+        correctAnimals.length;
+
+
+    selected.forEach(function(animal) {
+
+        createMovingTarget(animal);
+
+    });
+
+
+    progressEl.style.width = "0%";
+
+}
+
+
+/* CREATE MOVING TARGET */
+
+function createMovingTarget(animal) {
+
+    const target =
+        document.createElement("div");
+
+    target.className = "target";
+
+    target.textContent =
+        animal.emoji;
+
+    target.setAttribute(
+        "aria-label",
+        animal.name
+    );
+
+
+    /*
+        Random starting position.
+    */
+
+    const size = 92;
+
+    const maxX =
+        Math.max(20, arena.clientWidth - size);
+
+    const maxY =
+        Math.max(180, arena.clientHeight - size);
+
+
+    const x =
+        Math.random() * maxX;
+
+    const y =
+        170 + Math.random() *
+        Math.max(20, maxY - 170);
+
+
+    /*
+        Random direction.
+        Every animal gets its own
+        X and Y speed.
+    */
+
+    const angle =
+        Math.random() * Math.PI * 2;
+
+
+    /*
+        Higher levels = faster animals.
+    */
+
+    const baseSpeed =
+        0.7 + level * 0.15;
+
+
+    const speed =
+        baseSpeed +
+        Math.random() * 1.2;
+
+
+    const vx =
+        Math.cos(angle) * speed;
+
+    const vy =
+        Math.sin(angle) * speed;
+
+
+    const targetData = {
+
+        element: target,
+
+        animal: animal,
+
+        x: x,
+
+        y: y,
+
+        vx: vx,
+
+        vy: vy,
+
+        active: true
+
+    };
+
+
+    target.style.left =
+        x + "px";
+
+    target.style.top =
+        y + "px";
+
+
+    target.addEventListener(
+        "click",
+        function(e) {
+
+            e.stopPropagation();
+
+            shootTarget(targetData);
+
+        }
+    );
+
+
+    arena.appendChild(target);
+
+    movingTargets.push(targetData);
+
+}
+
+
+/* CONTINUOUS MOVEMENT */
+
+function startMovement() {
+
+    cancelAnimationFrame(animationFrame);
+
+
+    function move() {
+
+        const arenaWidth =
+            arena.clientWidth;
+
+        const arenaHeight =
+            arena.clientHeight;
+
+
+        movingTargets.forEach(function(t) {
+
+            if(!t.active) return;
+
+
+            const size =
+                t.element.offsetWidth;
+
+
+            t.x += t.vx;
+
+            t.y += t.vy;
+
+
+            /*
+                Bounce from left/right walls.
+            */
+
+            if(t.x <= 0) {
+
+                t.x = 0;
+
+                t.vx *= -1;
+
+            }
+
+
+            if(t.x >= arenaWidth - size) {
+
+                t.x =
+                    arenaWidth - size;
+
+                t.vx *= -1;
+
+            }
+
+
+            /*
+                Bounce from top/bottom walls.
+            */
+
+            const topLimit = 165;
+
+            if(t.y <= topLimit) {
+
+                t.y = topLimit;
+
+                t.vy *= -1;
+
+            }
+
+
+            if(t.y >= arenaHeight - size) {
+
+                t.y =
+                    arenaHeight - size;
+
+                t.vy *= -1;
+
+            }
+
+
+            t.element.style.left =
+                t.x + "px";
+
+            t.element.style.top =
+                t.y + "px";
+
+        });
+
+
+        animationFrame =
+            requestAnimationFrame(move);
+
+    }
+
+
+    move();
+
+}
+
+
+/* SHOOT TARGET */
+
+function shootTarget(targetData) {
+
+    if(!targetData.active) return;
+
+
+    const animal =
+        targetData.animal;
+
+
+    if(animal.type === currentType) {
+
+        /*
+            CORRECT
+        */
+
+        targetData.active = false;
+
+        targetData.element
+            .classList.add("correct-hit");
+
+
+        score += 10;
+
+        correctTargets--;
+
+
+        const completed =
+            totalCorrectTargets -
+            correctTargets;
+
+
+        progressEl.style.width =
+            (completed /
+            totalCorrectTargets * 100)
+            + "%";
+
+
+        showMessage(
+            `✅ Correct!<br>
+            <small>
+            ${animal.name} is a vertebrate.
+            </small>`,
+            "good"
+        );
+
+
+        updateStats();
+
+
+        setTimeout(function() {
+
+            targetData.element.remove();
+
+        }, 350);
+
+
+        /*
+            When all correct animals
+            have been shot:
+            next level.
+        */
+
+        if(correctTargets <= 0) {
+
+            setTimeout(nextLevel, 500);
+
+        }
+
+    }
+
+    else {
+
+        /*
+            WRONG TARGET
+        */
+
+        targetData.element
+            .classList.add("wrong-hit");
+
+
+        lives--;
+
+        score =
+            Math.max(0, score - 5);
+
+
+        const correctAnswer =
+            animal.type === "vertebrate"
+            ? "vertebrate"
+            : "invertebrate";
+
+
+        showMessage(
+            `❌ Not this one!<br>
+            <small>
+            ${animal.name} is a ${correctAnswer}.
+            </small>`,
+            "bad"
+        );
+
+
+        updateStats();
+
+
+        if(lives <= 0) {
+
+            endGame();
+
+        }
+
+    }
+
+}
+
+
+/* NEXT LEVEL */
+
+function nextLevel() {
+
+    if(time <= 0) return;
+
+
+    level++;
+
+    score += 20;
+
+
+    updateStats();
+
+
+    showMessage(
+        `🌟 Level ${level}!<br>
+        The animals are getting faster!`,
+        "good"
+    );
+
+
+    setTimeout(function() {
+
+        hideMessage();
+
+        startRound();
+
+    }, 900);
+
+}
+
+
+/* MESSAGE */
+
+function showMessage(text, type) {
+
+    message.innerHTML = text;
+
+    message.className = type;
+
+    message.style.display = "block";
+
+
+    clearTimeout(window.messageTimer);
+
+
+    window.messageTimer =
+        setTimeout(
+            hideMessage,
+            850
+        );
+
+}
+
+
+function hideMessage() {
+
+    message.style.display =
+        "none";
+
+}
+
+
+/* UPDATE SCORE */
+
+function updateStats() {
+
+    scoreEl.textContent =
+        score;
+
+    livesEl.textContent =
+        "❤️".repeat(lives);
+
+    levelEl.textContent =
+        level;
+
+    timerEl.textContent =
+        time;
+
+}
+
+
+/* END GAME */
+
+function endGame() {
+
+    clearInterval(timerInterval);
+
+    cancelAnimationFrame(animationFrame);
+
+
+    game.style.display =
+        "none";
+
+    crosshair.style.display =
+        "none";
+
+
+    gameOver.style.display =
+        "flex";
+
+
+    finalScore.textContent =
+        `⭐ Your Score: ${score}`;
+
+
+    if(score >= 150) {
+
+        finalMessage.textContent =
+            "🌟 Excellent! You really know your animal groups!";
+
+    }
+
+    else if(score >= 80) {
+
+        finalMessage.textContent =
+            "👏 Well done! Keep practising vertebrates and invertebrates.";
+
+    }
+
+    else {
+
+        finalMessage.textContent =
+            "💪 Good try! Remember: vertebrates have a backbone.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
+```
