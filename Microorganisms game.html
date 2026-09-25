@@ -1,0 +1,3916 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microbe Investigator | Year 6 Science</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root{
+    --cream:#fff9e9;
+    --paper:#fffdf5;
+    --ink:#26372d;
+    --green:#315f42;
+    --green2:#6d9968;
+    --blue:#52899b;
+    --purple:#765b94;
+    --orange:#d8903e;
+    --red:#c85e54;
+    --yellow:#f3d77b;
+    --shadow:0 15px 40px rgba(25,45,32,.25);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    font-family:"Nunito",Arial,sans-serif;
+    background:#17281d;
+    color:var(--ink);
+}
+
+button{
+    font-family:inherit;
+}
+
+#game{
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    position:relative;
+}
+
+/* =========================================================
+   START SCREEN
+========================================================= */
+
+#startScreen{
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at 50% 20%,rgba(255,240,177,.4),transparent 30%),
+        linear-gradient(135deg,#315f42,#173526);
+}
+
+.startCard{
+    width:min(760px,94vw);
+    background:var(--paper);
+    border:4px solid #759267;
+    border-radius:30px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 35px 100px rgba(0,0,0,.4);
+}
+
+.startIcon{
+    font-size:75px;
+}
+
+.startCard h1{
+    color:var(--green);
+    font-size:42px;
+    line-height:1.1;
+    margin:10px 0;
+}
+
+.startCard .subtitle{
+    font-size:19px;
+    font-weight:800;
+    margin:15px auto;
+}
+
+.startCard p{
+    line-height:1.6;
+    max-width:650px;
+    margin:8px auto;
+}
+
+.startFeatures{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin:25px 0;
+}
+
+.startFeature{
+    background:#edf2e5;
+    border-radius:14px;
+    padding:13px 8px;
+    font-weight:800;
+    font-size:14px;
+}
+
+.startButton{
+    border:0;
+    background:var(--orange);
+    color:#352514;
+    font-size:18px;
+    font-weight:900;
+    padding:15px 30px;
+    border-radius:15px;
+    cursor:pointer;
+    box-shadow:0 6px 0 #a86c2c;
+}
+
+.startButton:hover{
+    transform:translateY(-2px);
+}
+
+.startButton:active{
+    transform:translateY(4px);
+    box-shadow:0 2px 0 #a86c2c;
+}
+
+/* =========================================================
+   WORLD
+========================================================= */
+
+#world{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    background:#8dbb82;
+}
+
+#camera{
+    position:absolute;
+    width:3200px;
+    height:2100px;
+    background:
+        radial-gradient(circle at 15% 20%,rgba(255,255,255,.12),transparent 15%),
+        radial-gradient(circle at 80% 70%,rgba(255,255,255,.1),transparent 18%),
+        #8fbd83;
+    transition:transform .04s linear;
+}
+
+#camera::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.13;
+    background-image:
+        radial-gradient(circle,#ffffff 1px,transparent 1px);
+    background-size:42px 42px;
+}
+
+/* =========================================================
+   ZONES
+========================================================= */
+
+.zone{
+    position:absolute;
+    border:5px solid rgba(50,80,55,.24);
+    border-radius:45px;
+    box-shadow:
+        inset 0 0 60px rgba(255,255,255,.13),
+        0 15px 30px rgba(40,70,45,.12);
+    overflow:hidden;
+}
+
+.zoneTitle{
+    position:absolute;
+    left:25px;
+    top:20px;
+    font-size:25px;
+    font-weight:900;
+    color:#31583b;
+    text-shadow:0 2px white;
+}
+
+#kitchen{
+    left:130px;
+    top:130px;
+    width:760px;
+    height:530px;
+    background:#e8d1a5;
+}
+
+#pond{
+    left:2110px;
+    top:120px;
+    width:780px;
+    height:510px;
+    background:#659da9;
+}
+
+#hospital{
+    left:120px;
+    top:1150px;
+    width:760px;
+    height:540px;
+    background:#d7e6e5;
+}
+
+#farm{
+    left:2100px;
+    top:1150px;
+    width:780px;
+    height:540px;
+    background:#a8ca8d;
+}
+
+#lab{
+    left:1190px;
+    top:740px;
+    width:820px;
+    height:470px;
+    background:#dfe7d5;
+}
+
+/* =========================================================
+   PATHS
+========================================================= */
+
+.path{
+    position:absolute;
+    background:#cdbd91;
+    border:4px solid rgba(100,80,40,.15);
+    border-radius:80px;
+}
+
+#horizontalPath{
+    left:650px;
+    top:850px;
+    width:1650px;
+    height:105px;
+}
+
+#verticalPath{
+    left:1530px;
+    top:350px;
+    width:110px;
+    height:1100px;
+}
+
+#northPath{
+    left:850px;
+    top:390px;
+    width:800px;
+    height:90px;
+}
+
+/* =========================================================
+   DECORATION
+========================================================= */
+
+.tree{
+    position:absolute;
+    font-size:75px;
+    z-index:10;
+    user-select:none;
+}
+
+.rock{
+    position:absolute;
+    font-size:42px;
+    z-index:12;
+}
+
+.flower{
+    position:absolute;
+    font-size:35px;
+    z-index:10;
+}
+
+.fence{
+    position:absolute;
+    font-size:55px;
+}
+
+/* =========================================================
+   OBJECTS
+========================================================= */
+
+.object{
+    position:absolute;
+    z-index:25;
+    user-select:none;
+}
+
+.food{
+    font-size:70px;
+}
+
+.labMachine{
+    width:140px;
+    height:115px;
+    background:#ece8db;
+    border:5px solid #68746f;
+    border-radius:18px;
+    box-shadow:0 8px 15px rgba(0,0,0,.15);
+}
+
+.labMachine::before{
+    content:"";
+    position:absolute;
+    left:30px;
+    top:20px;
+    width:70px;
+    height:32px;
+    background:#78aaa0;
+    border:4px solid #52635f;
+    border-radius:8px;
+}
+
+.labMachine::after{
+    content:"";
+    position:absolute;
+    left:56px;
+    bottom:14px;
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    background:#d8903e;
+}
+
+.bed{
+    width:165px;
+    height:85px;
+    background:white;
+    border:5px solid #87989a;
+    border-radius:15px;
+}
+
+.sign{
+    background:#eee4c4;
+    border:4px solid #8e7541;
+    padding:12px 17px;
+    border-radius:10px;
+    font-weight:900;
+    box-shadow:0 7px 15px rgba(0,0,0,.12);
+}
+
+/* =========================================================
+   MICROORGANISMS
+========================================================= */
+
+.microbe{
+    position:absolute;
+    width:90px;
+    height:90px;
+    z-index:60;
+    cursor:pointer;
+}
+
+.microbeIcon{
+    font-size:68px;
+    filter:drop-shadow(0 7px 5px rgba(0,0,0,.2));
+    transition:.2s;
+}
+
+.microbe:hover .microbeIcon{
+    transform:scale(1.15) rotate(5deg);
+}
+
+.scanLabel{
+    position:absolute;
+    top:-12px;
+    left:3px;
+    background:#fff2b8;
+    border:2px solid #b9983d;
+    border-radius:12px;
+    padding:3px 7px;
+    font-size:10px;
+    font-weight:900;
+    animation:bob 1s infinite alternate;
+}
+
+@keyframes bob{
+    from{transform:translateY(0)}
+    to{transform:translateY(-5px)}
+}
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+#player{
+    position:absolute;
+    width:62px;
+    height:82px;
+    z-index:200;
+}
+
+.playerShadow{
+    position:absolute;
+    left:8px;
+    bottom:0;
+    width:46px;
+    height:12px;
+    background:rgba(30,45,30,.28);
+    border-radius:50%;
+}
+
+.playerHead{
+    position:absolute;
+    left:15px;
+    top:5px;
+    width:31px;
+    height:31px;
+    background:#e5a375;
+    border:3px solid #694831;
+    border-radius:50%;
+}
+
+.playerHair{
+    position:absolute;
+    left:14px;
+    top:2px;
+    width:33px;
+    height:14px;
+    background:#35271f;
+    border-radius:20px 20px 5px 5px;
+    z-index:2;
+}
+
+.playerGoggles{
+    position:absolute;
+    left:8px;
+    top:9px;
+    width:47px;
+    height:17px;
+    border:4px solid #3d5c63;
+    border-radius:12px;
+    z-index:3;
+}
+
+.playerBody{
+    position:absolute;
+    left:13px;
+    top:32px;
+    width:36px;
+    height:39px;
+    background:#70558d;
+    border:3px solid #463655;
+    border-radius:12px;
+}
+
+.playerLeg{
+    position:absolute;
+    top:66px;
+    width:10px;
+    height:17px;
+    background:#3e4657;
+    border-radius:5px;
+}
+
+.playerLeg.one{left:15px}
+.playerLeg.two{left:34px}
+
+.walk .playerLeg.one{
+    animation:walkOne .18s infinite alternate;
+}
+
+.walk .playerLeg.two{
+    animation:walkTwo .18s infinite alternate;
+}
+
+@keyframes walkOne{
+    from{transform:rotate(15deg)}
+    to{transform:rotate(-15deg)}
+}
+
+@keyframes walkTwo{
+    from{transform:rotate(-15deg)}
+    to{transform:rotate(15deg)}
+}
+
+/* =========================================================
+   NPC
+========================================================= */
+
+#scientist{
+    position:absolute;
+    left:1470px;
+    top:650px;
+    z-index:100;
+    cursor:pointer;
+}
+
+.scientistIcon{
+    font-size:78px;
+}
+
+.npcBubble{
+    position:absolute;
+    left:-35px;
+    top:-25px;
+    width:155px;
+    background:#fff8df;
+    border:3px solid #5b7556;
+    border-radius:14px;
+    padding:5px;
+    text-align:center;
+    font-size:12px;
+    font-weight:900;
+}
+
+/* =========================================================
+   GATES
+========================================================= */
+
+.gate{
+    position:absolute;
+    z-index:120;
+    width:115px;
+    height:95px;
+    border:5px solid #695a3c;
+    border-radius:12px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #8d7952 0 13px,
+            #d1b57b 13px 25px
+        );
+    box-shadow:0 8px 15px rgba(0,0,0,.2);
+}
+
+.gate::after{
+    content:"🔒";
+    position:absolute;
+    font-size:30px;
+    left:37px;
+    top:27px;
+}
+
+.gate.unlocked{
+    opacity:.25;
+    pointer-events:none;
+}
+
+.gateLabel{
+    position:absolute;
+    top:-34px;
+    left:-25px;
+    width:165px;
+    text-align:center;
+    background:#fff1bd;
+    border:2px solid #b18e38;
+    padding:4px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:900;
+}
+
+/* =========================================================
+   HUD
+========================================================= */
+
+#hud{
+    position:fixed;
+    top:15px;
+    left:15px;
+    right:15px;
+    z-index:1000;
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    pointer-events:none;
+}
+
+.hudCard{
+    background:rgba(255,251,237,.96);
+    border:2px solid rgba(50,80,55,.25);
+    border-radius:17px;
+    box-shadow:var(--shadow);
+    padding:11px 15px;
+    pointer-events:auto;
+}
+
+#missionCard{
+    width:390px;
+}
+
+.hudSmall{
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#72806e;
+    font-weight:900;
+}
+
+#missionText{
+    font-weight:900;
+    margin-top:3px;
+}
+
+.progressTrack{
+    height:8px;
+    background:#ddd7c6;
+    border-radius:20px;
+    margin-top:8px;
+    overflow:hidden;
+}
+
+#progressBar{
+    height:100%;
+    width:0%;
+    background:#649361;
+    transition:.4s;
+}
+
+#stats{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    font-weight:900;
+}
+
+/* =========================================================
+   INTERACTION
+========================================================= */
+
+#interaction{
+    position:fixed;
+    left:50%;
+    bottom:28px;
+    transform:translateX(-50%);
+    z-index:1100;
+    display:none;
+    background:#263a2d;
+    color:white;
+    border-radius:15px;
+    padding:12px 20px;
+    box-shadow:var(--shadow);
+    font-weight:900;
+}
+
+.key{
+    display:inline-block;
+    background:#f1cf73;
+    color:#3b301d;
+    padding:3px 8px;
+    border-radius:6px;
+    margin-right:8px;
+}
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+#overlay{
+    position:fixed;
+    inset:0;
+    z-index:3000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(16,30,22,.63);
+    backdrop-filter:blur(5px);
+}
+
+.panel{
+    width:min(820px,95vw);
+    max-height:90vh;
+    overflow:auto;
+    background:var(--paper);
+    border:4px solid #69865e;
+    border-radius:25px;
+    padding:28px;
+    box-shadow:0 35px 90px rgba(0,0,0,.4);
+    animation:panelIn .22s ease;
+}
+
+@keyframes panelIn{
+    from{
+        opacity:0;
+        transform:scale(.93) translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+
+.panelHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.panelHeader h1{
+    color:var(--green);
+    font-size:29px;
+}
+
+.closeButton{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:50%;
+    background:#e8e1cd;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.lessonBox{
+    background:#eaf1e2;
+    border-left:6px solid var(--green2);
+    padding:17px;
+    border-radius:11px;
+    line-height:1.6;
+    margin:15px 0;
+}
+
+.evidenceBox{
+    background:#fff3bf;
+    border:3px dashed #c29d3e;
+    border-radius:15px;
+    padding:15px;
+    margin:15px 0;
+}
+
+.warningBox{
+    background:#f7e1dc;
+    border-left:6px solid var(--red);
+    border-radius:10px;
+    padding:15px;
+    margin:15px 0;
+}
+
+.choiceGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:17px;
+}
+
+.choice{
+    border:3px solid #d7d0bb;
+    background:#fffdf7;
+    border-radius:15px;
+    padding:16px;
+    text-align:left;
+    font-weight:900;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.choice:hover:not(:disabled){
+    border-color:#689064;
+    background:#f1f6e9;
+    transform:translateY(-2px);
+}
+
+.choice.correct{
+    background:#dcefd8;
+    border-color:#579152;
+}
+
+.choice.wrong{
+    background:#f4d9d5;
+    border-color:#bd6256;
+}
+
+.choice:disabled{
+    cursor:default;
+}
+
+.feedback{
+    display:none;
+    padding:15px;
+    border-radius:12px;
+    margin-top:15px;
+    line-height:1.5;
+    font-weight:800;
+}
+
+.feedback.show{
+    display:block;
+}
+
+.feedback.good{
+    background:#dcefd8;
+}
+
+.feedback.bad{
+    background:#f4d9d5;
+}
+
+.primaryButton{
+    border:0;
+    background:var(--green);
+    color:white;
+    padding:13px 20px;
+    border-radius:13px;
+    font-weight:900;
+    cursor:pointer;
+    margin-top:15px;
+}
+
+.primaryButton:hover{
+    background:#274d35;
+}
+
+/* =========================================================
+   NOTEBOOK
+========================================================= */
+
+.notebookGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.note{
+    background:#fff4c8;
+    border:2px solid #d2b85b;
+    border-radius:13px;
+    padding:13px;
+}
+
+.noteTitle{
+    color:#776124;
+    font-size:11px;
+    font-weight:900;
+    margin-bottom:4px;
+}
+
+.note p{
+    font-weight:800;
+    line-height:1.45;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+#toast{
+    position:fixed;
+    left:50%;
+    top:100px;
+    transform:translate(-50%,-20px);
+    opacity:0;
+    z-index:4000;
+    background:#fff4c5;
+    border:3px solid #c5a247;
+    padding:12px 20px;
+    border-radius:14px;
+    font-weight:900;
+    box-shadow:var(--shadow);
+    transition:.25s;
+    pointer-events:none;
+}
+
+#toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* =========================================================
+   MAP
+========================================================= */
+
+#map{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    width:190px;
+    height:125px;
+    background:rgba(255,250,232,.94);
+    border:3px solid #587052;
+    border-radius:14px;
+    z-index:1000;
+    overflow:hidden;
+}
+
+.mapZone{
+    position:absolute;
+    border:1px solid rgba(40,80,45,.3);
+    border-radius:5px;
+}
+
+.mapPlayer{
+    position:absolute;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#c75d51;
+    border:2px solid white;
+    transform:translate(-50%,-50%);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+#mobileControls{
+    display:none;
+    position:fixed;
+    left:15px;
+    bottom:15px;
+    z-index:1500;
+}
+
+.dpad{
+    display:grid;
+    grid-template-columns:55px 55px 55px;
+    grid-template-rows:55px 55px 55px;
+}
+
+.dpad button{
+    border:2px solid #52694f;
+    background:rgba(255,250,235,.88);
+    border-radius:12px;
+    font-size:20px;
+}
+
+.dpadUp{
+    grid-column:2;
+}
+
+.dpadLeft{
+    grid-column:1;
+    grid-row:2;
+}
+
+.dpadDown{
+    grid-column:2;
+    grid-row:2;
+}
+
+.dpadRight{
+    grid-column:3;
+    grid-row:2;
+}
+
+@media(max-width:700px){
+
+    .startCard{
+        padding:25px;
+    }
+
+    .startCard h1{
+        font-size:31px;
+    }
+
+    .startFeatures{
+        grid-template-columns:1fr;
+    }
+
+    #missionCard{
+        width:250px;
+    }
+
+    #stats .hideMobile{
+        display:none;
+    }
+
+    #map{
+        display:none;
+    }
+
+    #mobileControls{
+        display:block;
+    }
+
+    .choiceGrid,
+    .notebookGrid{
+        grid-template-columns:1fr;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<!-- ======================================================
+     START SCREEN
+====================================================== -->
+
+<div id="startScreen">
+
+    <div class="startCard">
+
+        <div class="startIcon">🧫🔬🦠</div>
+
+        <h1>MICROBE INVESTIGATOR</h1>
+
+        <div class="subtitle">
+            Year 6 Science Investigation
+        </div>
+
+        <p>
+            You have been shrunk down to microscopic size!
+            Explore the research station, investigate mysterious
+            microorganisms and collect scientific evidence.
+        </p>
+
+        <p>
+            You won't simply be told the answers.
+            <strong>
+                You'll have to discover the evidence and use it
+                to solve the investigation.
+            </strong>
+        </p>
+
+        <div class="startFeatures">
+
+            <div class="startFeature">
+                🧫<br>
+                Discover microbes
+            </div>
+
+            <div class="startFeature">
+                🔎<br>
+                Collect evidence
+            </div>
+
+            <div class="startFeature">
+                🧠<br>
+                Solve cases
+            </div>
+
+        </div>
+
+        <p>
+            <strong>Controls:</strong>
+            WASD / Arrow Keys to move · E to investigate · N for notebook
+        </p>
+
+        <button class="startButton" onclick="startGame()">
+            ENTER THE MICROBE WORLD →
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ======================================================
+     WORLD
+====================================================== -->
+
+<div id="world">
+
+<div id="camera">
+
+    <!-- ZONES -->
+
+    <div id="kitchen" class="zone">
+        <div class="zoneTitle">🍞 FOOD & FERMENTATION LAB</div>
+    </div>
+
+    <div id="pond" class="zone">
+        <div class="zoneTitle" style="color:#f0ffff">
+            💧 WATER SAMPLE ZONE
+        </div>
+    </div>
+
+    <div id="hospital" class="zone">
+        <div class="zoneTitle">🏥 INFECTION INVESTIGATION</div>
+    </div>
+
+    <div id="farm" class="zone">
+        <div class="zoneTitle">🌾 HELPFUL BACTERIA FARM</div>
+    </div>
+
+    <div id="lab" class="zone">
+        <div class="zoneTitle">🔬 MICROBE RESEARCH LAB</div>
+    </div>
+
+    <!-- PATHS -->
+
+    <div id="horizontalPath" class="path"></div>
+    <div id="verticalPath" class="path"></div>
+    <div id="northPath" class="path"></div>
+
+    <!-- ==================================================
+         DECORATION
+    ================================================== -->
+
+    <div class="tree" style="left:40px;top:40px">🌳</div>
+    <div class="tree" style="left:920px;top:70px">🌲</div>
+    <div class="tree" style="left:1020px;top:540px">🌳</div>
+    <div class="tree" style="left:1000px;top:1350px">🌲</div>
+    <div class="tree" style="left:930px;top:1760px">🌳</div>
+    <div class="tree" style="left:1770px;top:1500px">🌲</div>
+    <div class="tree" style="left:2920px;top:800px">🌳</div>
+    <div class="tree" style="left:2950px;top:1700px">🌲</div>
+
+    <div class="rock" style="left:850px;top:760px">🪨</div>
+    <div class="rock" style="left:1070px;top:800px">🪨</div>
+    <div class="rock" style="left:2010px;top:760px">🪨</div>
+    <div class="rock" style="left:2160px;top:900px">🪨</div>
+
+    <div class="flower" style="left:100px;top:780px">🌼</div>
+    <div class="flower" style="left:920px;top:1000px">🌻</div>
+    <div class="flower" style="left:2050px;top:1000px">🌷</div>
+    <div class="flower" style="left:2800px;top:1020px">🌺</div>
+
+    <!-- ==================================================
+         KITCHEN OBJECTS
+    ================================================== -->
+
+    <div class="object food" style="left:300px;top:320px">
+        🍞
+    </div>
+
+    <div class="object food" style="left:560px;top:380px">
+        🥛
+    </div>
+
+    <div class="object food" style="left:700px;top:280px">
+        🧀
+    </div>
+
+    <div class="object sign" style="left:300px;top:520px">
+        FERMENTATION ZONE
+    </div>
+
+    <!-- ==================================================
+         POND
+    ================================================== -->
+
+    <div class="object" style="left:2270px;top:330px;font-size:100px">
+        💧
+    </div>
+
+    <div class="object" style="left:2500px;top:450px;font-size:75px">
+        🐸
+    </div>
+
+    <div class="object" style="left:2650px;top:250px;font-size:65px">
+        🐟
+    </div>
+
+    <!-- ==================================================
+         HOSPITAL
+    ================================================== -->
+
+    <div class="object bed" style="left:300px;top:1330px"></div>
+
+    <div class="object" style="left:560px;top:1240px;font-size:75px">
+        🩺
+    </div>
+
+    <div class="object" style="left:650px;top:1480px;font-size:70px">
+        🧴
+    </div>
+
+    <div class="object sign" style="left:300px;top:1570px">
+        INFECTION LAB
+    </div>
+
+    <!-- ==================================================
+         FARM
+    ================================================== -->
+
+    <div class="object" style="left:2260px;top:1290px;font-size:90px">
+        🐄
+    </div>
+
+    <div class="object" style="left:2520px;top:1400px;font-size:80px">
+        🥛
+    </div>
+
+    <div class="object" style="left:2200px;top:1540px;font-size:65px">
+        🌾
+    </div>
+
+    <!-- ==================================================
+         CENTRAL LAB
+    ================================================== -->
+
+    <div class="object labMachine"
+         style="left:1290px;top:900px">
+    </div>
+
+    <div class="object labMachine"
+         style="left:1700px;top:900px">
+    </div>
+
+    <div class="object sign"
+         style="left:1450px;top:1090px">
+        MICROBE SCANNER
+    </div>
+
+    <!-- ==================================================
+         GATES
+    ================================================== -->
+
+    <div id="gateHospital"
+         class="gate"
+         style="left:1030px;top:1250px">
+
+        <div class="gateLabel">
+            🔒 Requires VIRUS evidence
+        </div>
+
+    </div>
+
+    <div id="gateFarm"
+         class="gate"
+         style="left:2080px;top:1000px">
+
+        <div class="gateLabel">
+            🔒 Requires BACTERIA evidence
+        </div>
+
+    </div>
+
+    <div id="gateFinal"
+         class="gate"
+         style="left:1510px;top:500px">
+
+        <div class="gateLabel">
+            🔒 Final investigation
+        </div>
+
+    </div>
+
+    <!-- ==================================================
+         SCIENTIST
+    ================================================== -->
+
+    <div id="scientist">
+
+        <div class="npcBubble">
+            🔬 DR. MAYA<br>
+            <span>Talk to me!</span>
+        </div>
+
+        <div class="scientistIcon">
+            👩‍🔬
+        </div>
+
+    </div>
+
+    <!-- ==================================================
+         MICROORGANISMS
+    ================================================== -->
+
+    <!-- BACTERIA: FOOD -->
+
+    <div class="microbe"
+         data-id="bacteriaFood"
+         style="left:440px;top:230px">
+
+        <div class="scanLabel">SCAN</div>
+
+        <div class="microbeIcon">
+            🦠
+        </div>
+
+    </div>
+
+    <!-- FERMENTATION -->
+
+    <div class="microbe"
+         data-id="fermentation"
+         style="left:690px;top:470px">
+
+        <div class="scanLabel">SCAN</div>
+
+        <div class="microbeIcon">
+            🧫
+        </div>
+
+    </div>
+
+    <!-- WATER BACTERIA -->
+
+    <div class="microbe"
+         data-id="bacteriaWater"
+         style="left:2260px;top:240px">
+
+        <div class="scanLabel">SCAN</div>
+
+        <div class="microbeIcon">
+            🦠
+        </div>
+
+    </div>
+
+    <!-- VIRUS -->
+
+    <div class="microbe"
+         data-id="virus"
+         style="left:600px;top:1430px">
+
+        <div class="scanLabel">SCAN</div>
+
+        <div class="microbeIcon">
+            🧬
+        </div>
+
+    </div>
+
+    <!-- FUNGUS -->
+
+    <div class="microbe"
+         data-id="fungus"
+         style="left:300px;top:1240px">
+
+        <div class="scanLabel">SCAN</div>
+
+        <div class="microbeIcon">
+            🍄
+        </div>
+
+    </div>
+
+    <!-- HELPFUL BACTERIA -->
+
+    <div class="microbe"
+         data-id="helpful"
+         style="left:2400px;top:1240px">
+
+        <div class="scanLabel">SCAN</div>
+
+        <div class="microbeIcon">
+            🧫
+        </div>
+
+    </div>
+
+    <!-- ==================================================
+         PLAYER
+    ================================================== -->
+
+    <div id="player"
+         style="left:1440px;top:800px">
+
+        <div class="playerShadow"></div>
+
+        <div class="playerHair"></div>
+
+        <div class="playerHead"></div>
+
+        <div class="playerGoggles"></div>
+
+        <div class="playerBody"></div>
+
+        <div class="playerLeg one"></div>
+        <div class="playerLeg two"></div>
+
+    </div>
+
+</div>
+</div>
+
+<!-- ======================================================
+     HUD
+====================================================== -->
+
+<div id="hud">
+
+    <div class="hudCard" id="missionCard">
+
+        <div class="hudSmall">
+            CURRENT MISSION
+        </div>
+
+        <div id="missionText">
+            Find Dr. Maya.
+        </div>
+
+        <div class="progressTrack">
+            <div id="progressBar"></div>
+        </div>
+
+    </div>
+
+    <div class="hudCard" id="stats">
+
+        <div>
+            ⭐ <span id="xp">0</span> XP
+        </div>
+
+        <div>
+            🧫 <span id="sampleCount">0</span>/6
+        </div>
+
+        <div class="hideMobile">
+            🏅 <span id="badgeCount">0</span>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ======================================================
+     MAP
+====================================================== -->
+
+<div id="map">
+
+    <div class="mapZone"
+         style="left:4%;top:4%;width:27%;height:28%">
+    </div>
+
+    <div class="mapZone"
+         style="left:68%;top:4%;width:28%;height:28%">
+    </div>
+
+    <div class="mapZone"
+         style="left:4%;top:67%;width:27%;height:29%">
+    </div>
+
+    <div class="mapZone"
+         style="left:68%;top:67%;width:28%;height:29%">
+    </div>
+
+    <div class="mapZone"
+         style="left:38%;top:39%;width:25%;height:23%">
+    </div>
+
+    <div id="mapPlayer" class="mapPlayer"></div>
+
+</div>
+
+<!-- ======================================================
+     INTERACTION
+====================================================== -->
+
+<div id="interaction">
+
+    <span class="key">E</span>
+
+    <span id="interactionText">
+        Investigate
+    </span>
+
+</div>
+
+<!-- ======================================================
+     TOAST
+====================================================== -->
+
+<div id="toast"></div>
+
+<!-- ======================================================
+     MOBILE
+====================================================== -->
+
+<div id="mobileControls">
+
+    <div class="dpad">
+
+        <button class="dpadUp"
+                data-key="ArrowUp">
+            ▲
+        </button>
+
+        <button class="dpadLeft"
+                data-key="ArrowLeft">
+            ◀
+        </button>
+
+        <button class="dpadDown"
+                data-key="ArrowDown">
+            ▼
+        </button>
+
+        <button class="dpadRight"
+                data-key="ArrowRight">
+            ▶
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ======================================================
+     OVERLAY
+====================================================== -->
+
+<div id="overlay">
+
+    <div class="panel" id="panelContent"></div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   GAME CONFIGURATION
+========================================================= */
+
+const WORLD_WIDTH = 3200;
+const WORLD_HEIGHT = 2100;
+
+const player = document.getElementById("player");
+const camera = document.getElementById("camera");
+
+const overlay = document.getElementById("overlay");
+const panelContent = document.getElementById("panelContent");
+
+const interaction = document.getElementById("interaction");
+const interactionText = document.getElementById("interactionText");
+
+let gameStarted = false;
+
+let keys = {};
+
+let nearby = null;
+
+let playerState = {
+    x:1440,
+    y:800,
+    speed:4.6,
+    moving:false
+};
+
+let state = {
+    xp:0,
+    samples:[],
+    solved:[],
+    badges:[],
+    metScientist:false,
+    finalComplete:false
+};
+
+/* =========================================================
+   MICROBE DATABASE
+========================================================= */
+
+const microbes = {
+
+    bacteriaFood:{
+        title:"Bacteria in Food",
+        icon:"🦠",
+        category:"BACTERIA",
+        xp:25,
+
+        lesson:`
+        <strong>Bacteria are microscopic living organisms.</strong>
+
+        <br><br>
+
+        They are so small that we usually need a microscope
+        to observe them clearly.
+
+        <br><br>
+
+        Bacteria can be found in many places including
+        <strong>soil, water, food and living organisms.</strong>
+
+        <br><br>
+
+        Some bacteria can cause disease, but
+        <strong>not all bacteria are harmful.</strong>
+        `,
+
+        evidence:
+        "Bacteria can live in food and many other environments."
+    },
+
+    fermentation:{
+        title:"The Fermentation Sample",
+        icon:"🧫",
+        category:"HELPFUL BACTERIA",
+
+        xp:45,
+
+        lesson:`
+        Some bacteria are useful to humans.
+
+        <br><br>
+
+        Certain bacteria can carry out
+        <strong>fermentation</strong>.
+
+        <br><br>
+
+        Fermentation can help transform milk into
+        foods such as <strong>yogurt</strong>.
+
+        <br><br>
+
+        This gives us an important scientific clue:
+
+        <br><br>
+
+        <strong>
+        A microorganism is not automatically harmful.
+        </strong>
+        `,
+
+        evidence:
+        "Some bacteria help produce foods such as yogurt through fermentation."
+    },
+
+    bacteriaWater:{
+        title:"Bacteria in Water",
+        icon:"🦠",
+        category:"BACTERIA",
+
+        xp:30,
+
+        lesson:`
+        Bacteria occur naturally in the environment.
+
+        <br><br>
+
+        They can be found in
+        <strong>rivers, ponds, soil and oceans.</strong>
+
+        <br><br>
+
+        Different species have different effects.
+
+        <br><br>
+
+        Some bacteria break down dead material,
+        some are useful, and some can cause disease.
+        `,
+
+        evidence:
+        "Bacteria can be found naturally in water and other environments."
+    },
+
+    virus:{
+        title:"Virus Investigation",
+        icon:"🧬",
+        category:"VIRUS",
+
+        xp:40,
+
+        lesson:`
+        Viruses are extremely small infectious agents.
+
+        <br><br>
+
+        A virus enters a living cell and uses the cell's
+        machinery to make more copies of itself.
+
+        <br><br>
+
+        Viruses can cause diseases such as:
+
+        <br><br>
+
+        <strong>
+        influenza (flu), measles, chickenpox and COVID-19.
+        </strong>
+        `,
+
+        evidence:
+        "Viruses can infect cells and cause diseases such as flu, measles and chickenpox."
+    },
+
+    fungus:{
+        title:"Fungal Infection Sample",
+        icon:"🍄",
+        category:"FUNGI",
+
+        xp:40,
+
+        lesson:`
+        Some fungi are microorganisms.
+
+        <br><br>
+
+        Certain fungi can cause infections in humans.
+
+        <br><br>
+
+        Examples include:
+
+        <br>
+        • athlete's foot
+        <br>
+        • ringworm
+        <br>
+        • some yeast infections
+
+        <br><br>
+
+        Remember:
+
+        <strong>
+        Not every fungus is harmful.
+        </strong>
+        `,
+
+        evidence:
+        "Some fungi can cause infections such as athlete's foot and ringworm."
+    },
+
+    helpful:{
+        title:"Helpful Bacteria",
+        icon:"🧫",
+        category:"HELPFUL BACTERIA",
+
+        xp:45,
+
+        lesson:`
+        Some bacteria are very useful to humans.
+
+        <br><br>
+
+        Certain bacteria help produce foods such as
+        <strong>yogurt and cheese</strong>.
+
+        <br><br>
+
+        Some bacteria also live naturally in our
+        digestive system and form part of our
+        normal microbial community.
+        `,
+
+        evidence:
+        "Some bacteria help humans make food and are part of useful microbial communities."
+    }
+
+};
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+const questions = {
+
+    microorganism:{
+
+        title:"MISSION 1 — WHAT IS A MICROORGANISM?",
+
+        content:`
+        Dr. Maya gives you a mystery sample.
+
+        <br><br>
+
+        You cannot see the organism clearly with your
+        naked eye.
+
+        <br><br>
+
+        <strong>
+        Which statement best describes a microorganism?
+        </strong>
+        `,
+
+        choices:[
+            ["A very small organism that usually requires a microscope to observe clearly.","correct"],
+            ["Any organism that lives underground.","wrong"],
+            ["A living thing that must always cause disease.","wrong"],
+            ["Only a type of bacteria.","wrong"]
+        ],
+
+        explanation:`
+        Microorganisms are extremely small. Many are too small
+        to see clearly without a microscope.
+        `
+    },
+
+    bacteria:{
+
+        title:"MISSION 2 — WHERE CAN BACTERIA BE FOUND?",
+
+        content:`
+        You collect samples from:
+
+        <br><br>
+
+        💧 pond water
+        <br>
+        🌱 soil
+        <br>
+        🍞 food
+
+        <br><br>
+
+        Bacteria are detected in all three.
+
+        <br><br>
+
+        What is the best conclusion?
+        `,
+
+        choices:[
+            ["Bacteria can live in many different environments.","correct"],
+            ["Bacteria only live in dirty water.","wrong"],
+            ["Bacteria only live inside humans.","wrong"],
+            ["Every bacterium causes disease.","wrong"]
+        ],
+
+        explanation:`
+        Bacteria are widespread. They can be found in water,
+        soil, food and living organisms.
+        `
+    },
+
+    virus:{
+
+        title:"MISSION 3 — THE VIRAL OUTBREAK",
+
+        content:`
+        Several patients have the same infectious agent.
+
+        <br><br>
+
+        Scientists discover that the agent enters
+        living cells and uses the cells to make more copies.
+
+        <br><br>
+
+        Which is the most likely explanation?
+        `,
+
+        choices:[
+            ["A virus is infecting the cells.","correct"],
+            ["A flowering plant is reproducing.","wrong"],
+            ["A rock is multiplying.","wrong"],
+            ["A mineral is causing the cells to reproduce.","wrong"]
+        ],
+
+        explanation:`
+        Viruses infect living cells and use the machinery
+        of the host cell to make more copies.
+        `
+    },
+
+    fungus:{
+
+        title:"MISSION 4 — THE SKIN INFECTION",
+
+        content:`
+        A patient develops an itchy fungal skin infection.
+
+        <br><br>
+
+        Which condition could be caused by a fungus?
+        `,
+
+        choices:[
+            ["Athlete's foot","correct"],
+            ["Influenza","wrong"],
+            ["Measles","wrong"],
+            ["Chickenpox","wrong"]
+        ],
+
+        explanation:`
+        Athlete's foot and ringworm are examples of fungal
+        infections. Flu, measles and chickenpox are caused by viruses.
+        `
+    },
+
+    helpful:{
+
+        title:"MISSION 5 — FRIEND OR FOE?",
+
+        content:`
+        A scientist uses bacteria to turn milk into yogurt.
+
+        <br><br>
+
+        Another scientist explains that some bacteria
+        naturally live in the human digestive system.
+
+        <br><br>
+
+        What conclusion should you make?
+        `,
+
+        choices:[
+            ["Some bacteria can be helpful to humans.","correct"],
+            ["Every bacterium is harmful.","wrong"],
+            ["Bacteria cannot be used to make food.","wrong"],
+            ["Helpful bacteria are not microorganisms.","wrong"]
+        ],
+
+        explanation:`
+        Some bacteria are useful. They can help make foods
+        through fermentation and some bacteria are part of
+        useful microbial communities.
+        `
+    }
+
+};
+
+/* =========================================================
+   START GAME
+========================================================= */
+
+function startGame(){
+
+    document.getElementById("startScreen").style.display="none";
+
+    gameStarted=true;
+
+    loadProgress();
+
+    updateHUD();
+
+    toast("🔬 Mission started! Find Dr. Maya.");
+
+    requestAnimationFrame(gameLoop);
+}
+
+/* =========================================================
+   SAVE / LOAD
+========================================================= */
+
+function saveProgress(){
+
+    localStorage.setItem(
+        "microbeInvestigatorSave",
+        JSON.stringify(state)
+    );
+
+}
+
+function loadProgress(){
+
+    const saved=
+        localStorage.getItem(
+            "microbeInvestigatorSave"
+        );
+
+    if(!saved)return;
+
+    try{
+
+        const parsed=JSON.parse(saved);
+
+        state={
+            ...state,
+            ...parsed
+        };
+
+    }catch(error){
+
+        console.warn(
+            "Could not load saved game.",
+            error
+        );
+
+    }
+
+    updateGates();
+}
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener("keydown",function(event){
+
+    keys[event.key]=true;
+
+    if([
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        " "
+    ].includes(event.key)){
+
+        event.preventDefault();
+
+    }
+
+    if(event.key.toLowerCase()==="e"){
+
+        interact();
+
+    }
+
+    if(event.key.toLowerCase()==="n"){
+
+        openNotebook();
+
+    }
+
+    if(event.key==="Escape"){
+
+        closePanel();
+
+    }
+
+});
+
+document.addEventListener("keyup",function(event){
+
+    keys[event.key]=false;
+
+});
+
+/* =========================================================
+   MOBILE INPUT
+========================================================= */
+
+document
+.querySelectorAll("#mobileControls button")
+.forEach(button=>{
+
+    button.addEventListener(
+        "touchstart",
+        function(event){
+
+            event.preventDefault();
+
+            keys[button.dataset.key]=true;
+
+        }
+    );
+
+    button.addEventListener(
+        "touchend",
+        function(event){
+
+            event.preventDefault();
+
+            keys[button.dataset.key]=false;
+
+        }
+    );
+
+});
+
+/* =========================================================
+   GAME LOOP
+========================================================= */
+
+function gameLoop(){
+
+    if(gameStarted){
+
+        updatePlayer();
+
+        updateCamera();
+
+        detectNearby();
+
+        updateMap();
+
+    }
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+/* =========================================================
+   PLAYER MOVEMENT
+========================================================= */
+
+function updatePlayer(){
+
+    let dx=0;
+    let dy=0;
+
+    if(keys.w || keys.W || keys.ArrowUp)
+        dy--;
+
+    if(keys.s || keys.S || keys.ArrowDown)
+        dy++;
+
+    if(keys.a || keys.A || keys.ArrowLeft)
+        dx--;
+
+    if(keys.d || keys.D || keys.ArrowRight)
+        dx++;
+
+    if(dx!==0 || dy!==0){
+
+        playerState.moving=true;
+
+        const length=
+            Math.sqrt(dx*dx+dy*dy);
+
+        dx=
+            dx/length*
+            playerState.speed;
+
+        dy=
+            dy/length*
+            playerState.speed;
+
+        const nextX=
+            playerState.x+dx;
+
+        const nextY=
+            playerState.y+dy;
+
+        if(canMove(nextX,playerState.y)){
+
+            playerState.x=nextX;
+
+        }
+
+        if(canMove(playerState.x,nextY)){
+
+            playerState.y=nextY;
+
+        }
+
+    }else{
+
+        playerState.moving=false;
+
+    }
+
+    player.style.left=
+        playerState.x+"px";
+
+    player.style.top=
+        playerState.y+"px";
+
+    player.classList.toggle(
+        "walk",
+        playerState.moving
+    );
+
+}
+
+/* =========================================================
+   COLLISION SYSTEM
+========================================================= */
+
+function canMove(x,y){
+
+    const radius=20;
+
+    if(
+        x<30 ||
+        y<30 ||
+        x>WORLD_WIDTH-50 ||
+        y>WORLD_HEIGHT-70
+    ){
+
+        return false;
+
+    }
+
+    /*
+       Central machines
+    */
+
+    const obstacles=[
+
+        {
+            x:1290,
+            y:900,
+            width:140,
+            height:115
+        },
+
+        {
+            x:1700,
+            y:900,
+            width:140,
+            height:115
+        },
+
+        {
+            x:300,
+            y:500,
+            width:0,
+            height:0
+        }
+
+    ];
+
+    for(const obstacle of obstacles){
+
+        if(
+            circleRectangleCollision(
+                x+30,
+                y+40,
+                radius,
+                obstacle
+            )
+        ){
+
+            return false;
+
+        }
+
+    }
+
+    /*
+       Gates
+    */
+
+    const gates=[
+
+        {
+            id:"gateHospital",
+            x:1030,
+            y:1250,
+            width:115,
+            height:95
+        },
+
+        {
+            id:"gateFarm",
+            x:2080,
+            y:1000,
+            width:115,
+            height:95
+        },
+
+        {
+            id:"gateFinal",
+            x:1510,
+            y:500,
+            width:115,
+            height:95
+        }
+
+    ];
+
+    for(const gate of gates){
+
+        const element=
+            document.getElementById(gate.id);
+
+        if(
+            element &&
+            !element.classList.contains("unlocked")
+        ){
+
+            if(
+                circleRectangleCollision(
+                    x+30,
+                    y+40,
+                    radius,
+                    gate
+                )
+            ){
+
+                return false;
+
+            }
+
+        }
+
+    }
+
+    return true;
+
+}
+
+function circleRectangleCollision(
+    cx,
+    cy,
+    radius,
+    rectangle
+){
+
+    const closestX=
+        Math.max(
+            rectangle.x,
+            Math.min(
+                cx,
+                rectangle.x+rectangle.width
+            )
+        );
+
+    const closestY=
+        Math.max(
+            rectangle.y,
+            Math.min(
+                cy,
+                rectangle.y+rectangle.height
+            )
+        );
+
+    const dx=cx-closestX;
+    const dy=cy-closestY;
+
+    return(
+        dx*dx+dy*dy<
+        radius*radius
+    );
+
+}
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+function updateCamera(){
+
+    const screenWidth=
+        window.innerWidth;
+
+    const screenHeight=
+        window.innerHeight;
+
+    let cameraX=
+        playerState.x-screenWidth/2;
+
+    let cameraY=
+        playerState.y-screenHeight/2;
+
+    cameraX=
+        Math.max(
+            0,
+            Math.min(
+                cameraX,
+                WORLD_WIDTH-screenWidth
+            )
+        );
+
+    cameraY=
+        Math.max(
+            0,
+            Math.min(
+                cameraY,
+                WORLD_HEIGHT-screenHeight
+            )
+        );
+
+    camera.style.transform=
+        `translate(${-cameraX}px,${-cameraY}px)`;
+
+}
+
+/* =========================================================
+   DETECT NEARBY OBJECT
+========================================================= */
+
+function detectNearby(){
+
+    nearby=null;
+
+    /*
+       MICROORGANISMS
+    */
+
+    const microbeElements=
+        document.querySelectorAll(".microbe");
+
+    for(const element of microbeElements){
+
+        const x=
+            parseFloat(element.style.left);
+
+        const y=
+            parseFloat(element.style.top);
+
+        const distance=
+            Math.hypot(
+                playerState.x-x,
+                playerState.y-y
+            );
+
+        if(distance<115){
+
+            nearby={
+                type:"microbe",
+                id:element.dataset.id
+            };
+
+            showInteraction(
+                "Scan microorganism"
+            );
+
+            return;
+
+        }
+
+    }
+
+    /*
+       SCIENTIST
+    */
+
+    const scientistX=1470;
+    const scientistY=650;
+
+    const scientistDistance=
+        Math.hypot(
+            playerState.x-scientistX,
+            playerState.y-scientistY
+        );
+
+    if(scientistDistance<125){
+
+        nearby={
+            type:"scientist"
+        };
+
+        showInteraction(
+            "Talk to Dr. Maya"
+        );
+
+        return;
+
+    }
+
+    /*
+       FINAL GATE
+    */
+
+    if(
+        state.samples.length>=6 &&
+        state.solved.length>=3 &&
+        !state.finalComplete
+    ){
+
+        const finalDistance=
+            Math.hypot(
+                playerState.x-1565,
+                playerState.y-545
+            );
+
+        if(finalDistance<140){
+
+            nearby={
+                type:"final"
+            };
+
+            showInteraction(
+                "Begin final investigation"
+            );
+
+            return;
+
+        }
+
+    }
+
+    hideInteraction();
+
+}
+
+/* =========================================================
+   INTERACTION UI
+========================================================= */
+
+function showInteraction(text){
+
+    interactionText.textContent=text;
+
+    interaction.style.display="block";
+
+}
+
+function hideInteraction(){
+
+    interaction.style.display="none";
+
+}
+
+/* =========================================================
+   INTERACT
+========================================================= */
+
+function interact(){
+
+    if(!nearby)return;
+
+    if(nearby.type==="microbe"){
+
+        scanMicrobe(
+            nearby.id
+        );
+
+        return;
+
+    }
+
+    if(nearby.type==="scientist"){
+
+        talkToScientist();
+
+        return;
+
+    }
+
+    if(nearby.type==="final"){
+
+        openFinalChallenge();
+
+        return;
+
+    }
+
+}
+
+/* =========================================================
+   SCAN MICROBE
+========================================================= */
+
+function scanMicrobe(id){
+
+    const data=
+        microbes[id];
+
+    if(!data)return;
+
+    if(!state.samples.includes(id)){
+
+        state.samples.push(id);
+
+        state.xp+=data.xp;
+
+        saveProgress();
+
+        updateHUD();
+
+        updateGates();
+
+        toast(
+            `🧫 Evidence collected: ${data.category}`
+        );
+
+    }
+
+    openMicrobePanel(id);
+
+}
+
+/* =========================================================
+   MICROBE TEACHING PANEL
+========================================================= */
+
+function openMicrobePanel(id){
+
+    const data=
+        microbes[id];
+
+    panelContent.innerHTML=`
+
+        <div class="panelHeader">
+
+            <div>
+
+                <div style="font-size:55px">
+                    ${data.icon}
+                </div>
+
+                <h1>${data.title}</h1>
+
+            </div>
+
+            <button
+                class="closeButton"
+                onclick="closePanel()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="lessonBox">
+
+            <strong>
+                🔬 WHAT THE SCANNER FOUND
+            </strong>
+
+            <p style="margin-top:8px">
+                ${data.lesson}
+            </p>
+
+        </div>
+
+        <div class="evidenceBox">
+
+            <strong>
+                📋 EVIDENCE CARD
+            </strong>
+
+            <p style="margin-top:8px">
+
+                ${data.evidence}
+
+            </p>
+
+        </div>
+
+        <div class="warningBox">
+
+            <strong>
+                🧠 THINK LIKE A SCIENTIST
+            </strong>
+
+            <p style="margin-top:7px">
+
+                Don't decide whether a microorganism is
+                "good" or "bad" simply because it is a microbe.
+                Use evidence about what it does.
+
+            </p>
+
+        </div>
+
+        <button
+            class="primaryButton"
+            onclick="closePanel()">
+
+            ADD TO FIELD NOTEBOOK ✓
+
+        </button>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   DR MAYA
+========================================================= */
+
+function talkToScientist(){
+
+    if(!state.metScientist){
+
+        state.metScientist=true;
+
+        state.xp+=25;
+
+        saveProgress();
+
+        updateHUD();
+
+        openScientistIntroduction();
+
+        return;
+
+    }
+
+    openScientistMenu();
+
+}
+
+function openScientistIntroduction(){
+
+    panelContent.innerHTML=`
+
+        <div class="panelHeader">
+
+            <h1>🔬 Dr. Maya</h1>
+
+            <button
+                class="closeButton"
+                onclick="closePanel()">
+                ×
+            </button>
+
+        </div>
+
+        <p style="
+            font-size:17px;
+            line-height:1.6;
+        ">
+
+            Welcome, Investigator!
+
+            <br><br>
+
+            Our research station has lost all its
+            microorganism labels.
+
+            <br><br>
+
+            We need someone who can rebuild the
+            scientific evidence.
+
+        </p>
+
+        <div class="lessonBox">
+
+            <strong>
+                🧫 CORE CONCEPT
+            </strong>
+
+            <p style="margin-top:8px">
+
+                A microorganism is extremely small and
+                usually requires a microscope to observe
+                clearly.
+
+                <br><br>
+
+                Bacteria and some fungi are microorganisms.
+                Viruses are also microscopic infectious agents.
+
+            </p>
+
+        </div>
+
+        <div class="warningBox">
+
+            <strong>
+                YOUR RULE:
+            </strong>
+
+            <p style="margin-top:7px">
+
+                Don't memorise labels.
+
+                <br><br>
+
+                <strong>
+                Explore → find evidence → reason → classify.
+                </strong>
+
+            </p>
+
+        </div>
+
+        <button
+            class="primaryButton"
+            onclick="openQuestion('microorganism')">
+
+            BEGIN INVESTIGATION #1 →
+
+        </button>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+function openScientistMenu(){
+
+    panelContent.innerHTML=`
+
+        <div class="panelHeader">
+
+            <h1>🔬 Dr. Maya</h1>
+
+            <button
+                class="closeButton"
+                onclick="closePanel()">
+                ×
+            </button>
+
+        </div>
+
+        <p>
+            What should we investigate?
+        </p>
+
+        <div class="choiceGrid">
+
+            <button
+                class="choice"
+                onclick="openQuestion('microorganism')">
+
+                🧫 What is a microorganism?
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="openQuestion('bacteria')">
+
+                🦠 Where are bacteria found?
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="openQuestion('virus')">
+
+                🧬 Viral diseases
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="openQuestion('fungus')">
+
+                🍄 Fungal infections
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="openQuestion('helpful')">
+
+                🧫 Helpful bacteria
+
+            </button>
+
+        </div>
+
+        <div class="lessonBox">
+
+            <strong>
+                🔎 FIELD RULE
+            </strong>
+
+            <p style="margin-top:7px">
+
+                You must explore the world and collect
+                evidence cards before attempting the
+                final investigation.
+
+            </p>
+
+        </div>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   QUESTION SYSTEM
+========================================================= */
+
+function openQuestion(type){
+
+    const question=
+        questions[type];
+
+    panelContent.innerHTML=`
+
+        <div class="panelHeader">
+
+            <h1>${question.title}</h1>
+
+            <button
+                class="closeButton"
+                onclick="closePanel()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="lessonBox">
+
+            ${question.content}
+
+        </div>
+
+        <div
+            class="choiceGrid"
+            id="questionChoices">
+
+            ${question.choices
+                .map((choice,index)=>`
+
+                    <button
+                        class="choice"
+                        data-answer="${choice[1]}"
+                        onclick="
+                            answerQuestion(
+                                this,
+                                '${type}'
+                            )
+                        ">
+
+                        ${choice[0]}
+
+                    </button>
+
+                `)
+                .join("")}
+
+        </div>
+
+        <div
+            id="questionFeedback"
+            class="feedback">
+        </div>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+function answerQuestion(button,type){
+
+    const feedback=
+        document.getElementById(
+            "questionFeedback"
+        );
+
+    const buttons=
+        document.querySelectorAll(
+            "#questionChoices .choice"
+        );
+
+    if(button.dataset.answer==="correct"){
+
+        buttons.forEach(
+            b=>b.disabled=true
+        );
+
+        button.classList.add("correct");
+
+        feedback.className=
+            "feedback show good";
+
+        feedback.innerHTML=`
+
+            ✅ Correct!
+
+            <br><br>
+
+            ${questions[type].explanation}
+
+            <br><br>
+
+            <button
+                class="primaryButton"
+                onclick="
+                    completeQuestion('${type}')
+                ">
+
+                LOG THIS DISCOVERY
+
+            </button>
+
+        `;
+
+        if(!state.solved.includes(type)){
+
+            state.solved.push(type);
+
+            state.xp+=50;
+
+            saveProgress();
+
+            updateHUD();
+
+            updateGates();
+
+        }
+
+    }else{
+
+        button.classList.add("wrong");
+
+        feedback.className=
+            "feedback show bad";
+
+        feedback.innerHTML=`
+
+            ❌ Not quite.
+
+            <br><br>
+
+            Don't guess.
+
+            <strong>
+            Re-read the clues and think about
+            what the evidence tells you.
+            </strong>
+
+            <br><br>
+
+            You can try again.
+
+            <br>
+
+            <button
+                class="primaryButton"
+                onclick="
+                    openQuestion('${type}')
+                ">
+
+                TRY AGAIN
+
+            </button>
+
+        `;
+
+    }
+
+}
+
+function completeQuestion(type){
+
+    closePanel();
+
+    toast(
+        "🧠 Scientific concept added to notebook!"
+    );
+
+}
+
+/* =========================================================
+   NOTEBOOK
+========================================================= */
+
+function openNotebook(){
+
+    const sampleCards=
+        state.samples.length
+        ?
+        state.samples.map((id,index)=>{
+
+            const data=
+                microbes[id];
+
+            return `
+
+                <div class="note">
+
+                    <div class="noteTitle">
+                        EVIDENCE CARD #${index+1}
+                    </div>
+
+                    <strong>
+                        ${data.title}
+                    </strong>
+
+                    <p style="margin-top:5px">
+
+                        ${data.evidence}
+
+                    </p>
+
+                </div>
+
+            `;
+
+        }).join("")
+        :
+        `<p>
+            No evidence collected yet.
+            Explore the world!
+        </p>`;
+
+    panelContent.innerHTML=`
+
+        <div class="panelHeader">
+
+            <h1>📖 FIELD NOTEBOOK</h1>
+
+            <button
+                class="closeButton"
+                onclick="closePanel()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="lessonBox">
+
+            <strong>
+                🧫 WHAT IS A MICROORGANISM?
+            </strong>
+
+            <p style="margin-top:8px">
+
+                A microorganism is extremely small and
+                usually requires a microscope to observe clearly.
+
+            </p>
+
+        </div>
+
+        <div class="lessonBox">
+
+            <strong>
+                🦠 BACTERIA
+            </strong>
+
+            <p style="margin-top:8px">
+
+                Bacteria are microscopic living organisms.
+
+                <br><br>
+
+                They can be found in
+                <strong>
+                soil, water, food and living organisms.
+                </strong>
+
+                <br><br>
+
+                Some are harmful.
+                Some are helpful.
+
+            </p>
+
+        </div>
+
+        <div class="lessonBox">
+
+            <strong>
+                🧬 VIRUSES
+            </strong>
+
+            <p style="margin-top:8px">
+
+                Viruses infect cells and use their host
+                cells to make more copies.
+
+                <br><br>
+
+                Examples of viral diseases include
+                flu, measles, chickenpox and COVID-19.
+
+            </p>
+
+        </div>
+
+        <div class="lessonBox">
+
+            <strong>
+                🍄 FUNGI
+            </strong>
+
+            <p style="margin-top:8px">
+
+                Some fungi are microorganisms and can
+                cause infections such as athlete's foot
+                and ringworm.
+
+            </p>
+
+        </div>
+
+        <div class="lessonBox">
+
+            <strong>
+                🧫 HELPFUL BACTERIA
+            </strong>
+
+            <p style="margin-top:8px">
+
+                Some bacteria help humans make foods
+                such as yogurt and cheese through
+                fermentation.
+
+            </p>
+
+        </div>
+
+        <h2 style="
+            color:var(--green);
+            margin:20px 0 10px;
+        ">
+
+            🔎 COLLECTED EVIDENCE
+
+        </h2>
+
+        <div class="notebookGrid">
+
+            ${sampleCards}
+
+        </div>
+
+        <button
+            class="primaryButton"
+            onclick="closePanel()">
+
+            RETURN TO WORLD
+
+        </button>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   GATE SYSTEM
+========================================================= */
+
+function updateGates(){
+
+    /*
+       Hospital gate requires virus sample.
+    */
+
+    const hospitalGate=
+        document.getElementById(
+            "gateHospital"
+        );
+
+    if(
+        state.samples.includes("virus")
+    ){
+
+        hospitalGate.classList.add(
+            "unlocked"
+        );
+
+    }
+
+    /*
+       Farm gate requires bacteria evidence.
+    */
+
+    const farmGate=
+        document.getElementById(
+            "gateFarm"
+        );
+
+    if(
+        state.samples.includes("bacteriaFood") ||
+        state.samples.includes("bacteriaWater") ||
+        state.samples.includes("helpful")
+    ){
+
+        farmGate.classList.add(
+            "unlocked"
+        );
+
+    }
+
+    /*
+       Final gate requires enough investigation.
+    */
+
+    const finalGate=
+        document.getElementById(
+            "gateFinal"
+        );
+
+    if(
+        state.samples.length>=6 &&
+        state.solved.length>=3
+    ){
+
+        finalGate.classList.add(
+            "unlocked"
+        );
+
+    }
+
+}
+
+/* =========================================================
+   FINAL INVESTIGATION
+========================================================= */
+
+function openFinalChallenge(){
+
+    if(
+        state.samples.length<6
+    ){
+
+        toast(
+            "🔒 You need all 6 evidence samples."
+        );
+
+        return;
+
+    }
+
+    const cases=[
+
+        {
+            text:
+            "A patient has influenza (flu).",
+
+            answer:"VIRUS"
+        },
+
+        {
+            text:
+            "A patient has athlete's foot.",
+
+            answer:"FUNGUS"
+        },
+
+        {
+            text:
+            "Bacteria are used to turn milk into yogurt.",
+
+            answer:"HELPFUL BACTERIA"
+        },
+
+        {
+            text:
+            "Scientists find microscopic living organisms in pond water.",
+
+            answer:"BACTERIA"
+        },
+
+        {
+            text:
+            "An infectious agent enters cells and uses them to make copies.",
+
+            answer:"VIRUS"
+        },
+
+        {
+            text:
+            "A microorganism helps with fermentation to produce food.",
+
+            answer:"HELPFUL BACTERIA"
+        },
+
+        {
+            text:
+            "A circular fungal skin infection is diagnosed as ringworm.",
+
+            answer:"FUNGUS"
+        },
+
+        {
+            text:
+            "Scientists find microscopic organisms living in soil.",
+
+            answer:"BACTERIA"
+        }
+
+    ];
+
+    window.finalCases=cases;
+
+    panelContent.innerHTML=`
+
+        <div class="panelHeader">
+
+            <h1>
+                🏆 FINAL MICROBE INVESTIGATION
+            </h1>
+
+            <button
+                class="closeButton"
+                onclick="closePanel()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="lessonBox">
+
+            <strong>
+                🧠 THE FOREST KEEPER IS GONE.
+            </strong>
+
+            <p style="margin-top:8px">
+
+                Dr. Maya has received eight mystery cases.
+
+                <br><br>
+
+                Your evidence cards contain everything
+                you need.
+
+                <br><br>
+
+                <strong>
+                Don't classify by memorised definitions.
+                Identify the strongest clue.
+                </strong>
+
+            </p>
+
+        </div>
+
+        <div id="finalCases">
+
+            ${cases.map((item,index)=>`
+
+                <div style="
+                    background:#fffdf7;
+                    border:2px solid #ddd5bd;
+                    border-radius:14px;
+                    padding:15px;
+                    margin:10px 0;
+                ">
+
+                    <strong>
+                        CASE ${index+1}
+                    </strong>
+
+                    <p style="
+                        margin:7px 0 10px;
+                        line-height:1.45;
+                    ">
+
+                        ${item.text}
+
+                    </p>
+
+                    <select
+                        id="finalAnswer${index}"
+                        style="
+                            padding:9px 12px;
+                            border:2px solid #d2cab5;
+                            border-radius:8px;
+                            font-family:inherit;
+                            font-weight:800;
+                        ">
+
+                        <option value="">
+                            Select classification...
+                        </option>
+
+                        <option value="BACTERIA">
+                            🦠 Bacteria
+                        </option>
+
+                        <option value="VIRUS">
+                            🧬 Virus
+                        </option>
+
+                        <option value="FUNGUS">
+                            🍄 Fungus
+                        </option>
+
+                        <option value="HELPFUL BACTERIA">
+                            🧫 Helpful bacteria
+                        </option>
+
+                    </select>
+
+                </div>
+
+            `).join("")}
+
+        </div>
+
+        <button
+            class="primaryButton"
+            onclick="checkFinalInvestigation()">
+
+            SUBMIT RESEARCH REPORT →
+
+        </button>
+
+        <div
+            id="finalFeedback"
+            class="feedback">
+        </div>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   FINAL CHECK
+========================================================= */
+
+function checkFinalInvestigation(){
+
+    let score=0;
+
+    window.finalCases.forEach(
+        (item,index)=>{
+
+            const answer=
+                document.getElementById(
+                    "finalAnswer"+index
+                ).value;
+
+            if(answer===item.answer){
+
+                score++;
+
+            }
+
+        }
+    );
+
+    const feedback=
+        document.getElementById(
+            "finalFeedback"
+        );
+
+    if(
+        score===
+        window.finalCases.length
+    ){
+
+        state.finalComplete=true;
+
+        state.xp+=250;
+
+        if(
+            !state.badges.includes(
+                "microbe-master"
+            )
+        ){
+
+            state.badges.push(
+                "microbe-master"
+            );
+
+        }
+
+        saveProgress();
+
+        updateHUD();
+
+        updateGates();
+
+        openVictory();
+
+        return;
+
+    }
+
+    feedback.className=
+        "feedback show bad";
+
+    feedback.innerHTML=`
+
+        🧠 Your report scored
+
+        <strong>
+            ${score}/${window.finalCases.length}
+        </strong>
+
+        <br><br>
+
+        You need to investigate the clues again.
+
+        <br><br>
+
+        Remember:
+
+        <br><br>
+
+        🦠 <strong>Bacteria</strong>
+        → found in many environments
+
+        <br>
+
+        🧬 <strong>Viruses</strong>
+        → infect cells and can cause diseases
+
+        <br>
+
+        🍄 <strong>Fungi</strong>
+        → some cause infections
+
+        <br>
+
+        🧫 <strong>Helpful bacteria</strong>
+        → can help make foods such as yogurt
+
+    `;
+
+}
+
+/* =========================================================
+   VICTORY
+========================================================= */
+
+function openVictory(){
+
+    panelContent.innerHTML=`
+
+        <div style="text-align:center">
+
+            <div style="font-size:80px">
+                🏆🔬🧫
+            </div>
+
+            <h1 style="
+                color:var(--green);
+                font-size:38px;
+            ">
+
+                MICROBE MASTER!
+
+            </h1>
+
+            <p style="
+                font-size:18px;
+                line-height:1.6;
+                margin-top:15px;
+            ">
+
+                You successfully investigated
+                microorganisms and used evidence
+                to solve the mystery cases.
+
+            </p>
+
+            <div class="evidenceBox"
+                 style="text-align:left">
+
+                <strong>
+                    🧠 YOU MASTERED:
+                </strong>
+
+                <p style="margin-top:8px">
+
+                    ✓ What microorganisms are
+                    <br>
+                    ✓ Where bacteria can be found
+                    <br>
+                    ✓ What bacteria can do
+                    <br>
+                    ✓ Viral diseases
+                    <br>
+                    ✓ Fungal infections
+                    <br>
+                    ✓ Helpful bacteria
+                    <br>
+                    ✓ Fermentation
+                    <br>
+                    ✓ Evidence-based classification
+
+                </p>
+
+            </div>
+
+            <div style="
+                font-size:22px;
+                font-weight:900;
+                margin-top:15px;
+            ">
+
+                ⭐ ${state.xp} XP
+
+            </div>
+
+            <div style="
+                margin-top:15px;
+                background:#fff0b8;
+                border:3px solid #c09b3d;
+                border-radius:18px;
+                padding:13px;
+                font-weight:900;
+            ">
+
+                🏅 MICROBE INVESTIGATOR BADGE
+
+            </div>
+
+            <button
+                class="primaryButton"
+                onclick="closePanel()">
+
+                RETURN TO MICROBE WORLD
+
+            </button>
+
+        </div>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   HUD
+========================================================= */
+
+function updateHUD(){
+
+    document.getElementById(
+        "xp"
+    ).textContent=
+        state.xp;
+
+    document.getElementById(
+        "sampleCount"
+    ).textContent=
+        state.samples.length;
+
+    document.getElementById(
+        "badgeCount"
+    ).textContent=
+        state.badges.length;
+
+    let mission="";
+
+    if(!state.metScientist){
+
+        mission=
+            "Find Dr. Maya and begin your investigation.";
+
+    }
+    else if(
+        !state.solved.includes(
+            "microorganism"
+        )
+    ){
+
+        mission=
+            "Learn what a microorganism is.";
+
+    }
+    else if(
+        state.samples.length<6
+    ){
+
+        mission=
+            `Explore the station and collect evidence (${state.samples.length}/6).`;
+
+    }
+    else if(
+        state.solved.length<3
+    ){
+
+        mission=
+            "Use Dr. Maya's investigation challenges to prove your knowledge.";
+
+    }
+    else if(
+        !state.finalComplete
+    ){
+
+        mission=
+            "You have enough evidence. Find the Final Investigation gate.";
+
+    }
+    else{
+
+        mission=
+            "Investigation complete! You are a Microbe Master. 🏆";
+
+    }
+
+    document.getElementById(
+        "missionText"
+    ).textContent=
+        mission;
+
+    let progress=0;
+
+    if(state.metScientist)
+        progress+=15;
+
+    progress+=
+        state.samples.length/6*55;
+
+    progress+=
+        Math.min(
+            state.solved.length/5*30,
+            30
+        );
+
+    if(state.finalComplete)
+        progress=100;
+
+    document.getElementById(
+        "progressBar"
+    ).style.width=
+        Math.min(
+            100,
+            progress
+        )+"%";
+
+}
+
+/* =========================================================
+   MAP
+========================================================= */
+
+function updateMap(){
+
+    const mapPlayer=
+        document.getElementById(
+            "mapPlayer"
+        );
+
+    mapPlayer.style.left=
+        (
+            playerState.x/
+            WORLD_WIDTH*
+            100
+        )+"%";
+
+    mapPlayer.style.top=
+        (
+            playerState.y/
+            WORLD_HEIGHT*
+            100
+        )+"%";
+
+}
+
+/* =========================================================
+   CLOSE PANEL
+========================================================= */
+
+function closePanel(){
+
+    overlay.style.display="none";
+
+}
+
+overlay.addEventListener(
+    "click",
+    function(event){
+
+        if(event.target===overlay){
+
+            closePanel();
+
+        }
+
+    }
+);
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimeout;
+
+function toast(message){
+
+    const element=
+        document.getElementById(
+            "toast"
+        );
+
+    element.textContent=message;
+
+    element.classList.add("show");
+
+    clearTimeout(toastTimeout);
+
+    toastTimeout=
+        setTimeout(
+            function(){
+
+                element.classList.remove(
+                    "show"
+                );
+
+            },
+            2400
+        );
+
+}
+
+/* =========================================================
+   MICROBE CLICK SUPPORT
+========================================================= */
+
+document
+.querySelectorAll(".microbe")
+.forEach(element=>{
+
+    element.addEventListener(
+        "click",
+        function(){
+
+            scanMicrobe(
+                element.dataset.id
+            );
+
+        }
+    );
+
+});
+
+/* =========================================================
+   SCIENTIST CLICK SUPPORT
+========================================================= */
+
+document
+.getElementById("scientist")
+.addEventListener(
+    "click",
+    talkToScientist
+);
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+updateHUD();
+
+updateGates();
+
+/*
+   Optional reset function.
+
+   Open browser console and type:
+
+   resetMicrobeGame()
+
+   if you want to restart the game.
+*/
+
+window.resetMicrobeGame=function(){
+
+    localStorage.removeItem(
+        "microbeInvestigatorSave"
+    );
+
+    location.reload();
+
+};
+
+</script>
+
+</div>
+
+</body>
+</html>
+```

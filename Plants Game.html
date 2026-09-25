@@ -1,0 +1,2800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Botanical Forest Explorer — Year 6</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap');
+
+:root{
+    --cream:#f7f1df;
+    --paper:#fffaf0;
+    --ink:#26342b;
+    --green:#315d3a;
+    --green2:#4f7f4c;
+    --leaf:#789b59;
+    --amber:#d69a38;
+    --coral:#d46d57;
+    --blue:#4d7d92;
+    --shadow:0 12px 30px rgba(25,45,30,.22);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    overflow:hidden;
+    background:#18291e;
+    font-family:"Nunito",sans-serif;
+    color:var(--ink);
+}
+
+#game{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
+}
+
+/* =========================================================
+   WORLD
+========================================================= */
+
+#world{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,255,255,.25),transparent 20%),
+        linear-gradient(#9cc98c 0%,#77a968 48%,#628e55 100%);
+}
+
+#worldCamera{
+    position:absolute;
+    width:2600px;
+    height:1800px;
+    transform:translate(0,0);
+}
+
+/* ground texture */
+#worldCamera::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    opacity:.20;
+    background-image:
+        radial-gradient(circle,#fff 1px,transparent 1px),
+        radial-gradient(circle,#315d3a 1px,transparent 1px);
+    background-size:37px 41px,53px 47px;
+    background-position:0 0,20px 18px;
+}
+
+/* Paths */
+.path{
+    position:absolute;
+    background:#c9b782;
+    border:4px solid rgba(113,93,51,.3);
+    box-shadow:inset 0 0 20px rgba(90,70,30,.16);
+}
+
+.path.horizontal{
+    height:110px;
+    border-radius:60px;
+}
+
+.path.vertical{
+    width:110px;
+    border-radius:60px;
+}
+
+/* Water */
+.water{
+    position:absolute;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,.18) 0px,
+            rgba(255,255,255,.18) 4px,
+            transparent 4px,
+            transparent 17px
+        ),
+        #4f8fa4;
+    border:7px solid #376d7c;
+    box-shadow:inset 0 0 30px rgba(20,65,75,.25);
+}
+
+.water::after{
+    content:"";
+    position:absolute;
+    inset:15px;
+    border:2px dashed rgba(255,255,255,.35);
+    border-radius:inherit;
+}
+
+/* =========================================================
+   WORLD OBJECTS
+========================================================= */
+
+.tree{
+    position:absolute;
+    width:100px;
+    height:130px;
+    z-index:8;
+    user-select:none;
+}
+
+.tree .trunk{
+    position:absolute;
+    left:39px;
+    bottom:0;
+    width:25px;
+    height:58px;
+    background:#79563b;
+    border-radius:10px;
+}
+
+.tree .crown{
+    position:absolute;
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    background:#315d3a;
+    left:12px;
+    top:10px;
+    box-shadow:
+        28px 15px 0 #3f7044,
+        -17px 18px 0 #416f40,
+        13px -14px 0 #56834d;
+}
+
+.tree.big{
+    transform:scale(1.25);
+}
+
+.tree.conifer .crown{
+    width:0;
+    height:0;
+    border-left:40px solid transparent;
+    border-right:40px solid transparent;
+    border-bottom:100px solid #315d3a;
+    border-radius:0;
+    top:4px;
+    left:10px;
+    box-shadow:none;
+}
+
+.tree.conifer .crown::after{
+    content:"";
+    position:absolute;
+    left:-33px;
+    top:35px;
+    width:0;
+    height:0;
+    border-left:33px solid transparent;
+    border-right:33px solid transparent;
+    border-bottom:78px solid #4f7f4c;
+}
+
+.rock{
+    position:absolute;
+    width:65px;
+    height:42px;
+    border-radius:55% 55% 35% 35%;
+    background:#707b72;
+    border:5px solid #59635d;
+    z-index:7;
+}
+
+.flower{
+    position:absolute;
+    width:40px;
+    height:50px;
+    z-index:8;
+}
+
+.flower::before{
+    content:"🌸";
+    font-size:38px;
+}
+
+.sign{
+    position:absolute;
+    width:75px;
+    height:95px;
+    z-index:10;
+}
+
+.sign .post{
+    position:absolute;
+    width:12px;
+    height:55px;
+    background:#654832;
+    bottom:0;
+    left:31px;
+}
+
+.sign .board{
+    position:absolute;
+    background:#a87544;
+    color:#fff4d8;
+    padding:10px;
+    width:75px;
+    border-radius:8px;
+    text-align:center;
+    font-size:12px;
+    font-weight:900;
+    border:3px solid #795330;
+}
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+#player{
+    position:absolute;
+    width:54px;
+    height:72px;
+    z-index:100;
+    transform-origin:center bottom;
+    pointer-events:none;
+}
+
+.player-shadow{
+    position:absolute;
+    width:42px;
+    height:12px;
+    border-radius:50%;
+    background:rgba(20,35,22,.28);
+    left:6px;
+    bottom:-2px;
+}
+
+.player-body{
+    position:absolute;
+    width:30px;
+    height:37px;
+    left:12px;
+    top:27px;
+    background:#4d6f92;
+    border:3px solid #263d4e;
+    border-radius:12px 12px 9px 9px;
+}
+
+.player-head{
+    position:absolute;
+    width:29px;
+    height:29px;
+    border-radius:50%;
+    background:#e5a675;
+    left:13px;
+    top:4px;
+    border:3px solid #68462f;
+}
+
+.player-hair{
+    position:absolute;
+    width:30px;
+    height:13px;
+    left:13px;
+    top:3px;
+    border-radius:16px 16px 5px 5px;
+    background:#3c2d26;
+}
+
+.player-hat{
+    position:absolute;
+    width:43px;
+    height:13px;
+    left:6px;
+    top:0;
+    background:#d69a38;
+    border:3px solid #775323;
+    border-radius:50%;
+}
+
+.player-leg{
+    position:absolute;
+    width:9px;
+    height:17px;
+    background:#35455c;
+    top:60px;
+    border-radius:5px;
+}
+
+.player-leg.left{left:14px}
+.player-leg.right{left:31px}
+
+.player.walk .player-leg.left{
+    animation:walkLeft .18s infinite alternate;
+}
+.player.walk .player-leg.right{
+    animation:walkRight .18s infinite alternate;
+}
+
+@keyframes walkLeft{
+    from{transform:rotate(15deg)}
+    to{transform:rotate(-15deg)}
+}
+@keyframes walkRight{
+    from{transform:rotate(-15deg)}
+    to{transform:rotate(15deg)}
+}
+
+/* =========================================================
+   INTERACTIVE PLANTS
+========================================================= */
+
+.plant{
+    position:absolute;
+    width:72px;
+    height:80px;
+    z-index:30;
+    cursor:pointer;
+}
+
+.plant-icon{
+    font-size:50px;
+    filter:drop-shadow(0 5px 3px rgba(0,0,0,.25));
+    transition:.2s;
+}
+
+.plant:hover .plant-icon{
+    transform:scale(1.13);
+}
+
+.plant-marker{
+    position:absolute;
+    top:-18px;
+    left:18px;
+    background:#fff9d8;
+    color:#4e682d;
+    border:2px solid #bd9d4e;
+    border-radius:20px;
+    padding:3px 7px;
+    font-size:10px;
+    font-weight:900;
+    animation:bob 1s infinite alternate;
+}
+
+@keyframes bob{
+    from{transform:translateY(0)}
+    to{transform:translateY(-5px)}
+}
+
+/* NPC */
+#keeper{
+    position:absolute;
+    width:80px;
+    height:100px;
+    z-index:50;
+    cursor:pointer;
+}
+
+.keeper-character{
+    font-size:65px;
+    filter:drop-shadow(0 6px 4px rgba(0,0,0,.25));
+}
+
+.npc-label{
+    position:absolute;
+    top:-25px;
+    left:-25px;
+    width:130px;
+    text-align:center;
+    font-weight:900;
+    font-size:12px;
+    background:#fff8df;
+    padding:5px 7px;
+    border-radius:12px;
+    border:2px solid #7e6337;
+}
+
+/* =========================================================
+   HUD
+========================================================= */
+
+#hud{
+    position:fixed;
+    top:18px;
+    left:18px;
+    right:18px;
+    display:flex;
+    justify-content:space-between;
+    pointer-events:none;
+    z-index:500;
+}
+
+.hud-card{
+    background:rgba(255,250,235,.93);
+    backdrop-filter:blur(10px);
+    border:2px solid rgba(61,87,58,.25);
+    box-shadow:var(--shadow);
+    border-radius:17px;
+    padding:10px 14px;
+    pointer-events:auto;
+}
+
+#mission{
+    width:320px;
+}
+
+.mission-title{
+    font-size:11px;
+    text-transform:uppercase;
+    font-weight:900;
+    color:#6b785f;
+    letter-spacing:1px;
+}
+
+#missionText{
+    font-size:14px;
+    font-weight:800;
+    margin-top:3px;
+}
+
+.progress{
+    margin-top:7px;
+    height:8px;
+    background:#ddd7c3;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+#progressBar{
+    width:0%;
+    height:100%;
+    background:#4f7f4c;
+    transition:.4s;
+}
+
+#stats{
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
+.stat{
+    display:flex;
+    gap:6px;
+    align-items:center;
+    font-weight:900;
+}
+
+.stat-icon{
+    font-size:20px;
+}
+
+/* mini map */
+#miniMap{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:180px;
+    height:120px;
+    background:rgba(245,239,211,.92);
+    border:3px solid #53694e;
+    border-radius:14px;
+    z-index:500;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.map-zone{
+    position:absolute;
+    border:1px solid rgba(50,80,45,.25);
+    background:rgba(90,135,70,.35);
+}
+
+.map-player{
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:#d46d57;
+    border:2px solid white;
+    border-radius:50%;
+    z-index:5;
+}
+
+/* =========================================================
+   INTERACTION PROMPT
+========================================================= */
+
+#interaction{
+    position:fixed;
+    left:50%;
+    bottom:32px;
+    transform:translateX(-50%);
+    background:rgba(30,45,35,.93);
+    color:white;
+    padding:12px 20px;
+    border-radius:16px;
+    z-index:600;
+    display:none;
+    font-weight:800;
+    box-shadow:var(--shadow);
+}
+
+.key{
+    display:inline-block;
+    padding:3px 8px;
+    background:#f3d37a;
+    color:#352d1d;
+    border-radius:6px;
+    margin-right:5px;
+}
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+#overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(17,31,22,.56);
+    backdrop-filter:blur(4px);
+    z-index:1000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+}
+
+.panel{
+    width:min(760px,95vw);
+    max-height:88vh;
+    overflow:auto;
+    background:var(--paper);
+    border:4px solid #607654;
+    border-radius:25px;
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
+    padding:28px;
+    animation:panelIn .25s ease;
+}
+
+@keyframes panelIn{
+    from{transform:scale(.9) translateY(20px);opacity:0}
+    to{transform:scale(1) translateY(0);opacity:1}
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.panel h1{
+    font-size:28px;
+    color:#315d3a;
+}
+
+.panel h2{
+    color:#315d3a;
+    margin-bottom:10px;
+}
+
+.close{
+    border:0;
+    background:#e7dfc8;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.teaching{
+    background:#eaf0df;
+    border-left:6px solid #62894f;
+    padding:15px;
+    border-radius:10px;
+    margin:15px 0;
+    line-height:1.55;
+}
+
+.evidence{
+    background:#fff5c9;
+    border:3px dashed #c29b3e;
+    padding:15px;
+    border-radius:15px;
+    margin:15px 0;
+}
+
+.evidence strong{
+    color:#71551e;
+}
+
+.choice-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:18px;
+}
+
+.choice{
+    border:3px solid #d5ceb7;
+    background:#fffdf5;
+    border-radius:15px;
+    padding:15px;
+    cursor:pointer;
+    font-family:inherit;
+    font-weight:800;
+    text-align:left;
+    transition:.18s;
+}
+
+.choice:hover{
+    transform:translateY(-2px);
+    border-color:#789b59;
+    background:#f0f5e8;
+}
+
+.choice.correct{
+    border-color:#4f8f50;
+    background:#e2f1dc;
+}
+
+.choice.wrong{
+    border-color:#bd6657;
+    background:#f7dfd9;
+}
+
+.feedback{
+    padding:13px;
+    border-radius:12px;
+    margin-top:15px;
+    display:none;
+    font-weight:800;
+}
+
+.feedback.show{
+    display:block;
+}
+
+.feedback.good{
+    background:#dcefd5;
+    color:#315d3a;
+}
+
+.feedback.bad{
+    background:#f3d8d0;
+    color:#8a3f32;
+}
+
+.primary{
+    margin-top:18px;
+    border:0;
+    background:#315d3a;
+    color:white;
+    padding:13px 20px;
+    border-radius:13px;
+    font-family:inherit;
+    font-weight:900;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.primary:hover{
+    background:#23492b;
+    transform:translateY(-1px);
+}
+
+/* Evidence notebook */
+#notebook{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.evidence-card{
+    border:2px solid #d5c68f;
+    background:#fff7cf;
+    border-radius:12px;
+    padding:13px;
+}
+
+.evidence-card .number{
+    font-size:11px;
+    font-weight:900;
+    color:#806a31;
+}
+
+.evidence-card p{
+    margin-top:4px;
+    font-weight:800;
+}
+
+/* =========================================================
+   TITLE SCREEN
+========================================================= */
+
+#startScreen{
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at 50% 20%,rgba(255,246,199,.5),transparent 30%),
+        linear-gradient(135deg,#315d3a,#193c2a);
+    color:white;
+}
+
+.start-card{
+    width:min(720px,92vw);
+    text-align:center;
+    padding:45px;
+    border-radius:30px;
+    background:rgba(255,250,235,.94);
+    color:#26342b;
+    border:4px solid #79915f;
+    box-shadow:0 30px 100px rgba(0,0,0,.35);
+}
+
+.logo{
+    font-size:70px;
+}
+
+.start-card h1{
+    font-size:42px;
+    color:#315d3a;
+    margin:10px 0;
+}
+
+.start-card p{
+    max-width:560px;
+    margin:10px auto;
+    font-size:17px;
+    line-height:1.55;
+}
+
+.controls{
+    margin:20px auto;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.control{
+    background:#ebe3c9;
+    padding:8px 12px;
+    border-radius:10px;
+    font-weight:900;
+}
+
+.start-button{
+    border:0;
+    background:#d69a38;
+    color:#2e271b;
+    font-family:inherit;
+    font-size:18px;
+    font-weight:900;
+    padding:15px 35px;
+    border-radius:16px;
+    cursor:pointer;
+    box-shadow:0 7px 0 #a87528;
+    transition:.15s;
+}
+
+.start-button:hover{
+    transform:translateY(2px);
+    box-shadow:0 4px 0 #a87528;
+}
+
+/* Badge */
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:#fff2bd;
+    border:3px solid #c39a3b;
+    padding:12px 18px;
+    border-radius:20px;
+    margin-top:15px;
+    font-weight:900;
+}
+
+/* Toast */
+#toast{
+    position:fixed;
+    top:90px;
+    left:50%;
+    transform:translateX(-50%) translateY(-20px);
+    opacity:0;
+    background:#fff8dd;
+    border:3px solid #bd9d4e;
+    border-radius:14px;
+    padding:12px 20px;
+    z-index:1800;
+    font-weight:900;
+    box-shadow:var(--shadow);
+    transition:.3s;
+    pointer-events:none;
+}
+
+#toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* mobile controls */
+#mobileControls{
+    position:fixed;
+    left:20px;
+    bottom:20px;
+    z-index:700;
+    display:none;
+}
+
+.dpad{
+    display:grid;
+    grid-template-columns:55px 55px 55px;
+    grid-template-rows:55px 55px 55px;
+}
+
+.dpad button{
+    border:2px solid #53694e;
+    background:rgba(255,250,235,.8);
+    border-radius:12px;
+    font-size:22px;
+}
+
+.up{grid-column:2}
+.left{grid-column:1;grid-row:2}
+.down{grid-column:2;grid-row:2}
+.right{grid-column:3;grid-row:2}
+
+@media(max-width:700px){
+    #mobileControls{display:block}
+    #miniMap{display:none}
+    #mission{width:240px}
+    #stats .stat:nth-child(2){display:none}
+    .choice-grid,#notebook{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<!-- =====================================================
+     START SCREEN
+===================================================== -->
+
+<div id="startScreen">
+    <div class="start-card">
+        <div class="logo">🌲🔍🌿</div>
+        <h1>Botanical Forest Explorer</h1>
+
+        <p>
+            The Forest Keeper needs your help.
+            Several mysterious plants have appeared in the forest,
+            but their classification records are missing.
+        </p>
+
+        <p>
+            <strong>Explore the forest.</strong><br>
+            Scan plants. Collect evidence. Learn from clues.
+            Then use your evidence to solve the classification mystery.
+        </p>
+
+        <div class="controls">
+            <div class="control">W / ↑ Move</div>
+            <div class="control">A / ← Move</div>
+            <div class="control">S / ↓ Move</div>
+            <div class="control">D / → Move</div>
+            <div class="control">E Interact</div>
+            <div class="control">N Notebook</div>
+        </div>
+
+        <button class="start-button" onclick="startGame()">
+            ENTER THE FOREST →
+        </button>
+    </div>
+</div>
+
+<!-- WORLD -->
+
+<div id="world">
+    <div id="worldCamera">
+
+        <!-- Paths -->
+        <div class="path horizontal" style="left:100px;top:790px;width:2300px"></div>
+        <div class="path vertical" style="left:1150px;top:100px;height:1500px"></div>
+
+        <!-- Water -->
+        <div class="water" style="left:370px;top:240px;width:420px;height:230px;border-radius:45%"></div>
+
+        <!-- Zone labels -->
+        <div style="position:absolute;left:120px;top:120px;font-size:28px;font-weight:900;color:#315d3a">
+            🌳 EVERGREEN WOODS
+        </div>
+
+        <div style="position:absolute;left:1570px;top:130px;font-size:28px;font-weight:900;color:#315d3a">
+            🌸 FLOWER MEADOW
+        </div>
+
+        <div style="position:absolute;left:150px;top:1060px;font-size:28px;font-weight:900;color:#315d3a">
+            🌲 CONIFER GROVE
+        </div>
+
+        <div style="position:absolute;left:1570px;top:1060px;font-size:28px;font-weight:900;color:#315d3a">
+            🔬 CLASSIFICATION LAB
+        </div>
+
+        <!-- Trees -->
+        <div class="tree big" style="left:80px;top:300px"><div class="trunk"></div><div class="crown"></div></div>
+        <div class="tree" style="left:190px;top:500px"><div class="trunk"></div><div class="crown"></div></div>
+        <div class="tree big" style="left:820px;top:180px"><div class="trunk"></div><div class="crown"></div></div>
+        <div class="tree" style="left:930px;top:500px"><div class="trunk"></div><div class="crown"></div></div>
+
+        <div class="tree" style="left:1360px;top:180px"><div class="trunk"></div><div class="crown"></div></div>
+        <div class="tree big" style="left:1820px;top:250px"><div class="trunk"></div><div class="crown"></div></div>
+        <div class="tree" style="left:2130px;top:430px"><div class="trunk"></div><div class="crown"></div></div>
+
+        <!-- Conifers -->
+        <div class="tree conifer" style="left:180px;top:1210px"><div class="trunk"></div><div class="crown"></div></div>
+        <div class="tree conifer" style="left:390px;top:1300px"><div class="trunk"></div><div class="crown"></div></div>
+        <div class="tree conifer" style="left:650px;top:1150px"><div class="trunk"></div><div class="crown"></div></div>
+        <div class="tree conifer" style="left:850px;top:1300px"><div class="trunk"></div><div class="crown"></div></div>
+
+        <!-- Rocks -->
+        <div class="rock" style="left:300px;top:700px"></div>
+        <div class="rock" style="left:850px;top:850px"></div>
+        <div class="rock" style="left:1380px;top:720px"></div>
+        <div class="rock" style="left:1950px;top:850px"></div>
+        <div class="rock" style="left:1080px;top:1200px"></div>
+
+        <!-- Signs -->
+        <div class="sign" style="left:1020px;top:690px">
+            <div class="board">FOREST<br>RESEARCH<br>ZONE</div>
+            <div class="post"></div>
+        </div>
+
+        <div class="sign" style="left:1420px;top:720px">
+            <div class="board">FLOWER<br>MEADOW →</div>
+            <div class="post"></div>
+        </div>
+
+        <!-- Interactive Plants -->
+        <div class="plant" id="plant1" style="left:300px;top:550px"
+             data-plant="1">
+            <div class="plant-marker">SCAN</div>
+            <div class="plant-icon">🌳</div>
+        </div>
+
+        <div class="plant" id="plant2" style="left:780px;top:650px"
+             data-plant="2">
+            <div class="plant-marker">SCAN</div>
+            <div class="plant-icon">🍁</div>
+        </div>
+
+        <div class="plant" id="plant3" style="left:1540px;top:500px"
+             data-plant="3">
+            <div class="plant-marker">SCAN</div>
+            <div class="plant-icon">🌲</div>
+        </div>
+
+        <div class="plant" id="plant4" style="left:1950px;top:650px"
+             data-plant="4">
+            <div class="plant-marker">SCAN</div>
+            <div class="plant-icon">🌻</div>
+        </div>
+
+        <div class="plant" id="plant5" style="left:520px;top:1120px"
+             data-plant="5">
+            <div class="plant-marker">SCAN</div>
+            <div class="plant-icon">🌲</div>
+        </div>
+
+        <div class="plant" id="plant6" style="left:900px;top:1030px"
+             data-plant="6">
+            <div class="plant-marker">SCAN</div>
+            <div class="plant-icon">🌿</div>
+        </div>
+
+        <div class="plant" id="plant7" style="left:1730px;top:1200px"
+             data-plant="7">
+            <div class="plant-marker">SCAN</div>
+            <div class="plant-icon">🌸</div>
+        </div>
+
+        <div class="plant" id="plant8" style="left:2070px;top:1250px"
+             data-plant="8">
+            <div class="plant-marker">SCAN</div>
+            <div class="plant-icon">🍃</div>
+        </div>
+
+        <!-- Forest Keeper -->
+        <div id="keeper" style="left:1110px;top:620px">
+            <div class="npc-label">🌿 FOREST KEEPER</div>
+            <div class="keeper-character">🧑‍🌾</div>
+        </div>
+
+        <!-- Player -->
+        <div id="player" style="left:1050px;top:730px">
+            <div class="player-shadow"></div>
+            <div class="player-hat"></div>
+            <div class="player-head"></div>
+            <div class="player-hair"></div>
+            <div class="player-body"></div>
+            <div class="player-leg left"></div>
+            <div class="player-leg right"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- HUD -->
+
+<div id="hud">
+
+    <div class="hud-card" id="mission">
+        <div class="mission-title">CURRENT MISSION</div>
+        <div id="missionText">Find the Forest Keeper.</div>
+
+        <div class="progress">
+            <div id="progressBar"></div>
+        </div>
+    </div>
+
+    <div class="hud-card" id="stats">
+
+        <div class="stat">
+            <span class="stat-icon">⭐</span>
+            <span id="xp">0 XP</span>
+        </div>
+
+        <div class="stat">
+            <span class="stat-icon">🧩</span>
+            <span id="clueCount">0/8</span>
+        </div>
+
+        <div class="stat">
+            <span class="stat-icon">🏅</span>
+            <span id="badgeCount">0</span>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Mini Map -->
+
+<div id="miniMap">
+    <div class="map-zone" style="left:5%;top:5%;width:45%;height:45%"></div>
+    <div class="map-zone" style="left:55%;top:5%;width:40%;height:45%"></div>
+    <div class="map-zone" style="left:5%;top:55%;width:45%;height:40%"></div>
+    <div class="map-zone" style="left:55%;top:55%;width:40%;height:40%"></div>
+    <div class="map-player" id="mapPlayer"></div>
+</div>
+
+<div id="interaction">
+    <span class="key">E</span>
+    <span id="interactionText">Interact</span>
+</div>
+
+<div id="toast"></div>
+
+<!-- MOBILE -->
+
+<div id="mobileControls">
+    <div class="dpad">
+        <button class="up" data-key="ArrowUp">▲</button>
+        <button class="left" data-key="ArrowLeft">◀</button>
+        <button class="down" data-key="ArrowDown">▼</button>
+        <button class="right" data-key="ArrowRight">▶</button>
+    </div>
+</div>
+
+<!-- OVERLAY -->
+
+<div id="overlay">
+    <div class="panel" id="panelContent"></div>
+</div>
+
+<script>
+/* =========================================================
+   BOTANICAL FOREST EXPLORER
+   Single-file game engine
+========================================================= */
+
+const world = document.getElementById("worldCamera");
+const player = document.getElementById("player");
+const overlay = document.getElementById("overlay");
+const panelContent = document.getElementById("panelContent");
+
+const WORLD_W = 2600;
+const WORLD_H = 1800;
+
+let gameStarted = false;
+
+let playerState = {
+    x:1050,
+    y:730,
+    speed:4.3,
+    moving:false,
+    direction:"down"
+};
+
+let keys = {};
+
+let progress = {
+    xp:0,
+    evidence:[],
+    scanned:[],
+    solved:[],
+    badges:[],
+    keeper:false,
+    gateUnlocked:false,
+    finalComplete:false
+};
+
+let nearbyObject = null;
+
+/* =========================================================
+   PLANT DATABASE
+========================================================= */
+
+const plants = {
+
+1:{
+    title:"The Ancient Oak",
+    icon:"🌳",
+    clues:[
+        "Its leaves are broad and flat.",
+        "The leaves turn brown and fall during autumn.",
+        "It produces flowers, although they are not showy."
+    ],
+    evidence:"Leaves fall during autumn → DECIDUOUS",
+    concept:"DECIDUOUS",
+    xp:20
+},
+
+2:{
+    title:"The Mystery Maple",
+    icon:"🍁",
+    clues:[
+        "Its leaves change colour in autumn.",
+        "Most of its leaves fall before winter.",
+        "It produces flowers and later develops fruit."
+    ],
+    evidence:"Leaves fall seasonally → DECIDUOUS + FLOWERING",
+    concept:"DECIDUOUS",
+    xp:25
+},
+
+3:{
+    title:"The Winter Tree",
+    icon:"🌲",
+    clues:[
+        "Its leaves remain green through winter.",
+        "Look carefully underneath the branches.",
+        "You discover woody cones."
+    ],
+    evidence:"Evergreen + cones → CONIFEROUS",
+    concept:"CONIFEROUS",
+    xp:30
+},
+
+4:{
+    title:"The Meadow Sunflower",
+    icon:"🌻",
+    clues:[
+        "Bright yellow petals surround the centre.",
+        "It clearly produces flowers.",
+        "Later it produces seeds."
+    ],
+    evidence:"Produces flowers → FLOWERING",
+    concept:"FLOWERING",
+    xp:20
+},
+
+5:{
+    title:"The Mountain Spruce",
+    icon:"🌲",
+    clues:[
+        "Its leaves are needle-like.",
+        "It stays green throughout the year.",
+        "It produces cones."
+    ],
+    evidence:"Evergreen + cones → CONIFEROUS",
+    concept:"CONIFEROUS",
+    xp:30
+},
+
+6:{
+    title:"The Hidden Fern",
+    icon:"🌿",
+    clues:[
+        "It does not produce flowers.",
+        "It does not make cones.",
+        "It reproduces using spores."
+    ],
+    evidence:"No flowers + no cones → NON-FLOWERING",
+    concept:"NON-FLOWERING",
+    xp:30
+},
+
+7:{
+    title:"The Garden Rose",
+    icon:"🌸",
+    clues:[
+        "It produces obvious flowers.",
+        "Its flowers develop into structures containing seeds.",
+        "Its leaves remain for much of the year."
+    ],
+    evidence:"Produces flowers → FLOWERING",
+    concept:"FLOWERING",
+    xp:25
+},
+
+8:{
+    title:"The Forest Mystery",
+    icon:"🍃",
+    clues:[
+        "Its leaves stay green all year.",
+        "You find no flowers.",
+        "You find no cones."
+    ],
+    evidence:"Evergreen does NOT automatically mean coniferous.",
+    concept:"EVERGREEN",
+    xp:40
+}
+
+};
+
+/* =========================================================
+   CLASSIFICATION QUESTIONS
+========================================================= */
+
+const questions = {
+
+    evergreen:{
+        title:"FOREST INVESTIGATION #1",
+        text:`
+        You discover a tree that keeps its leaves throughout winter.
+        <br><br>
+        The Forest Keeper asks:
+        <br><br>
+        <strong>What is the most useful classification clue?</strong>
+        `,
+        choices:[
+            ["It is definitely a conifer.","wrong"],
+            ["It is evergreen.","correct"],
+            ["It must produce flowers.","wrong"],
+            ["It must lose leaves.","wrong"]
+        ],
+        explanation:
+        "Keeping leaves throughout the year is evidence that a plant is EVERGREEN. But evergreen does not automatically mean coniferous."
+    },
+
+    conifer:{
+        title:"FOREST INVESTIGATION #2",
+        text:`
+        Tree A stays green throughout the year.<br>
+        Tree B stays green throughout the year and produces cones.<br>
+        Tree C loses its leaves in autumn.
+        <br><br>
+        <strong>Which tree belongs in the Conifer Grove?</strong>
+        `,
+        choices:[
+            ["Tree A","wrong"],
+            ["Tree B","correct"],
+            ["Tree C","wrong"],
+            ["All three","wrong"]
+        ],
+        explanation:
+        "Tree B has TWO important clues: it is evergreen AND produces cones. That combination gives strong evidence that it is coniferous."
+    },
+
+    tricky:{
+        title:"FOREST INVESTIGATION #3",
+        text:`
+        The Forest Keeper says:
+        <br><br>
+        <em>“Every conifer is evergreen, but not every evergreen is a conifer.”</em>
+        <br><br>
+        Which statement best explains why?
+        `,
+        choices:[
+            ["Evergreen describes whether leaves remain; coniferous describes a plant group with cones.","correct"],
+            ["Evergreen and coniferous mean exactly the same thing.","wrong"],
+            ["Only flowering plants can be evergreen.","wrong"],
+            ["Conifers lose all their leaves every winter.","wrong"]
+        ],
+        explanation:
+        "Evergreen describes a leaf-retention characteristic. Coniferous refers to a particular group of plants, commonly recognised by their cones and needle-like leaves."
+    }
+
+};
+
+/* =========================================================
+   START
+========================================================= */
+
+function startGame(){
+
+    document.getElementById("startScreen").style.display="none";
+
+    gameStarted=true;
+
+    loadProgress();
+
+    updateHUD();
+
+    toast("🌲 Mission started: Find the Forest Keeper!");
+
+    requestAnimationFrame(gameLoop);
+}
+
+/* =========================================================
+   SAVE / LOAD
+========================================================= */
+
+function saveProgress(){
+
+    localStorage.setItem(
+        "botanicalForestProgress",
+        JSON.stringify(progress)
+    );
+
+}
+
+function loadProgress(){
+
+    const saved=localStorage.getItem(
+        "botanicalForestProgress"
+    );
+
+    if(saved){
+
+        try{
+
+            const parsed=JSON.parse(saved);
+
+            progress={
+                ...progress,
+                ...parsed
+            };
+
+        }catch(e){}
+
+    }
+
+}
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+document.addEventListener("keydown",e=>{
+
+    keys[e.key]=true;
+
+    if(
+        ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)
+    ){
+        e.preventDefault();
+    }
+
+    if(e.key.toLowerCase()==="e"){
+        interact();
+    }
+
+    if(e.key.toLowerCase()==="n"){
+        openNotebook();
+    }
+
+    if(e.key==="Escape"){
+        closePanel();
+    }
+
+});
+
+document.addEventListener("keyup",e=>{
+    keys[e.key]=false;
+});
+
+/* Mobile */
+
+document.querySelectorAll("#mobileControls button").forEach(button=>{
+
+    const key=button.dataset.key;
+
+    button.addEventListener("touchstart",e=>{
+        e.preventDefault();
+        keys[key]=true;
+    });
+
+    button.addEventListener("touchend",e=>{
+        e.preventDefault();
+        keys[key]=false;
+    });
+
+});
+
+/* =========================================================
+   MOVEMENT
+========================================================= */
+
+function gameLoop(){
+
+    if(gameStarted){
+
+        updatePlayer();
+        updateCamera();
+        detectNearby();
+        updateMiniMap();
+
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+function updatePlayer(){
+
+    let dx=0;
+    let dy=0;
+
+    if(keys["w"] || keys["W"] || keys["ArrowUp"])dy-=1;
+    if(keys["s"] || keys["S"] || keys["ArrowDown"])dy+=1;
+    if(keys["a"] || keys["A"] || keys["ArrowLeft"])dx-=1;
+    if(keys["d"] || keys["D"] || keys["ArrowRight"])dx+=1;
+
+    if(dx!==0 || dy!==0){
+
+        playerState.moving=true;
+
+        if(Math.abs(dx)>Math.abs(dy)){
+            playerState.direction=dx>0?"right":"left";
+        }else{
+            playerState.direction=dy>0?"down":"up";
+        }
+
+        const length=Math.sqrt(dx*dx+dy*dy);
+
+        dx=(dx/length)*playerState.speed;
+        dy=(dy/length)*playerState.speed;
+
+        const nextX=playerState.x+dx;
+        const nextY=playerState.y+dy;
+
+        if(canMoveTo(nextX,nextY)){
+
+            playerState.x=nextX;
+            playerState.y=nextY;
+
+        }
+
+    }else{
+
+        playerState.moving=false;
+
+    }
+
+    player.style.left=playerState.x+"px";
+    player.style.top=playerState.y+"px";
+
+    if(playerState.moving){
+        player.classList.add("walk");
+    }else{
+        player.classList.remove("walk");
+    }
+
+}
+
+/* =========================================================
+   COLLISION
+========================================================= */
+
+function canMoveTo(x,y){
+
+    const margin=22;
+
+    if(x<margin || y<margin ||
+       x>WORLD_W-margin || y>WORLD_H-margin){
+        return false;
+    }
+
+    /* water */
+
+    const water={
+        x:370,
+        y:240,
+        w:420,
+        h:230
+    };
+
+    if(
+        circleRectCollision(
+            x+27,
+            y+35,
+            20,
+            water
+        )
+    ){
+        return false;
+    }
+
+    /* trees */
+
+    const obstacles=[
+
+        [80,300,100,100],
+        [190,500,100,100],
+        [820,180,100,100],
+        [930,500,100,100],
+        [1360,180,100,100],
+        [1820,250,100,100],
+        [2130,430,100,100],
+
+        [180,1210,90,100],
+        [390,1300,90,100],
+        [650,1150,90,100],
+        [850,1300,90,100]
+
+    ];
+
+    for(const r of obstacles){
+
+        if(
+            circleRectCollision(
+                x+27,
+                y+40,
+                18,
+                {
+                    x:r[0],
+                    y:r[1],
+                    w:r[2],
+                    h:r[3]
+                }
+            )
+        ){
+            return false;
+        }
+
+    }
+
+    /* rocks */
+
+    const rocks=[
+        [300,700,65,42],
+        [850,850,65,42],
+        [1380,720,65,42],
+        [1950,850,65,42],
+        [1080,1200,65,42]
+    ];
+
+    for(const r of rocks){
+
+        if(
+            circleRectCollision(
+                x+27,
+                y+40,
+                18,
+                {
+                    x:r[0],
+                    y:r[1],
+                    w:r[2],
+                    h:r[3]
+                }
+            )
+        ){
+            return false;
+        }
+
+    }
+
+    return true;
+}
+
+function circleRectCollision(cx,cy,r,rect){
+
+    const nearestX=Math.max(
+        rect.x,
+        Math.min(cx,rect.x+rect.w)
+    );
+
+    const nearestY=Math.max(
+        rect.y,
+        Math.min(cy,rect.y+rect.h)
+    );
+
+    const dx=cx-nearestX;
+    const dy=cy-nearestY;
+
+    return dx*dx+dy*dy<r*r;
+}
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+function updateCamera(){
+
+    const screenW=window.innerWidth;
+    const screenH=window.innerHeight;
+
+    let cameraX=playerState.x-screenW/2;
+    let cameraY=playerState.y-screenH/2;
+
+    cameraX=Math.max(
+        0,
+        Math.min(
+            cameraX,
+            WORLD_W-screenW
+        )
+    );
+
+    cameraY=Math.max(
+        0,
+        Math.min(
+            cameraY,
+            WORLD_H-screenH
+        )
+    );
+
+    world.style.transform=
+        `translate(${-cameraX}px,${-cameraY}px)`;
+
+}
+
+/* =========================================================
+   NEARBY DETECTION
+========================================================= */
+
+function detectNearby(){
+
+    nearbyObject=null;
+
+    const allPlants=document.querySelectorAll(".plant");
+
+    for(const plant of allPlants){
+
+        const id=Number(plant.dataset.plant);
+
+        const rect={
+            x:parseFloat(plant.style.left),
+            y:parseFloat(plant.style.top)
+        };
+
+        const distance=Math.hypot(
+            playerState.x-rect.x,
+            playerState.y-rect.y
+        );
+
+        if(distance<95){
+
+            nearbyObject={
+                type:"plant",
+                id
+            };
+
+            showInteraction(
+                `Scan ${plants[id].title}`
+            );
+
+            return;
+
+        }
+
+    }
+
+    const keeperRect={
+        x:1110,
+        y:620
+    };
+
+    const keeperDistance=Math.hypot(
+        playerState.x-keeperRect.x,
+        playerState.y-keeperRect.y
+    );
+
+    if(keeperDistance<120){
+
+        nearbyObject={
+            type:"keeper"
+        };
+
+        showInteraction(
+            "Talk to the Forest Keeper"
+        );
+
+        return;
+
+    }
+
+    /* final lab */
+
+    if(
+        playerState.x>1600 &&
+        playerState.y>1100 &&
+        !progress.gateUnlocked
+    ){
+
+        nearbyObject={
+            type:"gate"
+        };
+
+        showInteraction(
+            "Examine the Classification Gate"
+        );
+
+        return;
+
+    }
+
+    hideInteraction();
+}
+
+function showInteraction(text){
+
+    document.getElementById("interactionText").textContent=text;
+
+    document.getElementById("interaction").style.display="block";
+
+}
+
+function hideInteraction(){
+
+    document.getElementById("interaction").style.display="none";
+
+}
+
+/* =========================================================
+   INTERACTION
+========================================================= */
+
+function interact(){
+
+    if(!nearbyObject)return;
+
+    if(nearbyObject.type==="plant"){
+
+        scanPlant(nearbyObject.id);
+
+    }
+
+    if(nearbyObject.type==="keeper"){
+
+        talkKeeper();
+
+    }
+
+    if(nearbyObject.type==="gate"){
+
+        examineGate();
+
+    }
+
+}
+
+/* =========================================================
+   SCANNING
+========================================================= */
+
+function scanPlant(id){
+
+    const p=plants[id];
+
+    if(progress.scanned.includes(id)){
+
+        openPlantPanel(id,true);
+
+        return;
+
+    }
+
+    progress.scanned.push(id);
+
+    progress.evidence.push({
+        id,
+        title:p.title,
+        evidence:p.evidence
+    });
+
+    progress.xp+=p.xp;
+
+    updateHUD();
+
+    saveProgress();
+
+    openPlantPanel(id,false);
+
+}
+
+/* =========================================================
+   PLANT PANEL
+========================================================= */
+
+function openPlantPanel(id,alreadyScanned){
+
+    const p=plants[id];
+
+    panelContent.innerHTML=`
+
+        <div class="panel-header">
+
+            <div>
+                <div style="font-size:42px">${p.icon}</div>
+                <h1>${p.title}</h1>
+            </div>
+
+            <button class="close" onclick="closePanel()">×</button>
+
+        </div>
+
+        <p>
+            Your scanner has detected several useful clues.
+            Don't classify the plant too quickly.
+            <strong>Evidence is more important than guessing.</strong>
+        </p>
+
+        <div class="teaching">
+
+            <strong>🔍 FIELD SCANNER</strong>
+
+            <p style="margin-top:8px">
+                ${p.clues.map((c,i)=>
+                    `<div>🔎 Clue ${i+1}: ${c}</div>`
+                ).join("")}
+            </p>
+
+        </div>
+
+        <div class="evidence">
+
+            <strong>📋 EVIDENCE CARD</strong>
+
+            <p style="margin-top:7px">
+                ${p.evidence}
+            </p>
+
+        </div>
+
+        <div class="teaching">
+
+            <strong>🧠 THINK LIKE A SCIENTIST</strong>
+
+            <p style="margin-top:7px">
+                Do not decide a plant's group from one clue alone.
+                Ask: <em>What evidence supports my classification?</em>
+            </p>
+
+        </div>
+
+        ${
+            alreadyScanned
+            ?
+            `<button class="primary" onclick="closePanel()">CONTINUE EXPLORING</button>`
+            :
+            `<button class="primary" onclick="closePanel()">EVIDENCE COLLECTED ✓</button>`
+        }
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   FOREST KEEPER
+========================================================= */
+
+function talkKeeper(){
+
+    if(!progress.keeper){
+
+        progress.keeper=true;
+        progress.xp+=30;
+
+        updateHUD();
+        saveProgress();
+
+        openKeeperIntro();
+
+    }else{
+
+        openKeeperMenu();
+
+    }
+
+}
+
+function openKeeperIntro(){
+
+    panelContent.innerHTML=`
+
+        <div class="panel-header">
+
+            <h1>🌿 The Forest Keeper</h1>
+
+            <button class="close" onclick="closePanel()">×</button>
+
+        </div>
+
+        <p style="font-size:17px;line-height:1.6">
+
+            Ah! An explorer!
+            Excellent. The forest's classification records have been
+            scrambled.
+
+        </p>
+
+        <div class="teaching">
+
+            <strong>YOUR FIRST LESSON</strong>
+
+            <p style="margin-top:8px">
+
+                Plants can be classified using observable features.
+                We can ask questions about their leaves, flowers,
+                cones and reproduction.
+
+            </p>
+
+        </div>
+
+        <div class="evidence">
+
+            <strong>🌿 IMPORTANT DISTINCTION</strong>
+
+            <p style="margin-top:8px">
+
+                An <strong>evergreen</strong> plant keeps its leaves
+                throughout the year.
+
+                <br><br>
+
+                A <strong>conifer</strong> is a particular group of
+                plants that commonly produces cones and has
+                needle-like or scale-like leaves.
+
+                <br><br>
+
+                Therefore:
+
+                <br>
+
+                <strong>Coniferous → usually evergreen</strong>
+
+                <br>
+
+                but
+
+                <br>
+
+                <strong>Evergreen → NOT necessarily coniferous.</strong>
+
+            </p>
+
+        </div>
+
+        <button class="primary" onclick="openInvestigation('evergreen')">
+            BEGIN INVESTIGATION #1 →
+        </button>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+function openKeeperMenu(){
+
+    panelContent.innerHTML=`
+
+        <div class="panel-header">
+
+            <h1>🌿 Forest Keeper</h1>
+
+            <button class="close" onclick="closePanel()">×</button>
+
+        </div>
+
+        <p>
+            Your evidence is growing.
+            Which investigation should we tackle?
+        </p>
+
+        <div class="choice-grid">
+
+            <button class="choice" onclick="openInvestigation('evergreen')">
+                🔎 Investigation #1<br>
+                <small>Evergreen clues</small>
+            </button>
+
+            <button class="choice" onclick="openInvestigation('conifer')">
+                🌲 Investigation #2<br>
+                <small>Find the conifer</small>
+            </button>
+
+            <button class="choice" onclick="openInvestigation('tricky')">
+                🧠 Investigation #3<br>
+                <small>The tricky evergreen question</small>
+            </button>
+
+        </div>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   INVESTIGATIONS
+========================================================= */
+
+function openInvestigation(type){
+
+    const q=questions[type];
+
+    panelContent.innerHTML=`
+
+        <div class="panel-header">
+
+            <h1>${q.title}</h1>
+
+            <button class="close" onclick="closePanel()">×</button>
+
+        </div>
+
+        <div class="teaching">
+
+            ${q.text}
+
+        </div>
+
+        <div class="choice-grid" id="questionChoices">
+
+            ${q.choices.map((choice,index)=>`
+
+                <button
+                    class="choice"
+                    data-answer="${choice[1]}"
+                    onclick="answerInvestigation(this,'${type}')"
+                >
+
+                    ${choice[0]}
+
+                </button>
+
+            `).join("")}
+
+        </div>
+
+        <div id="questionFeedback" class="feedback"></div>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+function answerInvestigation(button,type){
+
+    const feedback=document.getElementById(
+        "questionFeedback"
+    );
+
+    const choices=document.querySelectorAll(
+        "#questionChoices .choice"
+    );
+
+    choices.forEach(c=>c.disabled=true);
+
+    if(button.dataset.answer==="correct"){
+
+        button.classList.add("correct");
+
+        feedback.className="feedback show good";
+
+        feedback.innerHTML=`
+            ✅ Correct reasoning!<br><br>
+            ${questions[type].explanation}
+            <br><br>
+            <button class="primary"
+                    onclick="finishInvestigation('${type}')">
+                ADD TO FIELD NOTES
+            </button>
+        `;
+
+        if(!progress.solved.includes(type)){
+
+            progress.solved.push(type);
+            progress.xp+=50;
+
+        }
+
+        updateHUD();
+        saveProgress();
+
+    }else{
+
+        button.classList.add("wrong");
+
+        feedback.className="feedback show bad";
+
+        feedback.innerHTML=`
+            ❌ Not quite.<br><br>
+            Look at the <strong>evidence</strong>, not just the
+            appearance of the plant.
+            <br><br>
+            Try the question again.
+            <br>
+            <button class="primary"
+                    onclick="openInvestigation('${type}')">
+                TRY AGAIN
+            </button>
+        `;
+
+    }
+
+}
+
+function finishInvestigation(type){
+
+    closePanel();
+
+    if(type==="evergreen"){
+        toast("🔎 Investigation complete! You understand EVERGREEN.");
+    }
+
+    if(type==="conifer"){
+        toast("🌲 Investigation complete! Conifer evidence identified.");
+    }
+
+    if(type==="tricky"){
+        toast("🧠 Excellent! You spotted the classification trap.");
+    }
+
+}
+
+/* =========================================================
+   GATE
+========================================================= */
+
+function examineGate(){
+
+    if(progress.evidence.length<5){
+
+        openGateLocked();
+
+    }else{
+
+        unlockGate();
+
+    }
+
+}
+
+function openGateLocked(){
+
+    panelContent.innerHTML=`
+
+        <div class="panel-header">
+
+            <h1>🔒 Classification Gate</h1>
+
+            <button class="close" onclick="closePanel()">×</button>
+
+        </div>
+
+        <div class="teaching">
+
+            <strong>ACCESS DENIED</strong>
+
+            <p style="margin-top:10px">
+
+                The gate requires enough field evidence.
+
+                <br><br>
+
+                Current evidence:
+                <strong>${progress.evidence.length}/5</strong>
+
+            </p>
+
+        </div>
+
+        <p>
+            Explore deeper into the forest and scan more plants.
+            Some clues are intentionally far apart.
+        </p>
+
+        <button class="primary" onclick="closePanel()">
+            KEEP EXPLORING
+        </button>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+function unlockGate(){
+
+    if(!progress.gateUnlocked){
+
+        progress.gateUnlocked=true;
+        progress.xp+=100;
+
+        updateHUD();
+        saveProgress();
+
+        toast("🔓 Classification Lab unlocked!");
+
+    }
+
+    openFinalChallenge();
+
+}
+
+/* =========================================================
+   FINAL CHALLENGE
+========================================================= */
+
+function openFinalChallenge(){
+
+    const finalPlants=[
+
+        {
+            name:"Plant A",
+            clues:"Loses leaves in autumn; produces flowers.",
+            answer:"FLOWERING + DECIDUOUS"
+        },
+
+        {
+            name:"Plant B",
+            clues:"Keeps leaves all year; produces cones.",
+            answer:"CONIFEROUS + EVERGREEN"
+        },
+
+        {
+            name:"Plant C",
+            clues:"No flowers; reproduces using spores.",
+            answer:"NON-FLOWERING"
+        },
+
+        {
+            name:"Plant D",
+            clues:"Keeps leaves all year; no cones discovered.",
+            answer:"EVERGREEN"
+        },
+
+        {
+            name:"Plant E",
+            clues:"Produces obvious flowers and seeds.",
+            answer:"FLOWERING"
+        },
+
+        {
+            name:"Plant F",
+            clues:"Needle-like leaves; cones; green all year.",
+            answer:"CONIFEROUS + EVERGREEN"
+        },
+
+        {
+            name:"Plant G",
+            clues:"Broad leaves fall before winter.",
+            answer:"DECIDUOUS"
+        },
+
+        {
+            name:"Plant H",
+            clues:"No flowers; no cones; spores observed.",
+            answer:"NON-FLOWERING"
+        }
+
+    ];
+
+    panelContent.innerHTML=`
+
+        <div class="panel-header">
+
+            <h1>🔬 FINAL FOREST CLASSIFICATION</h1>
+
+            <button class="close" onclick="closePanel()">×</button>
+
+        </div>
+
+        <p>
+
+            The final records contain <strong>8 unknown plants</strong>.
+
+            You must classify them using evidence collected
+            during your expedition.
+
+        </p>
+
+        <div class="teaching">
+
+            <strong>📖 FIELD NOTEBOOK RULES</strong>
+
+            <p style="margin-top:8px">
+                🌸 Flowers → FLOWERING<br>
+                🚫 No flowers → NON-FLOWERING<br>
+                🍂 Leaves fall seasonally → DECIDUOUS<br>
+                🌿 Leaves remain all year → EVERGREEN<br>
+                🌲 Evergreen + cones → CONIFEROUS
+            </p>
+
+        </div>
+
+        <div id="finalChallengeArea">
+
+            ${finalPlants.map((p,i)=>`
+
+                <div
+                    style="
+                        margin:10px 0;
+                        padding:15px;
+                        background:#fffdf5;
+                        border:2px solid #ddd5bd;
+                        border-radius:14px;
+                    "
+                >
+
+                    <strong>${p.name}</strong>
+
+                    <p style="margin:5px 0">
+                        ${p.clues}
+                    </p>
+
+                    <select
+                        id="final-${i}"
+                        style="
+                            padding:9px;
+                            border-radius:8px;
+                            border:2px solid #d5ceb7;
+                            font-family:inherit;
+                            font-weight:800;
+                        "
+                    >
+
+                        <option value="">Choose classification...</option>
+                        <option>FLOWERING</option>
+                        <option>NON-FLOWERING</option>
+                        <option>DECIDUOUS</option>
+                        <option>EVERGREEN</option>
+                        <option>CONIFEROUS + EVERGREEN</option>
+                        <option>FLOWERING + DECIDUOUS</option>
+
+                    </select>
+
+                </div>
+
+            `).join("")}
+
+            <button
+                class="primary"
+                onclick="checkFinalChallenge()"
+            >
+                SUBMIT CLASSIFICATION REPORT
+            </button>
+
+        </div>
+
+    `;
+
+    window.finalPlants=finalPlants;
+
+    overlay.style.display="flex";
+
+}
+
+function checkFinalChallenge(){
+
+    let score=0;
+
+    window.finalPlants.forEach((p,i)=>{
+
+        const value=document.getElementById(
+            `final-${i}`
+        ).value;
+
+        if(value===p.answer){
+
+            score++;
+
+        }
+
+    });
+
+    if(score===8){
+
+        progress.finalComplete=true;
+        progress.xp+=300;
+
+        if(!progress.badges.includes("master")){
+
+            progress.badges.push("master");
+
+        }
+
+        updateHUD();
+        saveProgress();
+
+        openVictory();
+
+    }else{
+
+        panelContent.innerHTML+=`
+
+            <div class="feedback show bad">
+
+                🧠 You classified <strong>${score}/8</strong> correctly.
+
+                <br><br>
+
+                Don't rush.
+
+                Re-read the evidence cards in your notebook
+                and look for the exact feature that supports
+                each classification.
+
+                <br><br>
+
+                <button class="primary"
+                    onclick="openNotebook()">
+                    REVIEW FIELD NOTEBOOK
+                </button>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+/* =========================================================
+   NOTEBOOK
+========================================================= */
+
+function openNotebook(){
+
+    panelContent.innerHTML=`
+
+        <div class="panel-header">
+
+            <h1>📖 FIELD NOTEBOOK</h1>
+
+            <button class="close" onclick="closePanel()">×</button>
+
+        </div>
+
+        <div class="teaching">
+
+            <strong>CLASSIFICATION GUIDE</strong>
+
+            <p style="margin-top:8px">
+
+                Use observable features as evidence.
+                A classification should be supported by clues.
+
+            </p>
+
+        </div>
+
+        <div id="notebook">
+
+            ${
+                progress.evidence.length
+                ?
+                progress.evidence.map((e,i)=>`
+
+                    <div class="evidence-card">
+
+                        <div class="number">
+                            EVIDENCE CARD #${i+1}
+                        </div>
+
+                        <strong>${e.title}</strong>
+
+                        <p>
+                            ${e.evidence}
+                        </p>
+
+                    </div>
+
+                `).join("")
+                :
+                `<p>No evidence collected yet.</p>`
+            }
+
+        </div>
+
+        <div class="teaching" style="margin-top:18px">
+
+            <strong>🧠 REMEMBER</strong>
+
+            <p style="margin-top:8px">
+
+                Evergreen and coniferous are related,
+                but they are NOT interchangeable terms.
+
+                <br><br>
+
+                Think:
+                <br>
+                <strong>
+                “What does the evidence actually tell me?”
+                </strong>
+
+            </p>
+
+        </div>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   VICTORY
+========================================================= */
+
+function openVictory(){
+
+    panelContent.innerHTML=`
+
+        <div style="text-align:center">
+
+            <div style="font-size:80px">
+                🏆🌲🔬
+            </div>
+
+            <h1 style="font-size:36px">
+                FOREST CLASSIFICATION MASTER!
+            </h1>
+
+            <p style="font-size:18px;margin-top:15px">
+
+                You explored the forest, collected evidence,
+                reasoned through classification keys and correctly
+                classified all eight mystery plants.
+
+            </p>
+
+            <div class="badge">
+                🏅 BOTANICAL CLASSIFICATION MASTER
+            </div>
+
+            <div class="teaching" style="text-align:left">
+
+                <strong>WHAT YOU MASTERED</strong>
+
+                <p style="margin-top:8px">
+                    ✓ Flowering vs non-flowering<br>
+                    ✓ Deciduous vs evergreen<br>
+                    ✓ Evergreen vs coniferous<br>
+                    ✓ Using observable evidence<br>
+                    ✓ Following branching classification keys<br>
+                    ✓ Reasoning rather than memorising
+                </p>
+
+            </div>
+
+            <p style="font-size:20px;font-weight:900">
+                Final XP: ${progress.xp}
+            </p>
+
+            <button class="primary" onclick="closePanel()">
+                RETURN TO FOREST
+            </button>
+
+        </div>
+
+    `;
+
+    overlay.style.display="flex";
+
+}
+
+/* =========================================================
+   HUD
+========================================================= */
+
+function updateHUD(){
+
+    document.getElementById("xp").textContent=
+        progress.xp+" XP";
+
+    document.getElementById("clueCount").textContent=
+        progress.evidence.length+"/8";
+
+    document.getElementById("badgeCount").textContent=
+        progress.badges.length;
+
+    let mission="";
+
+    if(!progress.keeper){
+
+        mission="Find the Forest Keeper.";
+
+    }else if(progress.solved.length<1){
+
+        mission="Complete Investigation #1.";
+
+    }else if(progress.evidence.length<5){
+
+        mission=
+            `Collect more plant evidence (${progress.evidence.length}/5).`;
+
+    }else if(!progress.gateUnlocked){
+
+        mission="Return to the Classification Gate.";
+
+    }else if(!progress.finalComplete){
+
+        mission="Classify the 8 mystery plants.";
+
+    }else{
+
+        mission="Forest mission complete! 🏆";
+
+    }
+
+    document.getElementById("missionText").textContent=mission;
+
+    const percent=
+        Math.min(
+            100,
+            (
+                progress.evidence.length/8
+            )*100
+        );
+
+    document.getElementById("progressBar").style.width=
+        percent+"%";
+
+}
+
+/* =========================================================
+   MINI MAP
+========================================================= */
+
+function updateMiniMap(){
+
+    const mapPlayer=
+        document.getElementById("mapPlayer");
+
+    mapPlayer.style.left=
+        ((playerState.x/WORLD_W)*100)+"%";
+
+    mapPlayer.style.top=
+        ((playerState.y/WORLD_H)*100)+"%";
+
+}
+
+/* =========================================================
+   PANEL CONTROL
+========================================================= */
+
+function closePanel(){
+
+    overlay.style.display="none";
+
+}
+
+/* click outside */
+overlay.addEventListener("click",e=>{
+
+    if(e.target===overlay){
+
+        closePanel();
+
+    }
+
+});
+
+/* =========================================================
+   GATE PROXIMITY FIX
+========================================================= */
+
+function updateGate(){
+
+    if(
+        playerState.x>1530 &&
+        playerState.y>1060 &&
+        progress.gateUnlocked
+    ){
+
+        document.querySelectorAll(".plant").forEach(p=>{
+            p.style.zIndex=35;
+        });
+
+    }
+
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function toast(message){
+
+    const el=document.getElementById("toast");
+
+    el.textContent=message;
+
+    el.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer=setTimeout(()=>{
+
+        el.classList.remove("show");
+
+    },2500);
+
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetGame(){
+
+    localStorage.removeItem(
+        "botanicalForestProgress"
+    );
+
+    location.reload();
+
+}
+
+/* =========================================================
+   PLANT CLICK SUPPORT
+========================================================= */
+
+document.querySelectorAll(".plant").forEach(plant=>{
+
+    plant.addEventListener("click",()=>{
+
+        const id=Number(plant.dataset.plant);
+
+        const rect=plant.getBoundingClientRect();
+
+        /*
+         Clicking a plant acts like walking to it and
+         pressing E. This makes testing easier.
+        */
+
+        scanPlant(id);
+
+    });
+
+});
+
+/* Keeper click */
+
+document.getElementById("keeper").addEventListener(
+    "click",
+    talkKeeper
+);
+
+/* =========================================================
+   INITIAL
+========================================================= */
+
+updateHUD();
+
+</script>
+
+</body>
+</html>
