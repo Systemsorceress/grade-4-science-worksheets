@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Habitat Adventure</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #dff5ff;
+    overflow: hidden;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+    height: 70px;
+    background: #31572c;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    position: relative;
+    z-index: 20;
+}
+
+.title {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.progress {
+    background: rgba(255,255,255,0.18);
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* =========================
+   GAME WORLD
+========================= */
+
+#gameScreen {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 70px);
+    overflow: hidden;
+    background: linear-gradient(
+        to bottom,
+        #9ee7ff 0%,
+        #c8f4ff 45%,
+        #7bc96f 45%,
+        #4f9e45 100%
+    );
+}
+
+/* Sun */
+
+.sun {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: #ffd84d;
+    border-radius: 50%;
+    top: 40px;
+    right: 80px;
+    box-shadow: 0 0 40px rgba(255,216,77,0.8);
+}
+
+/* Clouds */
+
+.cloud {
+    position: absolute;
+    width: 130px;
+    height: 45px;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.85;
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 55px;
+    height: 55px;
+    left: 20px;
+    bottom: 10px;
+}
+
+.cloud::after {
+    width: 70px;
+    height: 70px;
+    right: 20px;
+    bottom: 5px;
+}
+
+.cloud1 {
+    top: 80px;
+    left: 120px;
+}
+
+.cloud2 {
+    top: 150px;
+    left: 500px;
+    transform: scale(0.8);
+}
+
+/* Ground */
+
+.ground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 55%;
+    background:
+        radial-gradient(circle at 20% 30%, #68b557 0 4px, transparent 5px),
+        radial-gradient(circle at 50% 50%, #438c39 0 4px, transparent 5px),
+        radial-gradient(circle at 75% 25%, #67b756 0 4px, transparent 5px),
+        #62aa50;
+}
+
+/* Path */
+
+.path {
+    position: absolute;
+    width: 75%;
+    height: 160px;
+    background: #d9bd87;
+    border-radius: 50%;
+    bottom: 50px;
+    left: 12%;
+    transform: rotate(-5deg);
+}
+
+/* Pond */
+
+.pond {
+    position: absolute;
+    width: 260px;
+    height: 130px;
+    border-radius: 50%;
+    background: #4db9df;
+    border: 7px solid #318daf;
+    left: 65%;
+    bottom: 70px;
+}
+
+.pond::after {
+    content: "💧";
+    position: absolute;
+    font-size: 40px;
+    left: 100px;
+    top: 35px;
+}
+
+/* Trees */
+
+.tree {
+    position: absolute;
+    width: 40px;
+    height: 110px;
+    background: #754c24;
+    border-radius: 8px;
+}
+
+.tree::before {
+    content: "";
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    background: #347a35;
+    border-radius: 50%;
+    left: -35px;
+    top: -55px;
+}
+
+.tree::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: #459642;
+    border-radius: 50%;
+    left: -20px;
+    top: -85px;
+}
+
+.tree1 {
+    left: 50px;
+    bottom: 120px;
+}
+
+.tree2 {
+    left: 350px;
+    bottom: 80px;
+    transform: scale(0.8);
+}
+
+.tree3 {
+    right: 50px;
+    bottom: 150px;
+    transform: scale(0.9);
+}
+
+/* =========================
+   HOUSE
+========================= */
+
+.house {
+    position: absolute;
+    left: 130px;
+    bottom: 190px;
+    width: 190px;
+    height: 140px;
+    background: #f5c16c;
+    border: 5px solid #7a4823;
+    z-index: 5;
+}
+
+.roof {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 115px solid transparent;
+    border-right: 115px solid transparent;
+    border-bottom: 90px solid #a94332;
+    top: -90px;
+    left: -20px;
+}
+
+.door {
+    position: absolute;
+    width: 45px;
+    height: 75px;
+    background: #6d4225;
+    bottom: 0;
+    left: 70px;
+}
+
+.window {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    background: #b8efff;
+    border: 5px solid #65432a;
+    top: 35px;
+}
+
+.window1 {
+    left: 20px;
+}
+
+.window2 {
+    right: 20px;
+}
+
+.interaction-label {
+    position: absolute;
+    top: -130px;
+    left: 25px;
+    background: #31572c;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 15px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* =========================
+   GAME OBJECTS
+========================= */
+
+.game-object {
+    position: absolute;
+    z-index: 10;
+}
+
+.object-image {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.25));
+}
+
+.dog1 {
+    left: 390px;
+    bottom: 165px;
+}
+
+.dog2 {
+    right: 320px;
+    bottom: 165px;
+}
+
+.dog3 {
+    right: 90px;
+    bottom: 270px;
+}
+
+.plant {
+    left: 530px;
+    bottom: 100px;
+}
+
+.plant .object-image {
+    width: 110px;
+    height: 110px;
+}
+
+/* =========================
+   PLAYER
+========================= */
+
+#player {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    z-index: 15;
+    transition: transform 0.05s linear;
+}
+
+#player img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 4px rgba(0,0,0,0.25));
+}
+
+/* =========================
+   INSTRUCTION
+========================= */
+
+.instructions {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    background: rgba(255,255,255,0.92);
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    z-index: 18;
+}
+
+.instructions strong {
+    color: #31572c;
+}
+
+/* =========================
+   INTERACTION MESSAGE
+========================= */
+
+#interactionHint {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #31572c;
+    color: white;
+    padding: 14px 25px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    display: none;
+    z-index: 30;
+}
+
+/* =========================
+   OVERLAY
+========================= */
+
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.68);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+}
+
+/* =========================
+   FLASHCARD
+========================= */
+
+.flashcard {
+    width: min(700px, 95vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.35);
+    text-align: center;
+    animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.flashcard h2 {
+    color: #31572c;
+    margin-top: 0;
+    font-size: 30px;
+}
+
+.flashcard h3 {
+    color: #444;
+    font-size: 23px;
+}
+
+.flashcard p {
+    font-size: 19px;
+    line-height: 1.6;
+}
+
+.flashcard ul {
+    text-align: left;
+    max-width: 420px;
+    margin: 20px auto;
+    font-size: 20px;
+    line-height: 2;
+}
+
+.card-image {
+    width: 190px;
+    height: 190px;
+    object-fit: contain;
+    margin: 5px auto 15px;
+    display: block;
+}
+
+.answer-input {
+    width: 90%;
+    max-width: 500px;
+    padding: 15px;
+    font-size: 18px;
+    border: 3px solid #b7d9b2;
+    border-radius: 12px;
+    outline: none;
+    margin: 10px 0;
+}
+
+.answer-input:focus {
+    border-color: #31572c;
+}
+
+.feedback {
+    min-height: 30px;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 8px 0;
+}
+
+.feedback.correct {
+    color: #2e7d32;
+}
+
+.feedback.wrong {
+    color: #c62828;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+button {
+    border: none;
+    border-radius: 12px;
+    padding: 13px 22px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.back-btn {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.next-btn {
+    background: #31572c;
+    color: white;
+}
+
+.next-btn:disabled {
+    background: #a5a5a5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =========================
+   COMPLETION
+========================= */
+
+#completeScreen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #31572c, #79b85b);
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 200;
+    padding: 30px;
+}
+
+.complete-box {
+    background: white;
+    color: #31572c;
+    padding: 45px;
+    border-radius: 30px;
+    max-width: 650px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.complete-box h1 {
+    font-size: 42px;
+}
+
+.complete-box p {
+    font-size: 21px;
+    line-height: 1.6;
+}
+
+.restart-btn {
+    background: #31572c;
+    color: white;
+    margin-top: 15px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    .title {
+        font-size: 18px;
+    }
+
+    .progress {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+
+    .instructions {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .house {
+        transform: scale(0.75);
+        transform-origin: bottom left;
+    }
+
+    .object-image {
+        width: 90px;
+        height: 90px;
+    }
+
+    #player {
+        width: 70px;
+        height: 70px;
+    }
+
+    .flashcard {
+        padding: 20px;
+    }
+
+    .flashcard h2 {
+        font-size: 24px;
+    }
+
+    .flashcard p,
+    .flashcard ul {
+        font-size: 17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<div class="topbar">
+    <div class="title">🌿 Habitat Adventure</div>
+    <div class="progress" id="progressText">
+        Mission 1 of 5
+    </div>
+</div>
+
+
+<!-- =========================
+     GAME
+========================= -->
+
+<div id="gameScreen">
+
+    <div class="sun"></div>
+
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+
+    <div class="ground"></div>
+    <div class="path"></div>
+    <div class="pond"></div>
+
+    <div class="tree tree1"></div>
+    <div class="tree tree2"></div>
+    <div class="tree tree3"></div>
+
+
+    <!-- HOUSE -->
+
+    <div class="house game-object"
+         id="house"
+         data-name="house">
+
+        <div class="roof"></div>
+
+        <div class="door"></div>
+
+        <div class="window window1"></div>
+        <div class="window window2"></div>
+
+        <div class="interaction-label">
+            Press D
+        </div>
+    </div>
+
+
+    <!-- DOG 1 -->
+
+    <div class="game-object dog1"
+         id="dog1"
+         data-name="abandoned dog">
+
+        <img
+            class="object-image"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQigkI7Ahv75DygsIexFSOsT5QweELNGGAzBabmJt0LDA&s=10"
+            alt="Abandoned dog">
+    </div>
+
+
+    <!-- DOG 2 -->
+
+    <div class="game-object dog2"
+         id="dog2"
+         data-name="thirsty dog">
+
+        <img
+            class="object-image"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvwQ9_Gv68Q6MmP0pBb8lWYUrQkcDvVnaBJxcI6vEh6A&s=10"
+            alt="Thirsty dog">
+    </div>
+
+
+    <!-- DOG 3 -->
+
+    <div class="game-object dog3"
+         id="dog3"
+         data-name="hungry dog">
+
+        <img
+            class="object-image"
+            src="https://media.istockphoto.com/id/2200203886/vector/print.jpg?s=612x612&w=0&k=20&c=uDA123kqNRrtiJS1rB2mFDE9MkFh4TfqsA5k7IfHamY="
+            alt="Hungry dog">
+    </div>
+
+
+    <!-- PLANT -->
+
+    <div class="game-object plant"
+         id="plant"
+         data-name="plant">
+
+        <img
+            class="object-image"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZY9ZEAGQAx7DRFbrXTL4oTzjsRzxsWiuY0VOr4N4X3A&s=10"
+            alt="Wilted plant">
+    </div>
+
+
+    <!-- PLAYER -->
+
+    <div id="player">
+        <img
+            src="https://png.pngtree.com/png-vector/20250610/ourmid/pngtree-capybara-clipart-on-white-background-png-image_16513755.png"
+            alt="Capybara">
+    </div>
+
+
+    <!-- INSTRUCTIONS -->
+
+    <div class="instructions">
+        <strong>🎮 Controls</strong><br>
+        ⬆️ ⬇️ ⬅️ ➡️ Move<br>
+        Press <strong>D</strong> near an object
+    </div>
+
+
+    <!-- INTERACTION HINT -->
+
+    <div id="interactionHint">
+        Press <strong>D</strong> to interact
+    </div>
+
+</div>
+
+
+<!-- =========================
+     FLASHCARD OVERLAY
+========================= -->
+
+<div id="overlay">
+
+    <div class="flashcard">
+
+        <div id="cardContent"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     COMPLETION SCREEN
+========================= -->
+
+<div id="completeScreen">
+
+    <div class="complete-box">
+
+        <h1>🎉 Habitat Hero!</h1>
+
+        <p>
+            Amazing work!
+            You helped every animal and plant get what they need
+            to survive.
+        </p>
+
+        <p>
+            🌬️ Air<br>
+            💧 Water<br>
+            🍎 Food<br>
+            🏠 Shelter<br>
+            ☀️ Sunlight
+        </p>
+
+        <p>
+            You now understand that living things need the right
+            things in their habitat to survive.
+        </p>
+
+        <button
+            class="restart-btn"
+            onclick="location.reload()">
+            🔄 Play Again
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   GAME VARIABLES
+========================================================= */
+
+const player = document.getElementById("player");
+const overlay = document.getElementById("overlay");
+const cardContent = document.getElementById("cardContent");
+const interactionHint = document.getElementById("interactionHint");
+const progressText = document.getElementById("progressText");
+
+let playerX = 300;
+let playerY = 350;
+
+const speed = 4;
+
+let keys = {};
+
+let currentMission = 1;
+let missionCompleted = {
+    house: false,
+    dog1: false,
+    dog2: false,
+    dog3: false,
+    plant: false
+};
+
+let currentObject = null;
+
+
+/* =========================================================
+   CARD NAVIGATION
+========================================================= */
+
+let currentCard = 0;
+
+/*
+    Each mission has its own card index.
+
+    House:
+    0 = information
+
+    Dog 1:
+    0 = what is habitat
+    1 = shelter
+    2 = success
+
+    Dog 2:
+    0 = water
+    1 = success
+
+    Dog 3:
+    0 = food
+    1 = success
+
+    Plant:
+    0 = needs
+    1 = success
+*/
+
+let missionCard = {
+    house: 0,
+    dog1: 0,
+    dog2: 0,
+    dog3: 0,
+    plant: 0
+};
+
+
+/* =========================================================
+   SAVED ANSWERS
+========================================================= */
+
+let answers = {
+    habitat: "",
+    shelter: "",
+    water: "",
+    food: "",
+    plant: ""
+};
+
+
+/* =========================================================
+   PLAYER MOVEMENT
+========================================================= */
+
+document.addEventListener("keydown", function(e) {
+
+    keys[e.key.toLowerCase()] = true;
+
+    if (
+        ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "]
+        .includes(e.key)
+    ) {
+        e.preventDefault();
+    }
+
+    if (
+        e.key.toLowerCase() === "d" &&
+        overlay.style.display !== "flex"
+    ) {
+        interact();
+    }
+
+});
+
+
+document.addEventListener("keyup", function(e) {
+    keys[e.key.toLowerCase()] = false;
+});
+
+
+function movePlayer() {
+
+    const game = document.getElementById("gameScreen");
+
+    const maxX = game.clientWidth - player.offsetWidth;
+    const maxY = game.clientHeight - player.offsetHeight;
+
+    if (keys["arrowleft"]) {
+        playerX -= speed;
+    }
+
+    if (keys["arrowright"]) {
+        playerX += speed;
+    }
+
+    if (keys["arrowup"]) {
+        playerY -= speed;
+    }
+
+    if (keys["arrowdown"]) {
+        playerY += speed;
+    }
+
+    playerX = Math.max(0, Math.min(maxX, playerX));
+    playerY = Math.max(0, Math.min(maxY, playerY));
+
+    player.style.left = playerX + "px";
+    player.style.top = playerY + "px";
+
+    checkNearbyObject();
+
+    requestAnimationFrame(movePlayer);
+}
+
+
+movePlayer();
+
+
+/* =========================================================
+   OBJECT DETECTION
+========================================================= */
+
+function getDistance(element) {
+
+    const playerRect = player.getBoundingClientRect();
+    const objectRect = element.getBoundingClientRect();
+
+    const playerCenterX =
+        playerRect.left + playerRect.width / 2;
+
+    const playerCenterY =
+        playerRect.top + playerRect.height / 2;
+
+    const objectCenterX =
+        objectRect.left + objectRect.width / 2;
+
+    const objectCenterY =
+        objectRect.top + objectRect.height / 2;
+
+    return Math.sqrt(
+        Math.pow(playerCenterX - objectCenterX, 2) +
+        Math.pow(playerCenterY - objectCenterY, 2)
+    );
+}
+
+
+function checkNearbyObject() {
+
+    const objects = [
+        document.getElementById("house"),
+        document.getElementById("dog1"),
+        document.getElementById("dog2"),
+        document.getElementById("dog3"),
+        document.getElementById("plant")
+    ];
+
+    let nearby = null;
+    let closestDistance = Infinity;
+
+    objects.forEach(obj => {
+
+        if (!obj) return;
+
+        const distance = getDistance(obj);
+
+        if (distance < 150 && distance < closestDistance) {
+            closestDistance = distance;
+            nearby = obj;
+        }
+
+    });
+
+    if (nearby) {
+
+        currentObject = nearby;
+
+        interactionHint.style.display = "block";
+        interactionHint.innerHTML =
+            `Press <strong>D</strong> to interact with the ${nearby.dataset.name}`;
+
+    } else {
+
+        currentObject = null;
+        interactionHint.style.display = "none";
+
+    }
+}
+
+
+/* =========================================================
+   INTERACTION
+========================================================= */
+
+function interact() {
+
+    if (!currentObject) return;
+
+    const id = currentObject.id;
+
+    if (id === "house" && !missionCompleted.house) {
+        currentMission = 1;
+        missionCard.house = 0;
+        openHouseCard();
+    }
+
+    else if (id === "dog1" && !missionCompleted.dog1) {
+        currentMission = 2;
+        missionCard.dog1 = 0;
+        openDog1Card();
+    }
+
+    else if (id === "dog2" && !missionCompleted.dog2) {
+        currentMission = 3;
+        missionCard.dog2 = 0;
+        openDog2Card();
+    }
+
+    else if (id === "dog3" && !missionCompleted.dog3) {
+        currentMission = 4;
+        missionCard.dog3 = 0;
+        openDog3Card();
+    }
+
+    else if (id === "plant" && !missionCompleted.plant) {
+        currentMission = 5;
+        missionCard.plant = 0;
+        openPlantCard();
+    }
+}
+
+
+/* =========================================================
+   GENERAL CARD FUNCTIONS
+========================================================= */
+
+function openOverlay() {
+    overlay.style.display = "flex";
+}
+
+function closeOverlay() {
+    overlay.style.display = "none";
+}
+
+function updateProgress() {
+
+    progressText.textContent =
+        `Mission ${currentMission} of 5`;
+
+}
+
+
+/* =========================================================
+   MISSION 1 — HOUSE
+========================================================= */
+
+function openHouseCard() {
+
+    currentCard = missionCard.house;
+
+    updateProgress();
+    openOverlay();
+
+    renderHouseCard();
+
+}
+
+
+function renderHouseCard() {
+
+    if (currentCard === 0) {
+
+        cardContent.innerHTML = `
+
+            <h2>🏠 What Is a Habitat?</h2>
+
+            <p>
+                A <strong>habitat</strong> is an area where
+                plants and animals live.
+            </p>
+
+            <p>
+                Living things need several important things
+                to survive:
+            </p>
+
+            <ul>
+                <li>🍎 <strong>Food</strong></li>
+                <li>💧 <strong>Water</strong></li>
+                <li>🌬️ <strong>Air</strong></li>
+                <li>🏠 <strong>Shelter</strong></li>
+                <li>🌡️ <strong>Suitable conditions</strong></li>
+            </ul>
+
+            <p>
+                Remember these things!
+                You will need them during your adventure.
+            </p>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="closeOverlay()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="finishHouseMission()">
+                    I've Read It →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+function finishHouseMission() {
+
+    missionCompleted.house = true;
+
+    closeOverlay();
+
+    progressText.textContent = "Mission 2 of 5";
+
+}
+
+
+/* =========================================================
+   MISSION 2 — ABANDONED DOG
+========================================================= */
+
+function openDog1Card() {
+
+    currentCard = missionCard.dog1;
+
+    updateProgress();
+    openOverlay();
+
+    renderDog1Card();
+
+}
+
+
+function renderDog1Card() {
+
+    /* CARD 1 — WHAT IS A HABITAT */
+
+    if (currentCard === 0) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQigkI7Ahv75DygsIexFSOsT5QweELNGGAzBabmJt0LDA&s=10"
+                alt="Dog">
+
+            <h2>🐕 Help the Abandoned Dog</h2>
+
+            <h3>What is a habitat?</h3>
+
+            <p>
+                Type your answer below.
+            </p>
+
+            <input
+                id="habitatAnswer"
+                class="answer-input"
+                type="text"
+                placeholder="Type your answer..."
+                value="${answers.habitat}"
+            >
+
+            <div
+                id="feedback"
+                class="feedback">
+            </div>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="closeOverlay()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="checkHabitat()">
+                    Next →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+
+    /* CARD 2 — SHELTER */
+
+    else if (currentCard === 1) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQigkI7Ahv75DygsIexFSOsT5QweELNGGAzBabmJt0LDA&s=10"
+                alt="Dog">
+
+            <h2>🏠 Help the Dog</h2>
+
+            <h3>
+                What does he need to survive?
+            </h3>
+
+            <p>
+                Think about where a dog can stay safe
+                from rain, heat and danger.
+            </p>
+
+            <input
+                id="shelterAnswer"
+                class="answer-input"
+                type="text"
+                placeholder="Type your answer..."
+                value="${answers.shelter}"
+            >
+
+            <div
+                id="feedback"
+                class="feedback">
+            </div>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="dog1Back()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="checkShelter()">
+                    Next →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+
+    /* CARD 3 — SUCCESS */
+
+    else if (currentCard === 2) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDDRSZtywN0OaVZK3jbvxCXYoi8G5bmCsNBCCalLvw&s=10"
+                alt="Dog with shelter">
+
+            <h2>🎉 Great Job!</h2>
+
+            <p>
+                You helped the dog understand that
+                <strong>shelter</strong> is important for survival.
+            </p>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="dog1Back()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="finishDog1()">
+                    Continue →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+function checkHabitat() {
+
+    const input =
+        document.getElementById("habitatAnswer");
+
+    const answer =
+        input.value.trim().toLowerCase();
+
+    answers.habitat = input.value;
+
+    const feedback =
+        document.getElementById("feedback");
+
+    if (
+        answer.includes("area") &&
+        answer.includes("plant") &&
+        answer.includes("animal")
+    ) {
+
+        feedback.textContent =
+            "✅ Correct! A habitat is an area where plants and animals live.";
+
+        feedback.className =
+            "feedback correct";
+
+        setTimeout(() => {
+
+            currentCard = 1;
+            missionCard.dog1 = 1;
+
+            renderDog1Card();
+
+        }, 700);
+
+    } else {
+
+        feedback.textContent =
+            "❌ Try again. Include an area where plants and animals live.";
+
+        feedback.className =
+            "feedback wrong";
+
+    }
+
+}
+
+
+function checkShelter() {
+
+    const input =
+        document.getElementById("shelterAnswer");
+
+    const answer =
+        input.value.trim().toLowerCase();
+
+    answers.shelter = input.value;
+
+    const feedback =
+        document.getElementById("feedback");
+
+    if (answer.includes("shelter")) {
+
+        feedback.textContent =
+            "✅ Correct! Shelter keeps the dog safe.";
+
+        feedback.className =
+            "feedback correct";
+
+        setTimeout(() => {
+
+            currentCard = 2;
+            missionCard.dog1 = 2;
+
+            renderDog1Card();
+
+        }, 700);
+
+    } else {
+
+        feedback.textContent =
+            "❌ Think about a safe place where the dog can stay.";
+
+        feedback.className =
+            "feedback wrong";
+
+    }
+
+}
+
+
+function dog1Back() {
+
+    if (currentCard > 0) {
+
+        currentCard--;
+
+        missionCard.dog1 = currentCard;
+
+        renderDog1Card();
+
+    }
+
+}
+
+
+function finishDog1() {
+
+    missionCompleted.dog1 = true;
+
+    closeOverlay();
+
+    progressText.textContent = "Mission 3 of 5";
+
+}
+
+
+/* =========================================================
+   MISSION 3 — WATER
+========================================================= */
+
+function openDog2Card() {
+
+    currentCard = missionCard.dog2;
+
+    updateProgress();
+    openOverlay();
+
+    renderDog2Card();
+
+}
+
+
+function renderDog2Card() {
+
+    if (currentCard === 0) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvwQ9_Gv68Q6MmP0pBb8lWYUrQkcDvVnaBJxcI6vEh6A&s=10"
+                alt="Thirsty dog">
+
+            <h2>💧 The Dog Is Thirsty!</h2>
+
+            <h3>
+                What does he need to survive?
+            </h3>
+
+            <input
+                id="waterAnswer"
+                class="answer-input"
+                type="text"
+                placeholder="Type your answer..."
+                value="${answers.water}"
+            >
+
+            <div
+                id="feedback"
+                class="feedback">
+            </div>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="closeOverlay()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="checkWater()">
+                    Next →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+
+    else if (currentCard === 1) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5wLWpXftF72ixxGGe6ezofjU_A5s4AA1yeCbacMSs21ACRsXXjPKYdCw&s=10"
+                alt="Dog drinking water">
+
+            <h2>🎉 Correct!</h2>
+
+            <p>
+                The dog needs <strong>water</strong> to survive.
+            </p>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="dog2Back()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="finishDog2()">
+                    Continue →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+function checkWater() {
+
+    const input =
+        document.getElementById("waterAnswer");
+
+    const answer =
+        input.value.trim().toLowerCase();
+
+    answers.water = input.value;
+
+    const feedback =
+        document.getElementById("feedback");
+
+    if (answer.includes("water")) {
+
+        feedback.textContent =
+            "✅ Correct! Water is essential for survival.";
+
+        feedback.className =
+            "feedback correct";
+
+        setTimeout(() => {
+
+            currentCard = 1;
+            missionCard.dog2 = 1;
+
+            renderDog2Card();
+
+        }, 700);
+
+    } else {
+
+        feedback.textContent =
+            "❌ Think about what a thirsty animal needs.";
+
+        feedback.className =
+            "feedback wrong";
+
+    }
+
+}
+
+
+function dog2Back() {
+
+    if (currentCard > 0) {
+
+        currentCard--;
+
+        missionCard.dog2 = currentCard;
+
+        renderDog2Card();
+
+    }
+
+}
+
+
+function finishDog2() {
+
+    missionCompleted.dog2 = true;
+
+    closeOverlay();
+
+    progressText.textContent = "Mission 4 of 5";
+
+}
+
+
+/* =========================================================
+   MISSION 4 — FOOD
+========================================================= */
+
+function openDog3Card() {
+
+    currentCard = missionCard.dog3;
+
+    updateProgress();
+    openOverlay();
+
+    renderDog3Card();
+
+}
+
+
+function renderDog3Card() {
+
+    if (currentCard === 0) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://media.istockphoto.com/id/2200203886/vector/print.jpg?s=612x612&w=0&k=20&c=uDA123kqNRrtiJS1rB2mFDE9MkFh4TfqsA5k7IfHamY="
+                alt="Hungry dog">
+
+            <h2>🍎 The Dog Is Hungry!</h2>
+
+            <h3>
+                What does he need to survive?
+            </h3>
+
+            <input
+                id="foodAnswer"
+                class="answer-input"
+                type="text"
+                placeholder="Type your answer..."
+                value="${answers.food}"
+            >
+
+            <div
+                id="feedback"
+                class="feedback">
+            </div>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="closeOverlay()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="checkFood()">
+                    Next →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+
+    else if (currentCard === 1) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShnto8h7b1Sgm1K6uyByjbl4R4OUIflbsfeK_o59R1sA&s=10"
+                alt="Dog with food">
+
+            <h2>🎉 Correct!</h2>
+
+            <p>
+                The dog needs <strong>food</strong> to get
+                energy and survive.
+            </p>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="dog3Back()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="finishDog3()">
+                    Continue →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+function checkFood() {
+
+    const input =
+        document.getElementById("foodAnswer");
+
+    const answer =
+        input.value.trim().toLowerCase();
+
+    answers.food = input.value;
+
+    const feedback =
+        document.getElementById("feedback");
+
+    if (answer.includes("food")) {
+
+        feedback.textContent =
+            "✅ Correct! Food provides energy.";
+
+        feedback.className =
+            "feedback correct";
+
+        setTimeout(() => {
+
+            currentCard = 1;
+            missionCard.dog3 = 1;
+
+            renderDog3Card();
+
+        }, 700);
+
+    } else {
+
+        feedback.textContent =
+            "❌ Think about what hungry animals need.";
+
+        feedback.className =
+            "feedback wrong";
+
+    }
+
+}
+
+
+function dog3Back() {
+
+    if (currentCard > 0) {
+
+        currentCard--;
+
+        missionCard.dog3 = currentCard;
+
+        renderDog3Card();
+
+    }
+
+}
+
+
+function finishDog3() {
+
+    missionCompleted.dog3 = true;
+
+    closeOverlay();
+
+    progressText.textContent = "Mission 5 of 5";
+
+}
+
+
+/* =========================================================
+   MISSION 5 — PLANT
+========================================================= */
+
+function openPlantCard() {
+
+    currentCard = missionCard.plant;
+
+    updateProgress();
+    openOverlay();
+
+    renderPlantCard();
+
+}
+
+
+function renderPlantCard() {
+
+    if (currentCard === 0) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZY9ZEAGQAx7DRFbrXTL4oTzjsRzxsWiuY0VOr4N4X3A&s=10"
+                alt="Wilted plant">
+
+            <h2>🌱 Help the Plant!</h2>
+
+            <h3>
+                What does a plant need to survive?
+            </h3>
+
+            <p>
+                Enter all <strong>three</strong> things.
+            </p>
+
+            <p>
+                Hint: Think about what plants need
+                from the environment.
+            </p>
+
+            <input
+                id="plantAnswer"
+                class="answer-input"
+                type="text"
+                placeholder="Example: water, air, sunlight"
+                value="${answers.plant}"
+            >
+
+            <div
+                id="feedback"
+                class="feedback">
+            </div>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="closeOverlay()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="checkPlant()">
+                    Next →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+
+    else if (currentCard === 1) {
+
+        cardContent.innerHTML = `
+
+            <img
+                class="card-image"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJEtu1qL50OpBsy_j4fNst_zsbm8p4w-iiFNX8cP09IA&s=10"
+                alt="Healthy plant">
+
+            <h2>🌱🎉 Amazing!</h2>
+
+            <p>
+                You helped the plant!
+            </p>
+
+            <p>
+                Plants need:
+            </p>
+
+            <ul>
+                <li>💧 Water</li>
+                <li>🌬️ Air</li>
+                <li>☀️ Sunlight</li>
+            </ul>
+
+            <div class="buttons">
+
+                <button
+                    class="back-btn"
+                    onclick="plantBack()">
+                    ← Back
+                </button>
+
+                <button
+                    class="next-btn"
+                    onclick="finishPlant()">
+                    Finish Mission →
+                </button>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+function checkPlant() {
+
+    const input =
+        document.getElementById("plantAnswer");
+
+    const answer =
+        input.value.trim().toLowerCase();
+
+    answers.plant = input.value;
+
+    const feedback =
+        document.getElementById("feedback");
+
+    const hasWater =
+        answer.includes("water");
+
+    const hasAir =
+        answer.includes("air");
+
+    const hasSun =
+        answer.includes("sun") ||
+        answer.includes("sunlight");
+
+    if (hasWater && hasAir && hasSun) {
+
+        feedback.textContent =
+            "✅ Excellent! You found all three things.";
+
+        feedback.className =
+            "feedback correct";
+
+        setTimeout(() => {
+
+            currentCard = 1;
+            missionCard.plant = 1;
+
+            renderPlantCard();
+
+        }, 700);
+
+    } else {
+
+        let missing = [];
+
+        if (!hasWater) missing.push("water");
+        if (!hasAir) missing.push("air");
+        if (!hasSun) missing.push("sunlight");
+
+        feedback.textContent =
+            "❌ You still need: " + missing.join(", ");
+
+        feedback.className =
+            "feedback wrong";
+
+    }
+
+}
+
+
+function plantBack() {
+
+    if (currentCard > 0) {
+
+        currentCard--;
+
+        missionCard.plant = currentCard;
+
+        renderPlantCard();
+
+    }
+
+}
+
+
+function finishPlant() {
+
+    missionCompleted.plant = true;
+
+    closeOverlay();
+
+    document.getElementById("completeScreen").style.display =
+        "flex";
+
+}
+
+
+/* =========================================================
+   INITIAL PLAYER POSITION
+========================================================= */
+
+player.style.left = playerX + "px";
+player.style.top = playerY + "px";
+
+</script>
+
+</body>
+</html>
