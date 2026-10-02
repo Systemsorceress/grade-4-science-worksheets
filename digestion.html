@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digestive System | Year 4</title>
+
+<style>
+/* =========================================================
+   GLOBAL
+========================================================= */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background: #101827;
+    color: #172033;
+    overflow: hidden;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+.topbar {
+    height: 70px;
+    background: #172033;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
+    gap: 20px;
+    z-index: 10;
+}
+
+.brand {
+    font-weight: 800;
+    font-size: 20px;
+    min-width: 240px;
+}
+
+.progress-wrap {
+    flex: 1;
+    height: 12px;
+    background: #344057;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#progress {
+    height: 100%;
+    width: 5.5%;
+    background: #55d6be;
+    border-radius: 20px;
+    transition: width .35s ease;
+}
+
+.slide-number {
+    font-weight: bold;
+    min-width: 65px;
+    text-align: right;
+}
+
+/* =========================================================
+   SLIDE AREA
+========================================================= */
+#slides {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding: 38px 55px 100px;
+    overflow-y: auto;
+    background: #f5f7fb;
+}
+
+.slide.active {
+    display: block;
+    animation: fadeIn .35s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+h1 {
+    font-size: clamp(38px, 5vw, 66px);
+    margin: 0 0 18px;
+    line-height: 1.05;
+}
+
+h2 {
+    font-size: clamp(30px, 4vw, 48px);
+    margin: 0 0 15px;
+}
+
+h3 {
+    font-size: 25px;
+}
+
+p {
+    font-size: 21px;
+    line-height: 1.5;
+}
+
+.subtitle {
+    font-size: 25px;
+    color: #526078;
+}
+
+.highlight {
+    color: #168b77;
+    font-weight: 800;
+}
+
+.small {
+    font-size: 17px;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+.btn {
+    border: 0;
+    border-radius: 14px;
+    padding: 15px 24px;
+    font-size: 18px;
+    font-weight: 800;
+    background: #172033;
+    color: white;
+    transition: .2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px #0002;
+}
+
+.btn.green {
+    background: #1ca58b;
+}
+
+.btn.orange {
+    background: #f39a38;
+}
+
+.btn.red {
+    background: #e85c5c;
+}
+
+.btn.blue {
+    background: #4278d4;
+}
+
+.btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+.hero {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 50px;
+    align-items: center;
+    height: 100%;
+    max-width: 1250px;
+    margin: auto;
+}
+
+.hero-image {
+    width: 100%;
+    max-height: 470px;
+    object-fit: contain;
+    border-radius: 25px;
+    box-shadow: 0 15px 35px #0002;
+    background: white;
+}
+
+.kicker {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 30px;
+    background: #d8f6ef;
+    color: #147b6a;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 8px 22px #00000012;
+}
+
+.click-card {
+    border: 3px solid transparent;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.click-card:hover {
+    border-color: #55d6be;
+    transform: translateY(-3px);
+}
+
+.click-card.selected {
+    border-color: #1ca58b;
+    background: #e8faf6;
+}
+
+.organ-icon {
+    font-size: 45px;
+}
+
+.function {
+    display: none;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #edf3ff;
+}
+
+.click-card.selected .function {
+    display: block;
+}
+
+/* =========================================================
+   IMAGE + CONTENT LAYOUT
+========================================================= */
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.visual img {
+    max-width: 100%;
+    max-height: 430px;
+    object-fit: contain;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 10px 25px #0002;
+}
+
+.info-box {
+    background: white;
+    padding: 28px;
+    border-radius: 22px;
+    box-shadow: 0 8px 22px #00000012;
+}
+
+/* =========================================================
+   QUIZ
+========================================================= */
+.quiz-box {
+    max-width: 850px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px #0002;
+}
+
+.question {
+    font-size: 27px;
+    font-weight: 800;
+    margin-bottom: 22px;
+}
+
+.options {
+    display: grid;
+    gap: 12px;
+}
+
+.option {
+    padding: 17px;
+    border: 3px solid #e0e5ee;
+    border-radius: 15px;
+    background: white;
+    font-size: 19px;
+    text-align: left;
+    transition: .2s;
+}
+
+.option:hover {
+    border-color: #55d6be;
+}
+
+.option.correct {
+    background: #dff7ed;
+    border-color: #1ca58b;
+}
+
+.option.wrong {
+    background: #ffe2e2;
+    border-color: #e85c5c;
+}
+
+.feedback {
+    margin-top: 18px;
+    font-weight: 800;
+    min-height: 28px;
+}
+
+/* =========================================================
+   SEQUENCE
+========================================================= */
+.sequence-area {
+    max-width: 1000px;
+    margin: 30px auto;
+}
+
+.sequence-bank,
+.sequence-answer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    min-height: 80px;
+    padding: 18px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 7px 20px #0001;
+}
+
+.sequence-item {
+    padding: 15px 18px;
+    background: #e9efff;
+    border-radius: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.sequence-item:hover {
+    border-color: #4278d4;
+}
+
+.sequence-answer .sequence-item {
+    background: #dff7ed;
+}
+
+/* =========================================================
+   MATCHING
+========================================================= */
+.match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 900px;
+    margin: 25px auto;
+}
+
+.match-item {
+    padding: 20px;
+    background: white;
+    border: 3px solid #e0e5ee;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.match-item.selected {
+    border-color: #4278d4;
+    background: #edf3ff;
+}
+
+.match-item.matched {
+    border-color: #1ca58b;
+    background: #dff7ed;
+    cursor: default;
+}
+
+/* =========================================================
+   FOOD JOURNEY
+========================================================= */
+.journey {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 30px auto;
+    max-width: 1150px;
+}
+
+.journey-step {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    min-width: 135px;
+    text-align: center;
+    box-shadow: 0 7px 18px #0001;
+}
+
+.arrow {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 75px;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    z-index: 20;
+}
+
+.nav-group {
+    display: flex;
+    gap: 10px;
+}
+
+#scoreDisplay {
+    font-weight: 800;
+    color: #147b6a;
+}
+
+/* =========================================================
+   SPECIAL SLIDES
+========================================================= */
+.center {
+    text-align: center;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.big-emoji {
+    font-size: 80px;
+}
+
+.statement {
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px #0002;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.answer-reveal {
+    display: none;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 15px;
+    background: #dff7ed;
+    font-weight: 800;
+}
+
+.show-answer {
+    display: block;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 850px) {
+    .hero,
+    .two-col {
+        grid-template-columns: 1fr;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .slide {
+        padding: 25px 20px 100px;
+    }
+
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .brand {
+        min-width: auto;
+        font-size: 15px;
+    }
+
+    .match-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+<header class="topbar">
+    <div class="brand">🫀 Digestive System | Year 4</div>
+
+    <div class="progress-wrap">
+        <div id="progress"></div>
+    </div>
+
+    <div class="slide-number" id="slideNumber">1 / 18</div>
+</header>
+
+
+<main id="slides">
+
+<!-- =====================================================
+     SLIDE 1
+===================================================== -->
+<section class="slide active">
+    <div class="hero">
+
+        <div>
+            <span class="kicker">🍎 FOOD JOURNEY</span>
+
+            <h1>
+                Where does our
+                <span class="highlight">food</span>
+                go?
+            </h1>
+
+            <p class="subtitle">
+                Let's follow a bite of food through the digestive system!
+            </p>
+
+            <br>
+
+            <button class="btn green"
+                    onclick="nextSlide()">
+                🚀 START THE JOURNEY
+            </button>
+        </div>
+
+        <div>
+            <img class="hero-image"
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZfnlQGxxYVA-dyH3NI0Lx_DwXEeANGdC3i4kKlxhqJA&s=10"
+                 alt="Tom eating">
+        </div>
+
+    </div>
+</section>
+
+
+<!-- =====================================================
+     SLIDE 2
+===================================================== -->
+<section class="slide">
+
+    <div class="two-col">
+
+        <div class="visual">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaPDyetawlsnN0IaOa2C-Ef5azoJIKDI9fUp0fFq9bX5PbCkR6DvS3pHOL&s=10"
+                 alt="Digestive system diagram">
+        </div>
+
+        <div>
+            <span class="kicker">🔎 BIG IDEA</span>
+
+            <h2>What is digestion?</h2>
+
+            <div class="info-box">
+
+                <p>
+                    <strong>Digestion</strong> is the process of
+                    breaking food down into smaller pieces so that
+                    our body can use it.
+                </p>
+
+                <div class="journey">
+
+                    <div class="journey-step">
+                        🍎<br>
+                        Food
+                    </div>
+
+                    <div class="arrow">→</div>
+
+                    <div class="journey-step">
+                        🔨<br>
+                        Broken down
+                    </div>
+
+                    <div class="arrow">→</div>
+
+                    <div class="journey-step">
+                        💪<br>
+                        Body uses it
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 3
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🗺️ EXPLORE</span>
+
+        <h2>Meet the Digestive System</h2>
+
+        <p>
+            Click each organ to discover what it does.
+        </p>
+
+        <div class="two-col">
+
+            <div class="visual">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaPDyetawlsnN0IaOa2C-Ef5azoJIKDI9fUp0fFq9bX5PbCkR6DvS3pHOL&s=10"
+                     alt="Digestive system">
+            </div>
+
+            <div class="card-grid" style="grid-template-columns:1fr 1fr; margin:0;">
+
+                <div class="card click-card"
+                     onclick="toggleOrgan(this)">
+                    <div class="organ-icon">👄</div>
+                    <h3>Mouth</h3>
+                    <div class="function">
+                        Chews food and mixes it with saliva.
+                    </div>
+                </div>
+
+                <div class="card click-card"
+                     onclick="toggleOrgan(this)">
+                    <div class="organ-icon">🛝</div>
+                    <h3>Oesophagus</h3>
+                    <div class="function">
+                        Carries food to the stomach.
+                    </div>
+                </div>
+
+                <div class="card click-card"
+                     onclick="toggleOrgan(this)">
+                    <div class="organ-icon">🥣</div>
+                    <h3>Stomach</h3>
+                    <div class="function">
+                        Mixes food and helps break it down.
+                    </div>
+                </div>
+
+                <div class="card click-card"
+                     onclick="toggleOrgan(this)">
+                    <div class="organ-icon">🌀</div>
+                    <h3>Small intestine</h3>
+                    <div class="function">
+                        Absorbs most nutrients.
+                    </div>
+                </div>
+
+                <div class="card click-card"
+                     onclick="toggleOrgan(this)">
+                    <div class="organ-icon">💧</div>
+                    <h3>Large intestine</h3>
+                    <div class="function">
+                        Absorbs water.
+                    </div>
+                </div>
+
+                <div class="card click-card"
+                     onclick="toggleOrgan(this)">
+                    <div class="organ-icon"></div>
+                    <h3>Anus</h3>
+                    <div class="function">
+                        Waste leaves the body here.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 4
+===================================================== -->
+<section class="slide">
+
+    <div class="two-col">
+
+        <div>
+            <span class="kicker">1️⃣ FIRST STOP</span>
+
+            <h2>👄 The Mouth</h2>
+
+            <div class="info-box">
+
+                <h3>What happens here?</h3>
+
+                <p>
+                    Your <strong>teeth chew</strong> food into smaller pieces.
+                </p>
+
+                <p>
+                    Your tongue moves the food around.
+                </p>
+
+                <p>
+                    <strong>Saliva</strong> mixes with food and starts
+                    breaking it down.
+                </p>
+
+                <button class="btn blue"
+                        onclick="showAnswer('mouthAnswer')">
+                    💡 Why do we chew?
+                </button>
+
+                <div id="mouthAnswer" class="answer-reveal">
+                    ✅ Chewing makes food smaller and easier to digest!
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="visual">
+
+            <img src="https://cdn.shopify.com/s/files/1/0080/2127/8786/files/Eating-gif.webp?v=1770048039"
+                 alt="Chewing animation">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 5
+===================================================== -->
+<section class="slide">
+
+    <div class="two-col">
+
+        <div class="visual">
+
+            <img src="https://i.makeagif.com/media/3-16-2015/5Df1wC.gif"
+                 alt="Oesophagus animation">
+
+        </div>
+
+        <div>
+
+            <span class="kicker">2️⃣ SECOND STOP</span>
+
+            <h2>🛝 The Oesophagus</h2>
+
+            <div class="info-box">
+
+                <p>
+                    The <strong>oesophagus</strong> is a tube that
+                    carries food from your mouth to your stomach.
+                </p>
+
+                <p>
+                    Muscles squeeze the food
+                    <strong>downwards</strong>.
+                </p>
+
+                <div class="statement"
+                     style="font-size:22px;">
+                    👄 Mouth
+                    <br>
+                    ↓
+                    <br>
+                    🛝 Oesophagus
+                    <br>
+                    ↓
+                    <br>
+                    🥣 Stomach
+                </div>
+
+                <button class="btn green"
+                        onclick="quizAnswer(this, true)">
+                    ✅ Food is pushed down by muscles
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 6
+===================================================== -->
+<section class="slide">
+
+    <div class="two-col">
+
+        <div>
+
+            <span class="kicker">3️⃣ THIRD STOP</span>
+
+            <h2>🥣 The Stomach</h2>
+
+            <div class="info-box">
+
+                <p>
+                    The stomach is like a
+                    <strong>mixing machine!</strong>
+                </p>
+
+                <ul style="font-size:21px; line-height:2;">
+                    <li>Stores food for a while</li>
+                    <li>Mixes the food</li>
+                    <li>Uses digestive juices</li>
+                    <li>Helps break food down</li>
+                </ul>
+
+                <button class="btn orange"
+                        onclick="showAnswer('stomachAnswer')">
+                    🥣 What is the stomach like?
+                </button>
+
+                <div id="stomachAnswer"
+                     class="answer-reveal">
+                    A mixing and breaking-down machine for food!
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="visual">
+
+            <img src="https://i.makeagif.com/media/3-09-2014/B2atyw.gif"
+                 alt="Stomach mixing animation">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 7
+===================================================== -->
+<section class="slide">
+
+    <div class="two-col">
+
+        <div class="visual">
+
+            <img src="https://i.makeagif.com/media/3-16-2015/gOZP31.gif"
+                 alt="Small intestine animation">
+
+        </div>
+
+        <div>
+
+            <span class="kicker">4️⃣ FOURTH STOP</span>
+
+            <h2>🌀 Small Intestine</h2>
+
+            <div class="info-box">
+
+                <p>
+                    This is a VERY important part of digestion!
+                </p>
+
+                <p>
+                    The small intestine absorbs
+                    <strong>most nutrients</strong>
+                    from our food.
+                </p>
+
+                <div class="journey">
+
+                    <div class="journey-step">
+                        🥦<br>
+                        Nutrients
+                    </div>
+
+                    <div class="arrow">→</div>
+
+                    <div class="journey-step">
+                        🩸<br>
+                        Blood
+                    </div>
+
+                    <div class="arrow">→</div>
+
+                    <div class="journey-step">
+                        💪<br>
+                        Body
+                    </div>
+
+                </div>
+
+                <p>
+                    Nutrients help us get energy,
+                    grow and repair our bodies.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 8
+===================================================== -->
+<section class="slide">
+
+    <div class="two-col">
+
+        <div>
+
+            <span class="kicker">5️⃣ FIFTH STOP</span>
+
+            <h2>💧 Large Intestine</h2>
+
+            <div class="info-box">
+
+                <p>
+                    The large intestine absorbs
+                    <strong>water</strong>
+                    from the remaining food mixture.
+                </p>
+
+                <p>
+                    The remaining material becomes more solid
+                    and eventually becomes waste.
+                </p>
+
+                <div class="statement"
+                     style="font-size:22px;">
+
+                    🍲 Food mixture
+                    <br><br>
+                    ↓
+                    <br><br>
+                    💧 Water absorbed
+                    <br><br>
+                    ↓
+                    <br><br>
+                    🚽 Waste
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="visual">
+
+            <img src="https://i.makeagif.com/media/3-16-2015/vAMCY6.gif"
+                 alt="Large intestine animation">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 9
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🧩 CHALLENGE</span>
+
+        <h2>Put the Food Journey in Order!</h2>
+
+        <p>
+            Click the organs in the correct order.
+        </p>
+
+        <div class="sequence-area">
+
+            <h3>Choose the next organ:</h3>
+
+            <div id="sequenceBank" class="sequence-bank">
+
+                <div class="sequence-item"
+                     onclick="sequenceClick(this)">
+                    👄 Mouth
+                </div>
+
+                <div class="sequence-item"
+                     onclick="sequenceClick(this)">
+                    🛝 Oesophagus
+                </div>
+
+                <div class="sequence-item"
+                     onclick="sequenceClick(this)">
+                    🥣 Stomach
+                </div>
+
+                <div class="sequence-item"
+                     onclick="sequenceClick(this)">
+                    🌀 Small intestine
+                </div>
+
+                <div class="sequence-item"
+                     onclick="sequenceClick(this)">
+                    💧 Large intestine
+                </div>
+
+                <div class="sequence-item"
+                     onclick="sequenceClick(this)">
+                    Anus
+                </div>
+
+            </div>
+
+            <h3>Your journey:</h3>
+
+            <div id="sequenceAnswer"
+                 class="sequence-answer">
+            </div>
+
+            <br>
+
+            <button class="btn green"
+                    onclick="checkSequence()">
+                ✅ Check My Order
+            </button>
+
+            <div id="sequenceFeedback"
+                 class="feedback">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 10
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🌟 THE WHOLE JOURNEY</span>
+
+        <h2>Follow Food Through the Digestive System</h2>
+
+        <img src="https://i.pinimg.com/originals/56/ef/cd/56efcd7919acb3b5cb4a8e2aa413b87b.gif"
+             alt="Complete digestion animation"
+             style="
+                max-width:600px;
+                width:100%;
+                max-height:430px;
+                object-fit:contain;
+                border-radius:22px;
+                box-shadow:0 10px 25px #0002;
+                background:white;
+             ">
+
+        <div class="journey">
+
+            <div class="journey-step">👄<br><strong>Mouth</strong></div>
+            <div class="arrow">→</div>
+
+            <div class="journey-step">🛝<br><strong>Oesophagus</strong></div>
+            <div class="arrow">→</div>
+
+            <div class="journey-step">🥣<br><strong>Stomach</strong></div>
+            <div class="arrow">→</div>
+
+            <div class="journey-step">🌀<br><strong>Small intestine</strong></div>
+            <div class="arrow">→</div>
+
+            <div class="journey-step">💧<br><strong>Large intestine</strong></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 11
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🍕 IMAGINE THIS!</span>
+
+        <h2>Follow a Slice of Pizza</h2>
+
+        <div class="journey">
+
+            <div class="journey-step">
+                🍕<br>
+                <strong>Pizza</strong>
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="journey-step">
+                👄<br>
+                <strong>Mouth</strong><br>
+                <span class="small">Chew it</span>
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="journey-step">
+                🛝<br>
+                <strong>Oesophagus</strong><br>
+                <span class="small">Pushes it down</span>
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="journey-step">
+                🥣<br>
+                <strong>Stomach</strong><br>
+                <span class="small">Mixes it</span>
+            </div>
+
+        </div>
+
+        <div class="journey">
+
+            <div class="journey-step">
+                🌀<br>
+                <strong>Small intestine</strong><br>
+                <span class="small">Nutrients enter blood</span>
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="journey-step">
+                💧<br>
+                <strong>Large intestine</strong><br>
+                <span class="small">Water absorbed</span>
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="journey-step">
+                🚽<br>
+                <strong>Waste</strong><br>
+                <span class="small">Leaves body</span>
+            </div>
+
+        </div>
+
+        <button class="btn green"
+                onclick="nextSlide()">
+            🍕 Pizza Journey Complete!
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 12
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🕵️ GUESS THE ORGAN</span>
+
+        <h2>Who Am I?</h2>
+
+        <div class="quiz-box">
+
+            <div class="question">
+                “I am a muscular tube.
+                I carry food from the mouth to the stomach.”
+            </div>
+
+            <div class="options">
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    👄 Mouth
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,true)">
+                    🛝 Oesophagus
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    🥣 Stomach
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    💧 Large intestine
+                </button>
+
+            </div>
+
+            <div class="feedback"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 13
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🔗 MATCH IT!</span>
+
+        <h2>Organ → Function</h2>
+
+        <p>
+            Click an organ and then click its matching function.
+        </p>
+
+        <div class="match-grid">
+
+            <div class="match-item organ-match"
+                 data-match="mouth"
+                 onclick="selectMatch(this)">
+                👄 Mouth
+            </div>
+
+            <div class="match-item function-match"
+                 data-match="stomach"
+                 onclick="selectMatch(this)">
+                🥣 Mixes and breaks down food
+            </div>
+
+            <div class="match-item organ-match"
+                 data-match="stomach"
+                 onclick="selectMatch(this)">
+                🥣 Stomach
+            </div>
+
+            <div class="match-item function-match"
+                 data-match="mouth"
+                 onclick="selectMatch(this)">
+                👄 Chews food and mixes it with saliva
+            </div>
+
+            <div class="match-item organ-match"
+                 data-match="small"
+                 onclick="selectMatch(this)">
+                🌀 Small intestine
+            </div>
+
+            <div class="match-item function-match"
+                 data-match="large"
+                 onclick="selectMatch(this)">
+                💧 Absorbs water
+            </div>
+
+            <div class="match-item organ-match"
+                 data-match="large"
+                 onclick="selectMatch(this)">
+                💧 Large intestine
+            </div>
+
+            <div class="match-item function-match"
+                 data-match="small"
+                 onclick="selectMatch(this)">
+                🌀 Absorbs most nutrients
+            </div>
+
+        </div>
+
+        <div id="matchFeedback"
+             class="feedback">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 14
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🚦 WHAT HAPPENS NEXT?</span>
+
+        <h2>Follow the Journey</h2>
+
+        <div class="quiz-box">
+
+            <div class="question">
+                🍎 Food has been chewed in the mouth.
+                Where does it go next?
+            </div>
+
+            <div class="options">
+
+                <button class="option"
+                        onclick="answerQuiz(this,true)">
+                    🛝 Oesophagus
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    💧 Large intestine
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                     Anus
+                </button>
+
+            </div>
+
+            <div class="feedback"></div>
+
+        </div>
+
+        <div class="quiz-box">
+
+            <div class="question">
+                🥣 Food has reached the stomach.
+                Where does it go next?
+            </div>
+
+            <div class="options">
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    👄 Mouth
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,true)">
+                    🌀 Small intestine
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    💧 Large intestine
+                </button>
+
+            </div>
+
+            <div class="feedback"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 15
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🧠 FIX THE MISTAKE</span>
+
+        <h2>Can You Spot the Mistake?</h2>
+
+        <div class="statement">
+
+            “The large intestine absorbs most nutrients.”
+
+            <br><br>
+
+            <button class="btn red"
+                    onclick="showAnswer('mistake1')">
+                ❌ That's wrong!
+            </button>
+
+            <div id="mistake1"
+                 class="answer-reveal">
+                ✅ Correct:
+                The <strong>small intestine</strong>
+                absorbs most nutrients.
+            </div>
+
+        </div>
+
+        <div class="statement">
+
+            “Food travels directly from the mouth
+            to the stomach.”
+
+            <br><br>
+
+            <button class="btn red"
+                    onclick="showAnswer('mistake2')">
+                ❌ Fix it!
+            </button>
+
+            <div id="mistake2"
+                 class="answer-reveal">
+                ✅ Correct:
+                Food travels through the
+                <strong>oesophagus</strong>
+                before reaching the stomach.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 16
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🏆 SPEED CHALLENGE</span>
+
+        <h2>Digestive System Challenge!</h2>
+
+        <p>
+            Answer the questions and build your score.
+        </p>
+
+        <div id="speedQuiz"
+             class="quiz-box">
+
+            <div class="question"
+                 id="speedQuestion">
+                Where does digestion begin?
+            </div>
+
+            <div class="options"
+                 id="speedOptions">
+
+                <button class="option"
+                        onclick="speedAnswer(this, true)">
+                    👄 Mouth
+                </button>
+
+                <button class="option"
+                        onclick="speedAnswer(this, false)">
+                    🥣 Stomach
+                </button>
+
+                <button class="option"
+                        onclick="speedAnswer(this, false)">
+                    💧 Large intestine
+                </button>
+
+            </div>
+
+            <div id="speedFeedback"
+                 class="feedback">
+            </div>
+
+            <br>
+
+            <button id="speedNext"
+                    class="btn green"
+                    style="display:none"
+                    onclick="nextSpeedQuestion()">
+                Next →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 17
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🎓 FINAL MISSION</span>
+
+        <h2>Can You Explain the Journey?</h2>
+
+        <div class="card-grid">
+
+            <div class="card">
+                <div class="organ-icon">👄</div>
+                <h3>Mouth</h3>
+                <p>Chews food and mixes it with saliva.</p>
+            </div>
+
+            <div class="card">
+                <div class="organ-icon">🛝</div>
+                <h3>Oesophagus</h3>
+                <p>Moves food to the stomach.</p>
+            </div>
+
+            <div class="card">
+                <div class="organ-icon">🥣</div>
+                <h3>Stomach</h3>
+                <p>Mixes and breaks down food.</p>
+            </div>
+
+            <div class="card">
+                <div class="organ-icon">🌀</div>
+                <h3>Small intestine</h3>
+                <p>Absorbs most nutrients.</p>
+            </div>
+
+            <div class="card">
+                <div class="organ-icon">💧</div>
+                <h3>Large intestine</h3>
+                <p>Absorbs water.</p>
+            </div>
+
+            <div class="card">
+                <div class="organ-icon">🚽</div>
+                <h3>Anus</h3>
+                <p>Waste leaves the body.</p>
+            </div>
+
+        </div>
+
+        <button class="btn green"
+                onclick="nextSlide()">
+            ⭐ I CAN EXPLAIN IT!
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SLIDE 18
+===================================================== -->
+<section class="slide">
+
+    <div class="center">
+
+        <span class="kicker">🎟️ EXIT TICKET</span>
+
+        <h2>What Have You Learned?</h2>
+
+        <div class="quiz-box">
+
+            <h3>1. What is digestion?</h3>
+
+            <textarea
+                style="width:100%;height:80px;border:2px solid #ddd;border-radius:12px;padding:12px;font-size:18px;"
+                placeholder="Type your answer..."></textarea>
+
+            <h3>2. Which organ absorbs most nutrients?</h3>
+
+            <div class="options">
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    Stomach
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,true)">
+                    Small intestine
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    Large intestine
+                </button>
+
+            </div>
+
+            <h3>3. Which organ absorbs water?</h3>
+
+            <div class="options">
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    Mouth
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,true)">
+                    Large intestine
+                </button>
+
+                <button class="option"
+                        onclick="answerQuiz(this,false)">
+                    Oesophagus
+                </button>
+
+            </div>
+
+            <br>
+
+            <button class="btn green"
+                    onclick="finishDeck()">
+                🎉 FINISH
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+<nav class="navigation">
+
+    <div class="nav-group">
+
+        <button class="btn"
+                onclick="previousSlide()">
+            ← Back
+        </button>
+
+        <button class="btn"
+                onclick="nextSlide()">
+            Next →
+        </button>
+
+    </div>
+
+    <div id="scoreDisplay">
+        ⭐ Score: 0
+    </div>
+
+    <div class="nav-group">
+
+        <button class="btn blue"
+                onclick="toggleFullscreen()">
+            ⛶ Fullscreen
+        </button>
+
+        <button class="btn"
+                onclick="goHome()">
+            🏠 Start
+        </button>
+
+    </div>
+
+</nav>
+
+
+<script>
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let currentSlide = 0;
+let score = 0;
+
+const slides = document.querySelectorAll(".slide");
+
+function updateUI() {
+
+    slides.forEach((slide, index) => {
+        slide.classList.toggle("active", index === currentSlide);
+    });
+
+    const percent =
+        ((currentSlide + 1) / slides.length) * 100;
+
+    document.getElementById("progress").style.width =
+        percent + "%";
+
+    document.getElementById("slideNumber").textContent =
+        `${currentSlide + 1} / ${slides.length}`;
+
+    document.getElementById("scoreDisplay").textContent =
+        `⭐ Score: ${score}`;
+
+    window.scrollTo(0, 0);
+
+    document.querySelector(".slide.active").scrollTop = 0;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function nextSlide() {
+
+    if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateUI();
+    }
+
+}
+
+function previousSlide() {
+
+    if (currentSlide > 0) {
+        currentSlide--;
+        updateUI();
+    }
+
+}
+
+function goHome() {
+
+    currentSlide = 0;
+    updateUI();
+
+}
+
+
+/* =========================================================
+   KEYBOARD NAVIGATION
+========================================================= */
+
+document.addEventListener("keydown", function(e) {
+
+    if (
+        e.target.tagName === "TEXTAREA" ||
+        e.target.tagName === "INPUT"
+    ) {
+        return;
+    }
+
+    if (e.key === "ArrowRight" || e.key === " ") {
+        e.preventDefault();
+        nextSlide();
+    }
+
+    if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        previousSlide();
+    }
+
+});
+
+
+/* =========================================================
+   FULLSCREEN
+========================================================= */
+
+function toggleFullscreen() {
+
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+
+}
+
+
+/* =========================================================
+   ORGAN CARDS
+========================================================= */
+
+function toggleOrgan(card) {
+
+    card.classList.toggle("selected");
+
+}
+
+
+/* =========================================================
+   SHOW ANSWER
+========================================================= */
+
+function showAnswer(id) {
+
+    const element = document.getElementById(id);
+
+    element.classList.toggle("show-answer");
+
+}
+
+
+/* =========================================================
+   GENERIC QUIZ
+========================================================= */
+
+function answerQuiz(button, correct) {
+
+    const parent =
+        button.closest(".quiz-box");
+
+    const buttons =
+        parent.querySelectorAll(".option");
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+    });
+
+    if (correct) {
+
+        button.classList.add("correct");
+
+        const feedback =
+            parent.querySelector(".feedback");
+
+        if (feedback) {
+            feedback.textContent =
+                "✅ Correct! Great thinking!";
+        }
+
+        score++;
+
+    } else {
+
+        button.classList.add("wrong");
+
+        const feedback =
+            parent.querySelector(".feedback");
+
+        if (feedback) {
+            feedback.textContent =
+                "❌ Not quite. Try thinking about the food journey.";
+        }
+
+    }
+
+    updateUI();
+
+}
+
+
+/* =========================================================
+   SIMPLE BUTTON QUIZ
+========================================================= */
+
+function quizAnswer(button, correct) {
+
+    if (correct) {
+
+        button.style.background = "#dff7ed";
+        button.style.border = "3px solid #1ca58b";
+
+        score++;
+        updateUI();
+
+    }
+
+}
+
+
+/* =========================================================
+   SEQUENCE GAME
+========================================================= */
+
+let sequence = [];
+
+function sequenceClick(item) {
+
+    const text = item.textContent.trim();
+
+    if (sequence.includes(text)) {
+        return;
+    }
+
+    sequence.push(text);
+
+    const clone = item.cloneNode(true);
+
+    clone.onclick = function() {
+        removeSequence(text, clone);
+    };
+
+    document.getElementById("sequenceAnswer")
+        .appendChild(clone);
+
+    item.style.opacity = ".3";
+    item.style.pointerEvents = "none";
+
+}
+
+function removeSequence(text, clone) {
+
+    sequence =
+        sequence.filter(item => item !== text);
+
+    clone.remove();
+
+    const bankItems =
+        document.querySelectorAll("#sequenceBank .sequence-item");
+
+    bankItems.forEach(item => {
+
+        if (item.textContent.trim() === text) {
+            item.style.opacity = "1";
+            item.style.pointerEvents = "auto";
+        }
+
+    });
+
+}
+
+function checkSequence() {
+
+    const correct = [
+        "👄 Mouth",
+        "🛝 Oesophagus",
+        "🥣 Stomach",
+        "🌀 Small intestine",
+        "💧 Large intestine",
+        " Anus"
+    ];
+
+    const feedback =
+        document.getElementById("sequenceFeedback");
+
+    if (
+        sequence.length === correct.length &&
+        sequence.every((item, index) =>
+            item === correct[index]
+        )
+    ) {
+
+        feedback.textContent =
+            "🎉 Perfect! You followed the entire food journey!";
+
+        score += 3;
+
+    } else {
+
+        feedback.textContent =
+            "❌ Almost! Remember: Mouth → Oesophagus → Stomach → Small intestine → Large intestine → Anus";
+
+    }
+
+    updateUI();
+
+}
+
+
+/* =========================================================
+   MATCHING GAME
+========================================================= */
+
+let firstMatch = null;
+
+function selectMatch(item) {
+
+    if (item.classList.contains("matched")) {
+        return;
+    }
+
+    if (!firstMatch) {
+
+        firstMatch = item;
+        item.classList.add("selected");
+        return;
+
+    }
+
+    if (
+        firstMatch !== item &&
+        firstMatch.dataset.match === item.dataset.match
+    ) {
+
+        firstMatch.classList.remove("selected");
+        firstMatch.classList.add("matched");
+
+        item.classList.add("matched");
+
+        score++;
+        document.getElementById("matchFeedback").textContent =
+            "✅ Match!";
+
+        firstMatch = null;
+
+        updateUI();
+
+    } else {
+
+        item.classList.add("selected");
+
+        setTimeout(() => {
+
+            if (firstMatch) {
+                firstMatch.classList.remove("selected");
+            }
+
+            item.classList.remove("selected");
+
+            firstMatch = null;
+
+        }, 600);
+
+        document.getElementById("matchFeedback").textContent =
+            "❌ These don't match. Try again!";
+
+    }
+
+}
+
+
+/* =========================================================
+   SPEED QUIZ
+========================================================= */
+
+const speedQuestions = [
+
+    {
+        question: "Where does digestion begin?",
+        options: ["👄 Mouth", "🥣 Stomach", "💧 Large intestine"],
+        answer: 0
+    },
+
+    {
+        question: "Which organ carries food to the stomach?",
+        options: ["🌀 Small intestine", "🛝 Oesophagus", " Anus"],
+        answer: 1
+    },
+
+    {
+        question: "Which organ mixes food?",
+        options: ["🥣 Stomach", "👄 Mouth", "💧 Large intestine"],
+        answer: 0
+    },
+
+    {
+        question: "Where are most nutrients absorbed?",
+        options: ["🥣 Stomach", "🌀 Small intestine", " Anus"],
+        answer: 1
+    },
+
+    {
+        question: "Which organ absorbs water?",
+        options: ["💧 Large intestine", "👄 Mouth", "🛝 Oesophagus"],
+        answer: 0
+    }
+
+];
+
+let speedIndex = 0;
+
+function loadSpeedQuestion() {
+
+    const q =
+        speedQuestions[speedIndex];
+
+    document.getElementById("speedQuestion")
+        .textContent = q.question;
+
+    const container =
+        document.getElementById("speedOptions");
+
+    container.innerHTML = "";
+
+    q.options.forEach((option, index) => {
+
+        const btn =
+            document.createElement("button");
+
+        btn.className = "option";
+        btn.textContent = option;
+
+        btn.onclick = function() {
+            speedAnswer(btn, index === q.answer);
+        };
+
+        container.appendChild(btn);
+
+    });
+
+    document.getElementById("speedFeedback")
+        .textContent = "";
+
+    document.getElementById("speedNext")
+        .style.display = "none";
+
+}
+
+function speedAnswer(button, correct) {
+
+    const buttons =
+        document.querySelectorAll("#speedOptions .option");
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+    });
+
+    if (correct) {
+
+        button.classList.add("correct");
+
+        document.getElementById("speedFeedback")
+            .textContent = "🎉 Correct!";
+
+        score++;
+
+    } else {
+
+        button.classList.add("wrong");
+
+        document.getElementById("speedFeedback")
+            .textContent = "❌ Try the next one!";
+
+    }
+
+    document.getElementById("speedNext")
+        .style.display = "inline-block";
+
+    updateUI();
+
+}
+
+function nextSpeedQuestion() {
+
+    speedIndex++;
+
+    if (speedIndex >= speedQuestions.length) {
+
+        document.getElementById("speedQuestion")
+            .textContent =
+            "🏆 Challenge Complete!";
+
+        document.getElementById("speedOptions")
+            .innerHTML =
+            "<p>Excellent work! You completed the digestive system challenge.</p>";
+
+        document.getElementById("speedNext")
+            .style.display = "none";
+
+        return;
+    }
+
+    loadSpeedQuestion();
+
+}
+
+
+/* =========================================================
+   FINISH
+========================================================= */
+
+function finishDeck() {
+
+    const slide =
+        document.querySelector(".slide.active");
+
+    slide.innerHTML = `
+
+        <div class="center"
+             style="padding-top:80px;">
+
+            <div class="big-emoji">🎉</div>
+
+            <h1>Fantastic Work!</h1>
+
+            <p class="subtitle">
+                You completed the Digestive System journey.
+            </p>
+
+            <div class="statement">
+
+                ⭐ Your Score
+
+                <div style="
+                    font-size:70px;
+                    color:#168b77;
+                    margin:20px;
+                ">
+                    ${score}
+                </div>
+
+                <p>
+                    Remember:
+                    <strong>
+                    Mouth → Oesophagus → Stomach →
+                    Small intestine → Large intestine → Anus
+                    </strong>
+                </p>
+
+            </div>
+
+            <button class="btn green"
+                    onclick="goHome()">
+                🔄 Start Again
+            </button>
+
+        </div>
+    `;
+
+}
+
+
+/* =========================================================
+   INITIALISE
+========================================================= */
+
+updateUI();
+
+</script>
+
+</body>
+</html>

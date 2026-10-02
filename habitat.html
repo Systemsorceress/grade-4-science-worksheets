@@ -167,6 +167,18 @@ textarea{width:100%;min-height:80px;resize:vertical}
  .branches{gap:8px}.node{min-width:130px;font-size:13px;padding:10px}
  .menu-grid{grid-template-columns:1fr}
 }
+@media print{
+ @page{size:A4 landscape;margin:12mm}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact;animation:none!important;transition:none!important}
+ html,body{height:auto;background:#fff}
+ #app{height:auto;display:block;overflow:visible}
+ .topbar,.footer-nav,.menu-overlay,.progress-wrap,button.primary,.reset{display:none!important}
+ main{position:static}
+ .slide,.slide.active{display:block;position:static;inset:auto;overflow:visible;padding:0;break-after:page;page-break-after:always}
+ .slide:last-child{break-after:auto;page-break-after:auto}
+ .hero{height:auto;min-height:150mm}
+ .card,.panel,.scene,.key-board{box-shadow:none;break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -764,6 +776,7 @@ textarea{width:100%;min-height:80px;resize:vertical}
 
 <footer class="footer-nav">
 <button class="navbtn home-btn" onclick="openMenu()" aria-label="Open slide menu">☰ Menu</button>
+<button class="navbtn home-btn" onclick="window.print()" aria-label="Print or save as PDF">🖨️ Print / PDF</button>
 <button class="navbtn" id="prevBtn" onclick="prevSlide()">← Previous</button>
 <div class="slide-count" id="slideCount">1 / 36</div>
 <button class="navbtn" id="nextBtn" onclick="nextSlide()">Next →</button>
