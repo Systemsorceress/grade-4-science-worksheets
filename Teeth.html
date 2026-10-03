@@ -1,0 +1,3073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Explore the Human Mouth & Teeth</title>
+
+<style>
+    :root {
+        --purple: #6c63ff;
+        --purple-dark: #5148d8;
+        --pink: #ff7aa8;
+        --blue: #4dabf7;
+        --green: #51cf66;
+        --orange: #ff922b;
+        --yellow: #ffd43b;
+        --red: #ff6b6b;
+        --dark: #263238;
+        --muted: #667085;
+        --bg: #f5f7ff;
+        --white: #ffffff;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: var(--bg);
+        color: var(--dark);
+    }
+
+    button {
+        font-family: inherit;
+    }
+
+    .app {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    /* HEADER */
+
+    header {
+        background: linear-gradient(135deg, var(--purple), #8b7cff);
+        color: white;
+        padding: 28px;
+        border-radius: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 25px rgba(108, 99, 255, .2);
+    }
+
+    header h1 {
+        margin: 0 0 8px;
+        font-size: clamp(28px, 5vw, 44px);
+    }
+
+    header p {
+        margin: 0;
+        font-size: 17px;
+        opacity: .95;
+    }
+
+    /* PROGRESS */
+
+    .progress-card {
+        background: white;
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 18px rgba(0,0,0,.07);
+    }
+
+    .progress-labels {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-bottom: 12px;
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .progress-label {
+        color: #98a2b3;
+    }
+
+    .progress-label.active {
+        color: var(--purple);
+    }
+
+    .progress-track {
+        height: 12px;
+        background: #e9eaf5;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        width: 25%;
+        height: 100%;
+        background: linear-gradient(90deg, var(--purple), var(--pink));
+        border-radius: 20px;
+        transition: width .4s ease;
+    }
+
+    /* SECTIONS */
+
+    .section {
+        display: none;
+        animation: fadeIn .35s ease;
+    }
+
+    .section.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .section-title {
+        margin-bottom: 8px;
+        font-size: clamp(25px, 4vw, 36px);
+    }
+
+    .section-description {
+        color: var(--muted);
+        margin-top: 0;
+        margin-bottom: 22px;
+        font-size: 17px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 22px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 6px 20px rgba(0,0,0,.07);
+    }
+
+    /* BUTTONS */
+
+    .btn {
+        border: none;
+        padding: 13px 20px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 15px;
+        transition: transform .15s, box-shadow .15s, background .15s;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-primary {
+        background: var(--purple);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: var(--purple-dark);
+        box-shadow: 0 5px 15px rgba(108,99,255,.25);
+    }
+
+    .btn-secondary {
+        background: #eef0ff;
+        color: var(--purple-dark);
+    }
+
+    .btn-success {
+        background: var(--green);
+        color: white;
+    }
+
+    .btn-orange {
+        background: var(--orange);
+        color: white;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+    }
+
+    /* MOUTH */
+
+    .mouth-layout {
+        display: grid;
+        grid-template-columns: minmax(300px, 1fr) minmax(280px, .75fr);
+        gap: 24px;
+        align-items: start;
+    }
+
+    .mouth-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    .mouth {
+        position: relative;
+        width: min(720px, 95%);
+        aspect-ratio: 800 / 1000;
+        background: white;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0,0,0,.12);
+    }
+
+    .mouth-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    /* TOOTH HOTSPOTS */
+
+    .tooth-hotspot {
+        position: absolute;
+        border: 3px solid transparent;
+        background: rgba(255,255,255,0);
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 5;
+        transition: .2s;
+        padding: 0;
+    }
+
+    .tooth-hotspot:hover {
+        background: rgba(255, 146, 43, .18);
+        border-color: rgba(255, 146, 43, .65);
+    }
+
+    .tooth-hotspot.selected {
+        background: rgba(255, 146, 43, .35);
+        border-color: var(--orange);
+        box-shadow: 0 0 0 5px rgba(255,146,43,.15);
+    }
+
+    /* UPPER INCISORS
+       Moved lower as requested */
+    .hot-incisor {
+        top: 32%;
+        width: 7%;
+        height: 9%;
+    }
+
+    .hot-incisor.left1 {
+        left: 39%;
+    }
+
+    .hot-incisor.left2 {
+        left: 46%;
+    }
+
+    .hot-incisor.right1 {
+        left: 53%;
+    }
+
+    .hot-incisor.right2 {
+        left: 60%;
+    }
+
+    /* UPPER CANINES
+       Moved slightly lower */
+    .hot-canine {
+        top: 31%;
+        width: 7%;
+        height: 10%;
+    }
+
+    .hot-canine.left {
+        left: 31%;
+    }
+
+    .hot-canine.right {
+        left: 68%;
+    }
+
+    /* UPPER PREMOLARS */
+
+    .hot-premolar {
+        top: 34%;
+        width: 8%;
+        height: 10%;
+    }
+
+    .hot-premolar.left1 {
+        left: 24%;
+    }
+
+    .hot-premolar.left2 {
+        left: 17%;
+    }
+
+    .hot-premolar.right1 {
+        left: 75%;
+    }
+
+    .hot-premolar.right2 {
+        left: 82%;
+    }
+
+    /* UPPER MOLARS */
+
+    .hot-molar {
+        top: 38%;
+        width: 9%;
+        height: 11%;
+    }
+
+    .hot-molar.left1 {
+        left: 10%;
+    }
+
+    .hot-molar.left2 {
+        left: 4%;
+    }
+
+    .hot-molar.right1 {
+        left: 87%;
+    }
+
+    .hot-molar.right2 {
+        left: 81%;
+    }
+
+    /* LOWER INCISORS */
+
+    .hot-lower-incisor {
+        bottom: 26%;
+        width: 7%;
+        height: 9%;
+    }
+
+    .hot-lower-incisor.left1 {
+        left: 39%;
+    }
+
+    .hot-lower-incisor.left2 {
+        left: 46%;
+    }
+
+    .hot-lower-incisor.right1 {
+        left: 53%;
+    }
+
+    .hot-lower-incisor.right2 {
+        left: 60%;
+    }
+
+    /* LOWER CANINES */
+
+    .hot-lower-canine {
+        bottom: 29%;
+        width: 7%;
+        height: 10%;
+    }
+
+    .hot-lower-canine.left {
+        left: 31%;
+    }
+
+    .hot-lower-canine.right {
+        left: 68%;
+    }
+
+    /* LOWER PREMOLARS */
+
+    .hot-lower-premolar {
+        bottom: 34%;
+        width: 8%;
+        height: 10%;
+    }
+
+    .hot-lower-premolar.left1 {
+        left: 24%;
+    }
+
+    .hot-lower-premolar.left2 {
+        left: 17%;
+    }
+
+    .hot-lower-premolar.right1 {
+        left: 75%;
+    }
+
+    .hot-lower-premolar.right2 {
+        left: 82%;
+    }
+
+    /* LOWER MOLARS */
+
+    .hot-lower-molar {
+        bottom: 39%;
+        width: 9%;
+        height: 11%;
+    }
+
+    .hot-lower-molar.left1 {
+        left: 10%;
+    }
+
+    .hot-lower-molar.left2 {
+        left: 4%;
+    }
+
+    .hot-lower-molar.right1 {
+        left: 87%;
+    }
+
+    .hot-lower-molar.right2 {
+        left: 81%;
+    }
+
+    /* TOOTH INFO */
+
+    .tooth-info {
+        min-height: 360px;
+    }
+
+    .info-placeholder {
+        text-align: center;
+        padding: 50px 20px;
+        color: var(--muted);
+    }
+
+    .tooth-icon {
+        font-size: 70px;
+        margin-bottom: 10px;
+    }
+
+    .info-title {
+        color: var(--purple);
+        margin-top: 0;
+        font-size: 30px;
+    }
+
+    .info-item {
+        background: #f7f7ff;
+        border-radius: 14px;
+        padding: 13px 15px;
+        margin: 10px 0;
+    }
+
+    .info-item strong {
+        display: block;
+        color: var(--purple-dark);
+        margin-bottom: 4px;
+    }
+
+    /* TOOTH TYPES */
+
+    .tooth-type-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 18px;
+    }
+
+    .type-card {
+        border-radius: 17px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: .2s;
+    }
+
+    .type-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .type-card.inc {
+        background: #fff0f5;
+    }
+
+    .type-card.can {
+        background: #eef7ff;
+    }
+
+    .type-card.pre {
+        background: #effff1;
+    }
+
+    .type-card.mol {
+        background: #fff6e9;
+    }
+
+    .type-icon {
+        font-size: 48px;
+    }
+
+    .type-card h3 {
+        margin: 8px 0;
+    }
+
+    /* FUNCTION SIMULATION */
+
+    .function-display {
+        min-height: 280px;
+        background: #f8f9ff;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 25px;
+        text-align: center;
+    }
+
+    .food-animation {
+        font-size: 90px;
+        margin-bottom: 15px;
+    }
+
+    .food-animation.animate {
+        animation: chew .8s ease-in-out infinite alternate;
+    }
+
+    @keyframes chew {
+        from {
+            transform: translateY(0) rotate(-4deg);
+        }
+
+        to {
+            transform: translateY(10px) rotate(4deg);
+        }
+    }
+
+    .function-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    /* FIND A TOOTH */
+
+    .question-number {
+        display: inline-block;
+        background: #eeeaff;
+        color: var(--purple-dark);
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    .question {
+        font-size: 24px;
+        font-weight: bold;
+        line-height: 1.4;
+        margin: 10px 0 20px;
+    }
+
+    .answer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .answer-btn {
+        border: 2px solid #e2e4f0;
+        background: white;
+        padding: 15px;
+        border-radius: 14px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+        transition: .2s;
+    }
+
+    .answer-btn:hover {
+        border-color: var(--purple);
+        background: #f7f6ff;
+    }
+
+    .answer-btn.correct {
+        background: #e9faed;
+        border-color: var(--green);
+        color: #258b38;
+    }
+
+    .answer-btn.wrong {
+        background: #fff0f0;
+        border-color: var(--red);
+        color: #c03939;
+    }
+
+    .feedback {
+        margin-top: 18px;
+        padding: 15px;
+        border-radius: 14px;
+        font-weight: bold;
+        display: none;
+    }
+
+    .feedback.show {
+        display: block;
+    }
+
+    .feedback.correct {
+        background: #e9faed;
+        color: #258b38;
+    }
+
+    .feedback.wrong {
+        background: #fff2f2;
+        color: #c03939;
+    }
+
+    .clue {
+        background: #fff9df;
+        border-left: 5px solid var(--yellow);
+        padding: 14px;
+        border-radius: 10px;
+        margin-top: 14px;
+        display: none;
+    }
+
+    .clue.show {
+        display: block;
+    }
+
+    /* FOOD ACTIVITY */
+
+    .food-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .food-card {
+        border: 3px solid #ececf4;
+        border-radius: 18px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        background: white;
+        transition: .2s;
+    }
+
+    .food-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--purple);
+    }
+
+    .food-card.selected {
+        border-color: var(--orange);
+        background: #fff8ef;
+    }
+
+    .food-emoji {
+        font-size: 55px;
+    }
+
+    .tooth-choice-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .tooth-choice {
+        border: 2px solid #e2e4f0;
+        background: white;
+        padding: 15px;
+        border-radius: 14px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .tooth-choice.selected {
+        border-color: var(--purple);
+        background: #f0efff;
+    }
+
+    .food-result {
+        margin-top: 20px;
+        padding: 18px;
+        border-radius: 15px;
+        background: #f4f7ff;
+        display: none;
+    }
+
+    .food-result.show {
+        display: block;
+    }
+
+    /* QUIZ */
+
+    .quiz-option-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .quiz-option {
+        border: 2px solid #e1e4ee;
+        background: white;
+        padding: 17px;
+        border-radius: 14px;
+        text-align: left;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .quiz-option:hover {
+        border-color: var(--purple);
+    }
+
+    .quiz-option.correct {
+        border-color: var(--green);
+        background: #e9faed;
+    }
+
+    .quiz-option.wrong {
+        border-color: var(--red);
+        background: #fff0f0;
+    }
+
+    .quiz-feedback {
+        margin-top: 18px;
+        padding: 15px;
+        border-radius: 14px;
+        display: none;
+        font-weight: bold;
+    }
+
+    .quiz-feedback.show {
+        display: block;
+    }
+
+    .quiz-feedback.correct {
+        background: #e9faed;
+        color: #258b38;
+    }
+
+    .quiz-feedback.wrong {
+        background: #fff0f0;
+        color: #c03939;
+    }
+
+    .quiz-result {
+        text-align: center;
+        padding: 35px 20px;
+        display: none;
+    }
+
+    .score-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: #eeeaff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px auto;
+        flex-direction: column;
+    }
+
+    .score-number {
+        font-size: 42px;
+        font-weight: bold;
+        color: var(--purple);
+    }
+
+    .score-total {
+        color: var(--muted);
+    }
+
+    /* NAVIGATION */
+
+    .navigation {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 25px;
+    }
+
+    .reset-area {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .reset-btn {
+        background: transparent;
+        border: 2px solid #d8dbe8;
+        color: var(--muted);
+        padding: 10px 18px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .reset-btn:hover {
+        border-color: var(--red);
+        color: var(--red);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 900px) {
+
+        .mouth-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .tooth-type-grid,
+        .function-buttons,
+        .answer-grid,
+        .food-grid,
+        .tooth-choice-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+
+        .app {
+            padding: 12px;
+        }
+
+        header {
+            padding: 22px;
+        }
+
+        .card {
+            padding: 18px;
+        }
+
+        .progress-labels {
+            font-size: 11px;
+        }
+
+        .tooth-type-grid,
+        .function-buttons,
+        .answer-grid,
+        .food-grid,
+        .tooth-choice-grid,
+        .quiz-option-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .navigation {
+            flex-direction: column;
+        }
+
+        .navigation .btn {
+            width: 100%;
+        }
+
+        .question {
+            font-size: 20px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <header>
+        <h1>🦷 Explore the Human Mouth & Teeth</h1>
+        <p>Click, explore and discover how different teeth help us eat!</p>
+    </header>
+
+    <!-- PROGRESS -->
+
+    <div class="progress-card">
+
+        <div class="progress-labels">
+            <div class="progress-label active" id="progress1">
+                🔎 Explore
+            </div>
+
+            <div class="progress-label" id="progress2">
+                🧠 Learn
+            </div>
+
+            <div class="progress-label" id="progress3">
+                🎯 Practice
+            </div>
+
+            <div class="progress-label" id="progress4">
+                🏆 Quiz
+            </div>
+        </div>
+
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- SECTION 1: EXPLORE -->
+    <!-- ================================================= -->
+
+    <section class="section active" id="section1">
+
+        <h2 class="section-title">🔎 Explore the Mouth</h2>
+
+        <p class="section-description">
+            Click on different teeth to discover what they are called,
+            where they are found and what they do.
+        </p>
+
+        <div class="mouth-layout">
+
+            <div class="card mouth-wrapper">
+
+                <div class="mouth" id="mouth">
+
+                    <img
+                        class="mouth-image"
+                        src="https://www.bearcreekfamilydentistry.com/blog/wp-content/uploads/2022/01/AdobeStock_86108764__3___1642539354_48082.jpg"
+                        alt="Open human mouth showing teeth"
+                    >
+
+                    <!-- UPPER INCISORS -->
+
+                    <button
+                        class="tooth-hotspot hot-incisor left1"
+                        data-type="incisor"
+                        aria-label="Upper incisor">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-incisor left2"
+                        data-type="incisor"
+                        aria-label="Upper incisor">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-incisor right1"
+                        data-type="incisor"
+                        aria-label="Upper incisor">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-incisor right2"
+                        data-type="incisor"
+                        aria-label="Upper incisor">
+                    </button>
+
+
+                    <!-- UPPER CANINES -->
+
+                    <button
+                        class="tooth-hotspot hot-canine left"
+                        data-type="canine"
+                        aria-label="Upper canine">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-canine right"
+                        data-type="canine"
+                        aria-label="Upper canine">
+                    </button>
+
+
+                    <!-- UPPER PREMOLARS -->
+
+                    <button
+                        class="tooth-hotspot hot-premolar left1"
+                        data-type="premolar"
+                        aria-label="Upper premolar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-premolar left2"
+                        data-type="premolar"
+                        aria-label="Upper premolar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-premolar right1"
+                        data-type="premolar"
+                        aria-label="Upper premolar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-premolar right2"
+                        data-type="premolar"
+                        aria-label="Upper premolar">
+                    </button>
+
+
+                    <!-- UPPER MOLARS -->
+
+                    <button
+                        class="tooth-hotspot hot-molar left1"
+                        data-type="molar"
+                        aria-label="Upper molar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-molar left2"
+                        data-type="molar"
+                        aria-label="Upper molar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-molar right1"
+                        data-type="molar"
+                        aria-label="Upper molar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-molar right2"
+                        data-type="molar"
+                        aria-label="Upper molar">
+                    </button>
+
+
+                    <!-- LOWER INCISORS -->
+
+                    <button
+                        class="tooth-hotspot hot-lower-incisor left1"
+                        data-type="incisor"
+                        aria-label="Lower incisor">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-incisor left2"
+                        data-type="incisor"
+                        aria-label="Lower incisor">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-incisor right1"
+                        data-type="incisor"
+                        aria-label="Lower incisor">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-incisor right2"
+                        data-type="incisor"
+                        aria-label="Lower incisor">
+                    </button>
+
+
+                    <!-- LOWER CANINES -->
+
+                    <button
+                        class="tooth-hotspot hot-lower-canine left"
+                        data-type="canine"
+                        aria-label="Lower canine">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-canine right"
+                        data-type="canine"
+                        aria-label="Lower canine">
+                    </button>
+
+
+                    <!-- LOWER PREMOLARS -->
+
+                    <button
+                        class="tooth-hotspot hot-lower-premolar left1"
+                        data-type="premolar"
+                        aria-label="Lower premolar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-premolar left2"
+                        data-type="premolar"
+                        aria-label="Lower premolar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-premolar right1"
+                        data-type="premolar"
+                        aria-label="Lower premolar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-premolar right2"
+                        data-type="premolar"
+                        aria-label="Lower premolar">
+                    </button>
+
+
+                    <!-- LOWER MOLARS -->
+
+                    <button
+                        class="tooth-hotspot hot-lower-molar left1"
+                        data-type="molar"
+                        aria-label="Lower molar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-molar left2"
+                        data-type="molar"
+                        aria-label="Lower molar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-molar right1"
+                        data-type="molar"
+                        aria-label="Lower molar">
+                    </button>
+
+                    <button
+                        class="tooth-hotspot hot-lower-molar right2"
+                        data-type="molar"
+                        aria-label="Lower molar">
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- TOOTH INFORMATION -->
+
+            <div class="card tooth-info" id="toothInfo">
+
+                <div class="info-placeholder">
+
+                    <div class="tooth-icon">🦷</div>
+
+                    <h3>Click a Tooth!</h3>
+
+                    <p>
+                        Choose any highlighted area of the mouth
+                        to learn about that type of tooth.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOOTH TYPE OVERVIEW -->
+
+        <div class="card">
+
+            <h2>Meet the Four Types of Teeth</h2>
+
+            <p>
+                Humans have four main types of teeth. Each type has
+                a special job.
+            </p>
+
+            <div class="tooth-type-grid">
+
+                <div
+                    class="type-card inc"
+                    onclick="showToothInformation('incisor')">
+
+                    <div class="type-icon">🦷</div>
+
+                    <h3>Incisors</h3>
+
+                    <p>Cut and bite food.</p>
+
+                </div>
+
+
+                <div
+                    class="type-card can"
+                    onclick="showToothInformation('canine')">
+
+                    <div class="type-icon">🦷</div>
+
+                    <h3>Canines</h3>
+
+                    <p>Tear food.</p>
+
+                </div>
+
+
+                <div
+                    class="type-card pre"
+                    onclick="showToothInformation('premolar')">
+
+                    <div class="type-icon">🦷</div>
+
+                    <h3>Premolars</h3>
+
+                    <p>Crush food.</p>
+
+                </div>
+
+
+                <div
+                    class="type-card mol"
+                    onclick="showToothInformation('molar')">
+
+                    <div class="type-icon">🦷</div>
+
+                    <h3>Molars</h3>
+
+                    <p>Grind food.</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="navigation">
+
+            <button
+                class="btn btn-primary"
+                onclick="goToSection(2)">
+                Next: Learn →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- SECTION 2: LEARN -->
+    <!-- ================================================= -->
+
+    <section class="section" id="section2">
+
+        <h2 class="section-title">🧠 Learn What Each Tooth Does</h2>
+
+        <p class="section-description">
+            Each tooth has a shape that helps it do a special job.
+            Click a tooth type to see it in action!
+        </p>
+
+
+        <div class="card">
+
+            <div class="function-buttons">
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="showFunction('incisor', this)">
+                    🦷 Incisors
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="showFunction('canine', this)">
+                    🦷 Canines
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="showFunction('premolar', this)">
+                    🦷 Premolars
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="showFunction('molar', this)">
+                    🦷 Molars
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="function-display">
+
+                <div
+                    class="food-animation"
+                    id="functionEmoji">
+                    🍎
+                </div>
+
+                <h2 id="functionTitle">
+                    Choose a Tooth
+                </h2>
+
+                <p id="functionText">
+                    Click one of the buttons above to see how
+                    that tooth helps us eat.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Remember Their Jobs</h2>
+
+            <div class="tooth-type-grid">
+
+                <div class="type-card inc">
+                    <div class="type-icon">✂️</div>
+                    <h3>Incisors</h3>
+                    <p>Cut and bite.</p>
+                </div>
+
+                <div class="type-card can">
+                    <div class="type-icon">🔺</div>
+                    <h3>Canines</h3>
+                    <p>Tear.</p>
+                </div>
+
+                <div class="type-card pre">
+                    <div class="type-icon">🥜</div>
+                    <h3>Premolars</h3>
+                    <p>Crush.</p>
+                </div>
+
+                <div class="type-card mol">
+                    <div class="type-icon">⚙️</div>
+                    <h3>Molars</h3>
+                    <p>Grind.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="navigation">
+
+            <button
+                class="btn btn-secondary"
+                onclick="goToSection(1)">
+                ← Back
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="goToSection(3)">
+                Next: Practice →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- SECTION 3: PRACTICE -->
+    <!-- ================================================= -->
+
+    <section class="section" id="section3">
+
+        <h2 class="section-title">🎯 Find a Tooth</h2>
+
+        <p class="section-description">
+            Read the clue and choose the correct type of tooth.
+        </p>
+
+
+        <div class="card">
+
+            <div
+                class="question-number"
+                id="findQuestionNumber">
+                Question 1 of 10
+            </div>
+
+            <div
+                class="question"
+                id="findQuestion">
+                Loading...
+            </div>
+
+
+            <div
+                class="answer-grid"
+                id="findAnswers">
+
+                <button
+                    class="answer-btn"
+                    onclick="answerFind('incisor')">
+                    Incisor
+                </button>
+
+                <button
+                    class="answer-btn"
+                    onclick="answerFind('canine')">
+                    Canine
+                </button>
+
+                <button
+                    class="answer-btn"
+                    onclick="answerFind('premolar')">
+                    Premolar
+                </button>
+
+                <button
+                    class="answer-btn"
+                    onclick="answerFind('molar')">
+                    Molar
+                </button>
+
+            </div>
+
+
+            <div
+                class="feedback"
+                id="findFeedback">
+            </div>
+
+
+            <div
+                class="clue"
+                id="findClue">
+            </div>
+
+
+            <div class="btn-row">
+
+                <button
+                    class="btn btn-primary"
+                    id="nextFindBtn"
+                    onclick="nextFindQuestion()"
+                    style="display:none;">
+                    Next Question →
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>💡 Helpful Clues</h2>
+
+            <p>
+                Remember:
+            </p>
+
+            <ul>
+                <li>Incisors are at the front.</li>
+                <li>Canines are pointed.</li>
+                <li>Premolars are behind canines.</li>
+                <li>Molars are at the back.</li>
+            </ul>
+
+        </div>
+
+
+        <div class="navigation">
+
+            <button
+                class="btn btn-secondary"
+                onclick="goToSection(2)">
+                ← Back
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="goToSection(4)">
+                Next: Food Activity →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- SECTION 4: FOOD ACTIVITY -->
+    <!-- ================================================= -->
+
+    <section class="section" id="section4">
+
+        <h2 class="section-title">🍎 Food & Teeth</h2>
+
+        <p class="section-description">
+            Choose a food and then choose the tooth type that would
+            help with that part of eating.
+        </p>
+
+
+        <div class="card">
+
+            <h2>Step 1: Choose a Food</h2>
+
+            <div class="food-grid">
+
+                <div
+                    class="food-card"
+                    onclick="selectFood('apple', this)">
+
+                    <div class="food-emoji">🍎</div>
+
+                    <h3>Apple</h3>
+
+                    <p>Crunchy fruit</p>
+
+                </div>
+
+
+                <div
+                    class="food-card"
+                    onclick="selectFood('carrot', this)">
+
+                    <div class="food-emoji">🥕</div>
+
+                    <h3>Carrot</h3>
+
+                    <p>Crunchy vegetable</p>
+
+                </div>
+
+
+                <div
+                    class="food-card"
+                    onclick="selectFood('bread', this)">
+
+                    <div class="food-emoji">🍞</div>
+
+                    <h3>Bread</h3>
+
+                    <p>Soft food</p>
+
+                </div>
+
+
+                <div
+                    class="food-card"
+                    onclick="selectFood('meat', this)">
+
+                    <div class="food-emoji">🥩</div>
+
+                    <h3>Meat</h3>
+
+                    <p>Needs tearing and chewing</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Step 2: Choose a Tooth</h2>
+
+            <div class="tooth-choice-grid">
+
+                <button
+                    class="tooth-choice"
+                    onclick="selectFoodTooth('incisor', this)">
+                    🦷 Incisor
+                </button>
+
+                <button
+                    class="tooth-choice"
+                    onclick="selectFoodTooth('canine', this)">
+                    🦷 Canine
+                </button>
+
+                <button
+                    class="tooth-choice"
+                    onclick="selectFoodTooth('premolar', this)">
+                    🦷 Premolar
+                </button>
+
+                <button
+                    class="tooth-choice"
+                    onclick="selectFoodTooth('molar', this)">
+                    🦷 Molar
+                </button>
+
+            </div>
+
+
+            <div
+                class="food-result"
+                id="foodResult">
+            </div>
+
+        </div>
+
+
+        <div class="navigation">
+
+            <button
+                class="btn btn-secondary"
+                onclick="goToSection(3)">
+                ← Back
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="goToSection(5)">
+                Next: Quiz →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- SECTION 5: QUIZ -->
+    <!-- ================================================= -->
+
+    <section class="section" id="section5">
+
+        <h2 class="section-title">🏆 Teeth Quiz</h2>
+
+        <p class="section-description">
+            Let's see how much you remember!
+        </p>
+
+
+        <div class="card" id="quizCard">
+
+            <div
+                class="question-number"
+                id="quizQuestionNumber">
+                Question 1 of 8
+            </div>
+
+
+            <div
+                class="question"
+                id="quizQuestion">
+                Loading...
+            </div>
+
+
+            <div
+                class="quiz-option-grid"
+                id="quizOptions">
+            </div>
+
+
+            <div
+                class="quiz-feedback"
+                id="quizFeedback">
+            </div>
+
+
+            <div class="btn-row">
+
+                <button
+                    class="btn btn-primary"
+                    id="nextQuizBtn"
+                    onclick="nextQuizQuestion()"
+                    style="display:none;">
+                    Next Question →
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="card quiz-result"
+            id="quizResult">
+
+            <h2>🎉 Quiz Complete!</h2>
+
+            <div class="score-circle">
+
+                <div
+                    class="score-number"
+                    id="scoreNumber">
+                    0
+                </div>
+
+                <div class="score-total">
+                    / 8
+                </div>
+
+            </div>
+
+
+            <h2 id="scoreMessage">
+                Great work!
+            </h2>
+
+
+            <p id="scoreExplanation">
+                You are learning how our teeth help us eat.
+            </p>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="restartQuiz()">
+                🔄 Try Again
+            </button>
+
+        </div>
+
+
+        <div class="navigation">
+
+            <button
+                class="btn btn-secondary"
+                onclick="goToSection(4)">
+                ← Back
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESET -->
+
+    <div class="reset-area">
+
+        <button
+            class="reset-btn"
+            onclick="resetAll()">
+            🔄 Reset Activity
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       STATE
+    ===================================================== */
+
+    let currentSection = 1;
+
+    let selectedFood = null;
+    let selectedFoodTooth = null;
+
+    let findIndex = 0;
+    let findAnswered = false;
+
+    let quizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+
+
+    /* =====================================================
+       TOOTH DATA
+    ===================================================== */
+
+    const toothData = {
+
+        incisor: {
+
+            name: "Incisors",
+
+            icon: "🦷",
+
+            location: "At the front of the mouth.",
+
+            shape: "Flat and sharp at the edge.",
+
+            function: "Biting and cutting food.",
+
+            explanation:
+                "Incisors are the teeth at the front. Their sharp edges help us bite into food such as apples and sandwiches."
+
+        },
+
+
+        canine: {
+
+            name: "Canines",
+
+            icon: "🦷",
+
+            location: "Beside the incisors.",
+
+            shape: "Pointed and cone-shaped.",
+
+            function: "Tearing food.",
+
+            explanation:
+                "Canines are pointed teeth. They help us grip and tear food."
+
+        },
+
+
+        premolar: {
+
+            name: "Premolars",
+
+            icon: "🦷",
+
+            location: "Behind the canines.",
+
+            shape: "Broader with small raised points.",
+
+            function: "Crushing and beginning to grind food.",
+
+            explanation:
+                "Premolars have broader surfaces than canines. They help crush food into smaller pieces."
+
+        },
+
+
+        molar: {
+
+            name: "Molars",
+
+            icon: "🦷",
+
+            location: "At the back of the mouth.",
+
+            shape: "Large and broad with a wide chewing surface.",
+
+            function: "Grinding and chewing food.",
+
+            explanation:
+                "Molars are large teeth at the back. Their broad surfaces help grind food so it is easier to swallow."
+
+        }
+
+    };
+
+
+    /* =====================================================
+       TOOTH HOTSPOTS
+    ===================================================== */
+
+    function buildTeeth() {
+
+        const hotspots =
+            document.querySelectorAll(".tooth-hotspot");
+
+        hotspots.forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                hotspots.forEach(item => {
+                    item.classList.remove("selected");
+                });
+
+                button.classList.add("selected");
+
+                const type =
+                    button.dataset.type;
+
+                showToothInformation(type);
+
+            });
+
+        });
+
+    }
+
+
+    /* =====================================================
+       SHOW TOOTH INFORMATION
+    ===================================================== */
+
+    function showToothInformation(type) {
+
+        const data = toothData[type];
+
+        const info =
+            document.getElementById("toothInfo");
+
+        info.innerHTML = `
+
+            <div style="text-align:center;">
+
+                <div class="tooth-icon">
+                    ${data.icon}
+                </div>
+
+                <h2 class="info-title">
+                    ${data.name}
+                </h2>
+
+            </div>
+
+            <div class="info-item">
+                <strong>📍 Where is it?</strong>
+                ${data.location}
+            </div>
+
+            <div class="info-item">
+                <strong>🔍 What does it look like?</strong>
+                ${data.shape}
+            </div>
+
+            <div class="info-item">
+                <strong>🍎 Main job</strong>
+                ${data.function}
+            </div>
+
+            <div class="info-item">
+                <strong>💡 Grade 4 Explanation</strong>
+                ${data.explanation}
+            </div>
+
+        `;
+
+    }
+
+
+    /* =====================================================
+       SECTION NAVIGATION
+    ===================================================== */
+
+    function goToSection(number) {
+
+        document
+            .querySelectorAll(".section")
+            .forEach(section => {
+                section.classList.remove("active");
+            });
+
+        const target =
+            document.getElementById(
+                "section" + number
+            );
+
+        if (target) {
+            target.classList.add("active");
+        }
+
+        currentSection = number;
+
+        updateProgress();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        if (number === 3) {
+            loadFindQuestion();
+        }
+
+        if (number === 5) {
+            loadQuiz();
+        }
+
+    }
+
+
+    function updateProgress() {
+
+        const fill =
+            document.getElementById("progressFill");
+
+        const percentage =
+            ((currentSection - 1) / 4) * 100 + 25;
+
+        fill.style.width =
+            Math.min(100, percentage) + "%";
+
+
+        for (let i = 1; i <= 4; i++) {
+
+            const label =
+                document.getElementById("progress" + i);
+
+            label.classList.remove("active");
+
+            let activeNumber;
+
+            if (currentSection === 1) {
+                activeNumber = 1;
+            }
+
+            else if (currentSection === 2) {
+                activeNumber = 2;
+            }
+
+            else if (
+                currentSection === 3 ||
+                currentSection === 4
+            ) {
+                activeNumber = 3;
+            }
+
+            else {
+                activeNumber = 4;
+            }
+
+            if (i <= activeNumber) {
+                label.classList.add("active");
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       FUNCTION SIMULATION
+    ===================================================== */
+
+    function showFunction(type, button) {
+
+        document
+            .querySelectorAll(".function-buttons .btn")
+            .forEach(btn => {
+                btn.classList.remove("btn-orange");
+                btn.classList.add("btn-secondary");
+            });
+
+        button.classList.remove("btn-secondary");
+        button.classList.add("btn-orange");
+
+
+        const emoji =
+            document.getElementById("functionEmoji");
+
+        const title =
+            document.getElementById("functionTitle");
+
+        const text =
+            document.getElementById("functionText");
+
+
+        emoji.classList.remove("animate");
+
+        if (type === "incisor") {
+
+            emoji.textContent = "🍎";
+
+            title.textContent =
+                "Incisors: Biting and Cutting";
+
+            text.textContent =
+                "Incisors have sharp, flat edges that help us bite and cut food.";
+
+        }
+
+        else if (type === "canine") {
+
+            emoji.textContent = "🥩";
+
+            title.textContent =
+                "Canines: Tearing";
+
+            text.textContent =
+                "Canines are pointed teeth that help grip and tear food.";
+
+        }
+
+        else if (type === "premolar") {
+
+            emoji.textContent = "🥨";
+
+            title.textContent =
+                "Premolars: Crushing";
+
+            text.textContent =
+                "Premolars have broader surfaces that help crush food into smaller pieces.";
+
+        }
+
+        else if (type === "molar") {
+
+            emoji.textContent = "🥕";
+
+            title.textContent =
+                "Molars: Grinding";
+
+            text.textContent =
+                "Molars have large, broad surfaces that help grind and chew food.";
+
+        }
+
+
+        void emoji.offsetWidth;
+
+        emoji.classList.add("animate");
+
+    }
+
+
+    /* =====================================================
+       FIND A TOOTH
+    ===================================================== */
+
+    const findQuestions = [
+
+        {
+            question:
+                "Which teeth are at the very front of your mouth and help you bite food?",
+
+            answer: "incisor",
+
+            clue:
+                "Think about the flat teeth you can see when you smile."
+        },
+
+        {
+            question:
+                "Which teeth are pointed and help tear food?",
+
+            answer: "canine",
+
+            clue:
+                "These teeth look a little like small points."
+        },
+
+        {
+            question:
+                "Which teeth are behind the canines and help crush food?",
+
+            answer: "premolar",
+
+            clue:
+                "Their name starts with 'pre' and they are before the molars."
+        },
+
+        {
+            question:
+                "Which large teeth are found at the back of the mouth?",
+
+            answer: "molar",
+
+            clue:
+                "They have wide surfaces for grinding."
+        },
+
+        {
+            question:
+                "You use these teeth to cut into an apple.",
+
+            answer: "incisor",
+
+            clue:
+                "Look at the front of your mouth."
+        },
+
+        {
+            question:
+                "You use these pointed teeth to tear food.",
+
+            answer: "canine",
+
+            clue:
+                "Think of a dog. Dogs have very pointed versions of these teeth."
+        },
+
+        {
+            question:
+                "Which teeth help crush food before it reaches the molars?",
+
+            answer: "premolar",
+
+            clue:
+                "They are located between the canines and molars."
+        },
+
+        {
+            question:
+                "Which teeth do most of the grinding during chewing?",
+
+            answer: "molar",
+
+            clue:
+                "They are large and are found at the back."
+        },
+
+        {
+            question:
+                "Which teeth have sharp, flat edges?",
+
+            answer: "incisor",
+
+            clue:
+                "There are four main ones at the front of the upper and lower jaws."
+        },
+
+        {
+            question:
+                "Which teeth have large, broad chewing surfaces?",
+
+            answer: "molar",
+
+            clue:
+                "Think about the biggest teeth at the back."
+        }
+
+    ];
+
+
+    function loadFindQuestion() {
+
+        const question =
+            findQuestions[findIndex];
+
+        document.getElementById(
+            "findQuestionNumber"
+        ).textContent =
+            `Question ${findIndex + 1} of ${findQuestions.length}`;
+
+
+        document.getElementById(
+            "findQuestion"
+        ).textContent =
+            question.question;
+
+
+        const feedback =
+            document.getElementById("findFeedback");
+
+        feedback.className =
+            "feedback";
+
+        feedback.textContent = "";
+
+
+        const clue =
+            document.getElementById("findClue");
+
+        clue.className =
+            "clue";
+
+        clue.textContent =
+            "💡 Clue: " + question.clue;
+
+
+        document.getElementById(
+            "nextFindBtn"
+        ).style.display = "none";
+
+
+        document
+            .querySelectorAll(".answer-btn")
+            .forEach(button => {
+
+                button.disabled = false;
+
+                button.classList.remove(
+                    "correct",
+                    "wrong"
+                );
+
+            });
+
+
+        findAnswered = false;
+
+    }
+
+
+    function answerFind(answer) {
+
+        if (findAnswered) {
+            return;
+        }
+
+        findAnswered = true;
+
+        const question =
+            findQuestions[findIndex];
+
+        const buttons =
+            document.querySelectorAll(".answer-btn");
+
+
+        buttons.forEach(button => {
+
+            button.disabled = true;
+
+            if (
+                button.textContent
+                    .toLowerCase()
+                    .includes(question.answer)
+            ) {
+                button.classList.add("correct");
+            }
+
+        });
+
+
+        const feedback =
+            document.getElementById("findFeedback");
+
+        const clue =
+            document.getElementById("findClue");
+
+
+        if (answer === question.answer) {
+
+            feedback.textContent =
+                "✅ Correct! Great job!";
+
+            feedback.className =
+                "feedback correct show";
+
+        }
+
+        else {
+
+            feedback.textContent =
+                `❌ Not quite. The correct answer is ${capitalize(question.answer)}.`;
+
+            feedback.className =
+                "feedback wrong show";
+
+            clue.classList.add("show");
+
+        }
+
+
+        document.getElementById(
+            "nextFindBtn"
+        ).style.display = "inline-block";
+
+    }
+
+
+    function nextFindQuestion() {
+
+        findIndex++;
+
+        if (
+            findIndex >= findQuestions.length
+        ) {
+
+            findIndex = 0;
+
+            document.getElementById(
+                "findQuestion"
+            ).textContent =
+                "🎉 Excellent! You completed all the Find a Tooth questions!";
+
+            document.getElementById(
+                "findQuestionNumber"
+            ).textContent =
+                "Practice Complete!";
+
+            document.getElementById(
+                "findAnswers"
+            ).style.display = "none";
+
+            document.getElementById(
+                "findFeedback"
+            ).className =
+                "feedback";
+
+            document.getElementById(
+                "findClue"
+            ).className =
+                "clue";
+
+            document.getElementById(
+                "nextFindBtn"
+            ).style.display =
+                "none";
+
+            return;
+        }
+
+        loadFindQuestion();
+
+    }
+
+
+    /* =====================================================
+       FOOD ACTIVITY
+    ===================================================== */
+
+    function selectFood(food, element) {
+
+        selectedFood = food;
+
+        document
+            .querySelectorAll(".food-card")
+            .forEach(card => {
+                card.classList.remove("selected");
+            });
+
+        element.classList.add("selected");
+
+        updateFoodResult();
+
+    }
+
+
+    function selectFoodTooth(tooth, element) {
+
+        selectedFoodTooth = tooth;
+
+        document
+            .querySelectorAll(".tooth-choice")
+            .forEach(button => {
+                button.classList.remove("selected");
+            });
+
+        element.classList.add("selected");
+
+        updateFoodResult();
+
+    }
+
+
+    function updateFoodResult() {
+
+        const result =
+            document.getElementById("foodResult");
+
+        if (
+            !selectedFood ||
+            !selectedFoodTooth
+        ) {
+
+            result.classList.remove("show");
+
+            return;
+        }
+
+
+        const foods = {
+
+            apple: {
+                name: "🍎 Apple",
+                best: "incisor",
+                explanation:
+                    "Incisors are useful for biting into a crunchy apple."
+            },
+
+            carrot: {
+                name: "🥕 Carrot",
+                best: "incisor",
+                explanation:
+                    "Incisors can bite through a crunchy carrot."
+            },
+
+            bread: {
+                name: "🍞 Bread",
+                best: "molar",
+                explanation:
+                    "Molars help chew and grind bread into smaller pieces."
+            },
+
+            meat: {
+                name: "🥩 Meat",
+                best: "canine",
+                explanation:
+                    "Canines help grip and tear pieces of food such as meat."
+            }
+
+        };
+
+
+        const food =
+            foods[selectedFood];
+
+
+        if (
+            selectedFoodTooth === food.best
+        ) {
+
+            result.innerHTML = `
+                <strong>✅ Great choice!</strong>
+                <p>
+                    ${food.name} → ${capitalize(selectedFoodTooth)}
+                </p>
+                <p>
+                    ${food.explanation}
+                </p>
+            `;
+
+        }
+
+        else {
+
+            result.innerHTML = `
+                <strong>💡 Think again!</strong>
+                <p>
+                    ${food.name} can involve several teeth,
+                    but a useful tooth type for this action is
+                    <strong>${capitalize(food.best)}</strong>.
+                </p>
+                <p>
+                    ${food.explanation}
+                </p>
+            `;
+
+        }
+
+
+        result.classList.add("show");
+
+    }
+
+
+    /* =====================================================
+       QUIZ
+    ===================================================== */
+
+    const quizQuestions = [
+
+        {
+            question:
+                "Which teeth are at the front of the mouth?",
+
+            options: [
+                "Molars",
+                "Incisors",
+                "Canines",
+                "Premolars"
+            ],
+
+            answer: 1,
+
+            explanation:
+                "Incisors are the front teeth and help us bite and cut food."
+        },
+
+
+        {
+            question:
+                "Which teeth are pointed?",
+
+            options: [
+                "Canines",
+                "Molars",
+                "Incisors",
+                "Premolars"
+            ],
+
+            answer: 0,
+
+            explanation:
+                "Canines are pointed and help tear food."
+        },
+
+
+        {
+            question:
+                "Which teeth help crush food?",
+
+            options: [
+                "Incisors",
+                "Canines",
+                "Premolars",
+                "Tongue"
+            ],
+
+            answer: 2,
+
+            explanation:
+                "Premolars have broader surfaces that help crush food."
+        },
+
+
+        {
+            question:
+                "Which teeth are found at the back of the mouth?",
+
+            options: [
+                "Molars",
+                "Canines",
+                "Incisors",
+                "Lips"
+            ],
+
+            answer: 0,
+
+            explanation:
+                "Molars are large teeth at the back of the mouth."
+        },
+
+
+        {
+            question:
+                "Which teeth help tear food?",
+
+            options: [
+                "Molars",
+                "Canines",
+                "Premolars",
+                "Incisors"
+            ],
+
+            answer: 1,
+
+            explanation:
+                "Canines are pointed and help grip and tear food."
+        },
+
+
+        {
+            question:
+                "What is the main job of incisors?",
+
+            options: [
+                "Grinding",
+                "Tearing",
+                "Biting and cutting",
+                "Swallowing"
+            ],
+
+            answer: 2,
+
+            explanation:
+                "Incisors have sharp edges that help bite and cut food."
+        },
+
+
+        {
+            question:
+                "Which teeth have large, broad chewing surfaces?",
+
+            options: [
+                "Canines",
+                "Incisors",
+                "Molars",
+                "Tongue"
+            ],
+
+            answer: 2,
+
+            explanation:
+                "Molars have large surfaces that help grind food."
+        },
+
+
+        {
+            question:
+                "Why do we have different types of teeth?",
+
+            options: [
+                "They all do exactly the same job",
+                "Each type has a special job",
+                "Only adults need teeth",
+                "Teeth help us breathe"
+            ],
+
+            answer: 1,
+
+            explanation:
+                "Different teeth have different shapes and jobs to help us eat."
+        }
+
+    ];
+
+
+    function loadQuiz() {
+
+        const question =
+            quizQuestions[quizIndex];
+
+
+        document.getElementById(
+            "quizCard"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "quizResult"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "quizQuestionNumber"
+        ).textContent =
+            `Question ${quizIndex + 1} of ${quizQuestions.length}`;
+
+
+        document.getElementById(
+            "quizQuestion"
+        ).textContent =
+            question.question;
+
+
+        const options =
+            document.getElementById("quizOptions");
+
+        options.innerHTML = "";
+
+
+        question.options.forEach(
+            (option, index) => {
+
+                const button =
+                    document.createElement("button");
+
+                button.className =
+                    "quiz-option";
+
+                button.textContent =
+                    option;
+
+                button.onclick =
+                    () => answerQuiz(index, button);
+
+                options.appendChild(button);
+
+            }
+        );
+
+
+        const feedback =
+            document.getElementById("quizFeedback");
+
+        feedback.className =
+            "quiz-feedback";
+
+        feedback.textContent = "";
+
+
+        document.getElementById(
+            "nextQuizBtn"
+        ).style.display =
+            "none";
+
+
+        quizAnswered = false;
+
+    }
+
+
+    function answerQuiz(index, button) {
+
+        if (quizAnswered) {
+            return;
+        }
+
+        quizAnswered = true;
+
+
+        const question =
+            quizQuestions[quizIndex];
+
+
+        const options =
+            document.querySelectorAll(".quiz-option");
+
+
+        options.forEach(option => {
+            option.disabled = true;
+        });
+
+
+        if (
+            index === question.answer
+        ) {
+
+            quizScore++;
+
+            button.classList.add("correct");
+
+        }
+
+        else {
+
+            button.classList.add("wrong");
+
+            options[
+                question.answer
+            ].classList.add("correct");
+
+        }
+
+
+        const feedback =
+            document.getElementById("quizFeedback");
+
+
+        if (
+            index === question.answer
+        ) {
+
+            feedback.textContent =
+                "✅ Correct! " +
+                question.explanation;
+
+            feedback.className =
+                "quiz-feedback correct show";
+
+        }
+
+        else {
+
+            feedback.textContent =
+                "❌ Not quite. " +
+                question.explanation;
+
+            feedback.className =
+                "quiz-feedback wrong show";
+
+        }
+
+
+        document.getElementById(
+            "nextQuizBtn"
+        ).style.display =
+            "inline-block";
+
+    }
+
+
+    function nextQuizQuestion() {
+
+        quizIndex++;
+
+
+        if (
+            quizIndex >= quizQuestions.length
+        ) {
+
+            showQuizResult();
+
+            return;
+        }
+
+
+        loadQuiz();
+
+    }
+
+
+    function showQuizResult() {
+
+        document.getElementById(
+            "quizCard"
+        ).style.display =
+            "none";
+
+
+        const result =
+            document.getElementById("quizResult");
+
+        result.style.display =
+            "block";
+
+
+        document.getElementById(
+            "scoreNumber"
+        ).textContent =
+            quizScore;
+
+
+        let message;
+
+
+        if (quizScore === 8) {
+
+            message =
+                "🌟 Perfect! Amazing work!";
+
+        }
+
+        else if (quizScore >= 6) {
+
+            message =
+                "🎉 Great job!";
+
+        }
+
+        else if (quizScore >= 4) {
+
+            message =
+                "👏 Good effort! Keep practising!";
+
+        }
+
+        else {
+
+            message =
+                "💪 Keep learning! You can try again.";
+
+        }
+
+
+        document.getElementById(
+            "scoreMessage"
+        ).textContent =
+            message;
+
+
+        document.getElementById(
+            "scoreExplanation"
+        ).textContent =
+            `You got ${quizScore} out of ${quizQuestions.length} questions correct.`;
+
+    }
+
+
+    function restartQuiz() {
+
+        quizIndex = 0;
+
+        quizScore = 0;
+
+        quizAnswered = false;
+
+        loadQuiz();
+
+    }
+
+
+    /* =====================================================
+       RESET EVERYTHING
+    ===================================================== */
+
+    function resetAll() {
+
+        currentSection = 1;
+
+        selectedFood = null;
+
+        selectedFoodTooth = null;
+
+        findIndex = 0;
+
+        findAnswered = false;
+
+        quizIndex = 0;
+
+        quizScore = 0;
+
+        quizAnswered = false;
+
+
+        document
+            .querySelectorAll(".tooth-hotspot")
+            .forEach(button => {
+                button.classList.remove("selected");
+            });
+
+
+        document
+            .querySelectorAll(".food-card")
+            .forEach(card => {
+                card.classList.remove("selected");
+            });
+
+
+        document
+            .querySelectorAll(".tooth-choice")
+            .forEach(button => {
+                button.classList.remove("selected");
+            });
+
+
+        document.getElementById(
+            "foodResult"
+        ).classList.remove("show");
+
+
+        document.getElementById(
+            "toothInfo"
+        ).innerHTML = `
+
+            <div class="info-placeholder">
+
+                <div class="tooth-icon">🦷</div>
+
+                <h3>Click a Tooth!</h3>
+
+                <p>
+                    Choose any highlighted area of the mouth
+                    to learn about that type of tooth.
+                </p>
+
+            </div>
+
+        `;
+
+
+        document
+            .querySelectorAll(".function-buttons .btn")
+            .forEach(button => {
+
+                button.classList.remove("btn-orange");
+
+                button.classList.add("btn-secondary");
+
+            });
+
+
+        document.getElementById(
+            "functionEmoji"
+        ).textContent = "🍎";
+
+
+        document.getElementById(
+            "functionTitle"
+        ).textContent =
+            "Choose a Tooth";
+
+
+        document.getElementById(
+            "functionText"
+        ).textContent =
+            "Click one of the buttons above to see how that tooth helps us eat.";
+
+
+        document.getElementById(
+            "quizResult"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "quizCard"
+        ).style.display =
+            "block";
+
+
+        goToSection(1);
+
+        loadFindQuestion();
+
+        loadQuiz();
+
+    }
+
+
+    /* =====================================================
+       HELPER
+    ===================================================== */
+
+    function capitalize(text) {
+
+        return text.charAt(0).toUpperCase() +
+               text.slice(1);
+
+    }
+
+
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
+
+    buildTeeth();
+
+    loadFindQuestion();
+
+    loadQuiz();
+
+    updateProgress();
+
+</script>
+
+</body>
+</html>

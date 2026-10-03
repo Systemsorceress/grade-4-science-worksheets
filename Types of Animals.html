@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animal Diets & Teeth - Interactive Grade 4 Deck</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --green: #2e7d32;
+    --light-green: #e8f5e9;
+    --dark-green: #1b5e20;
+    --orange: #f57c00;
+    --yellow: #fff3cd;
+    --blue: #1976d2;
+    --purple: #7b1fa2;
+    --red: #d32f2f;
+    --text: #263238;
+    --muted: #607d8b;
+    --white: #ffffff;
+    --border: #dce4e7;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at top left, #e8f5e9 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #fff8e1 0%, transparent 35%),
+        #f5f8f6;
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* APP */
+.app {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TOP BAR */
+.topbar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    color: var(--dark-green);
+    font-size: 18px;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: var(--light-green);
+    font-size: 22px;
+}
+
+.progress-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 230px;
+}
+
+.progress-bar {
+    width: 180px;
+    height: 9px;
+    background: #e5e7eb;
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 7%;
+    height: 100%;
+    background: var(--green);
+    border-radius: inherit;
+    transition: width .3s ease;
+}
+
+.progress-text {
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+/* DECK */
+.deck {
+    flex: 1;
+    width: min(1180px, 94%);
+    margin: 0 auto;
+    padding: 25px 0 100px;
+}
+
+.slide {
+    display: none;
+    animation: slideIn .3s ease;
+}
+
+.slide.active {
+    display: block;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* HEADINGS */
+.slide-kicker {
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+h1 {
+    font-size: clamp(32px, 5vw, 58px);
+    line-height: 1.05;
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: clamp(27px, 4vw, 42px);
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.55;
+    max-width: 800px;
+}
+
+.question {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 6px solid var(--green);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 20px 0;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+/* CARDS */
+.grid {
+    display: grid;
+    gap: 18px;
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+}
+
+.animal-card {
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s ease;
+    border: 2px solid transparent;
+}
+
+.animal-card:hover {
+    transform: translateY(-3px);
+}
+
+.animal-card.selected {
+    border-color: var(--green);
+    background: var(--light-green);
+}
+
+.animal-card img {
+    width: 100%;
+    height: 155px;
+    object-fit: cover;
+    border-radius: 13px;
+    margin-bottom: 10px;
+}
+
+.animal-name {
+    font-weight: 800;
+    font-size: 18px;
+}
+
+/* IMAGE */
+.hero-image {
+    width: 100%;
+    max-height: 390px;
+    object-fit: contain;
+    border-radius: 20px;
+    background: white;
+    border: 1px solid var(--border);
+}
+
+.teeth-image {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    background: white;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+}
+
+/* BUTTONS */
+button {
+    font: inherit;
+}
+
+.choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 18px;
+}
+
+.choice {
+    border: 2px solid var(--border);
+    background: white;
+    border-radius: 15px;
+    padding: 17px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 18px;
+    min-height: 58px;
+    transition: .2s ease;
+}
+
+.choice:hover {
+    border-color: var(--green);
+    transform: translateY(-2px);
+}
+
+.choice.correct {
+    background: #e8f5e9;
+    border-color: #43a047;
+    color: #1b5e20;
+}
+
+.choice.wrong {
+    background: #ffebee;
+    border-color: #e53935;
+    color: #b71c1c;
+}
+
+.feedback {
+    min-height: 30px;
+    margin-top: 14px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.feedback.good {
+    color: #2e7d32;
+}
+
+.feedback.bad {
+    color: #c62828;
+}
+
+/* FOOD */
+.food-card {
+    cursor: pointer;
+    text-align: center;
+    border: 3px solid transparent;
+    transition: .2s;
+}
+
+.food-card:hover {
+    transform: translateY(-3px);
+}
+
+.food-card.selected {
+    border-color: var(--orange);
+    background: #fff8e1;
+}
+
+.food-card img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 9px;
+}
+
+.food-name {
+    font-weight: 800;
+}
+
+/* SORTING */
+.sort-zone {
+    min-height: 220px;
+    border: 2px dashed #b0bec5;
+    border-radius: 18px;
+    background: rgba(255,255,255,.65);
+    padding: 15px;
+}
+
+.sort-zone h3 {
+    margin-bottom: 10px;
+}
+
+.sort-zone.carnivore h3 {
+    color: #b71c1c;
+}
+
+.sort-zone.herbivore h3 {
+    color: #2e7d32;
+}
+
+.sort-zone.omnivore h3 {
+    color: #6a1b9a;
+}
+
+.sort-item {
+    display: inline-block;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 11px;
+    margin: 4px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* DRAG-LIKE CLICK SORT */
+.sort-pool {
+    background: white;
+    padding: 16px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    border: 1px solid var(--border);
+}
+
+.sort-pool .sort-item.active {
+    outline: 3px solid var(--orange);
+}
+
+/* TEETH */
+.tooth-choice {
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    background: white;
+}
+
+.tooth-choice.selected {
+    border-color: var(--purple);
+    background: #f3e5f5;
+}
+
+.tooth-icon {
+    font-size: 45px;
+    margin-bottom: 8px;
+}
+
+.tooth-job {
+    margin-top: 15px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #fafafa;
+    border: 1px solid var(--border);
+}
+
+/* MYSTERY */
+.mystery-card {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    border: 3px solid transparent;
+    transition: .2s;
+}
+
+.mystery-card:hover {
+    transform: translateY(-3px);
+}
+
+.mystery-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.mystery-card.selected {
+    border-color: var(--green);
+}
+
+.reveal {
+    display: none;
+    margin-top: 10px;
+    background: var(--light-green);
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 800;
+}
+
+.mystery-card.revealed .reveal {
+    display: block;
+}
+
+/* BIG IDEA */
+.big-idea {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #e8f5e9, #fff8e1);
+    border: 2px solid #c8e6c9;
+    border-radius: 22px;
+    padding: 28px;
+    text-align: center;
+}
+
+.big-idea strong {
+    font-size: clamp(22px, 4vw, 34px);
+}
+
+/* FLOW */
+.flow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.flow-box {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    text-align: center;
+}
+
+.flow-arrow {
+    text-align: center;
+    font-size: 35px;
+    font-weight: 900;
+}
+
+/* NAVIGATION */
+.navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+}
+
+.nav-inner {
+    width: min(1180px, 94%);
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn {
+    border: 0;
+    background: var(--green);
+    color: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 800;
+    min-width: 100px;
+}
+
+.nav-btn:hover {
+    background: var(--dark-green);
+}
+
+.nav-btn.secondary {
+    background: #eceff1;
+    color: var(--text);
+}
+
+.nav-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.slide-count {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* EXIT TICKET */
+input[type="text"] {
+    width: 100%;
+    padding: 13px;
+    border: 2px solid var(--border);
+    border-radius: 11px;
+    font-size: 17px;
+    outline: none;
+}
+
+input[type="text"]:focus {
+    border-color: var(--green);
+}
+
+.ticket-question {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 18px;
+    margin-bottom: 13px;
+}
+
+.ticket-question label {
+    display: block;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+    .grid-3,
+    .grid-4,
+    .grid-5 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .flow {
+        grid-template-columns: 1fr;
+    }
+
+    .flow-arrow {
+        transform: rotate(90deg);
+    }
+
+    .progress-area {
+        min-width: 0;
+    }
+
+    .progress-bar {
+        width: 100px;
+    }
+}
+
+@media (max-width: 600px) {
+    .topbar {
+        padding: 10px 12px;
+    }
+
+    .brand span:last-child {
+        display: none;
+    }
+
+    .deck {
+        width: 92%;
+        padding-top: 18px;
+    }
+
+    .grid-3,
+    .grid-4,
+    .grid-5,
+    .choice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .animal-card img {
+        height: 200px;
+    }
+
+    .progress-text {
+        display: none;
+    }
+
+    .nav-inner {
+        width: 94%;
+    }
+
+    .nav-btn {
+        min-width: 80px;
+        padding: 11px 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <span>Animal Diets & Teeth</span>
+    </div>
+
+    <div class="progress-area">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">1 / 14</div>
+    </div>
+</header>
+
+<main class="deck">
+
+<!-- ========================================================= -->
+<!-- SLIDE 1 -->
+<!-- ========================================================= -->
+
+<section class="slide active">
+
+    <div class="slide-kicker">Mission 1 • Think Like a Scientist</div>
+
+    <h1>🐾 What Does This Animal Eat?</h1>
+
+    <p class="subtitle">
+        Animals do not all eat the same kinds of food. Let's investigate
+        animals, their diets, and their teeth!
+    </p>
+
+    <div class="grid grid-3" style="margin-top:25px;">
+
+        <div class="animal-card card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdGVnGqztH2aUtvb--KmfJYKmtMA4Rm7OXZ3xtkTzLwPcX1BMxhvc-w64G&s=10"
+                 alt="Lion">
+            <div class="animal-name">🦁 Lion</div>
+        </div>
+
+        <div class="animal-card card">
+            <img src="https://media.istockphoto.com/id/1620572291/photo/mooing-with-content.jpg?s=612x612&w=0&k=20&c=KTQyeJtgPhfnIgbRKKcim8rjM2aEaYSsr4CCqo7olBY="
+                 alt="Cow">
+            <div class="animal-name">🐄 Cow</div>
+        </div>
+
+        <div class="animal-card card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0tx8dRABWjUyRhMs9Gg6TY6vps0okpCjKSA1vZmHWaPNwkWzFbPAjv13O&s=10"
+                 alt="Bear">
+            <div class="animal-name">🐻 Bear</div>
+        </div>
+
+    </div>
+
+    <div class="question">
+        🤔 Do you think these animals eat the same food?
+    </div>
+
+    <div class="choice-grid" data-question="q1">
+
+        <button class="choice" data-answer="wrong">
+            ✅ Yes
+        </button>
+
+        <button class="choice" data-answer="correct">
+            ❌ No
+        </button>
+
+    </div>
+
+    <div class="feedback" id="feedback-q1"></div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 2 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 2 • Carnivores</div>
+
+    <h2>🍖 Which Animals Hunt and Eat Other Animals?</h2>
+
+    <div class="question">
+        Click all the animals that hunt and eat other animals.
+    </div>
+
+    <div class="grid grid-5">
+
+        <div class="animal-card card selectable-animal" data-correct="true">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdGVnGqztH2aUtvb--KmfJYKmtMA4Rm7OXZ3xtkTzLwPcX1BMxhvc-w64G&s=10" alt="Lion">
+            <div class="animal-name">🦁 Lion</div>
+        </div>
+
+        <div class="animal-card card selectable-animal" data-correct="false">
+            <img src="https://media.istockphoto.com/id/1620572291/photo/mooing-with-content.jpg?s=612x612&w=0&k=20&c=KTQyeJtgPhfnIgbRKKcim8rjM2aEaYSsr4CCqo7olBY=" alt="Cow">
+            <div class="animal-name">🐄 Cow</div>
+        </div>
+
+        <div class="animal-card card selectable-animal" data-correct="true">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSynnL_kfgWDldGqDk4aOtuDEHXwoL3GWos99qitn5D-akJhQzYIMyYjmEc&s=10" alt="Tiger">
+            <div class="animal-name">🐅 Tiger</div>
+        </div>
+
+        <div class="animal-card card selectable-animal" data-correct="false">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdyLQzshYj-GBsOC3CtRGktQ5QzxB4htirl9GsLLkDrw&s=10" alt="Rabbit">
+            <div class="animal-name">🐇 Rabbit</div>
+        </div>
+
+        <div class="animal-card card selectable-animal" data-correct="true">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSH8a1ePAabB2oVnKuzRpBViS2FyYDxW4dDxPrDbw0Ww&s" alt="Eagle">
+            <div class="animal-name">🦅 Eagle</div>
+        </div>
+
+    </div>
+
+    <button class="nav-btn" style="margin-top:20px;" id="checkCarnivores">
+        Check My Choices
+    </button>
+
+    <div class="feedback" id="feedback-q2"></div>
+
+    <div class="big-idea">
+        <strong>🍖 Carnivores mainly eat other animals.</strong>
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 3 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 3 • Teeth Detective</div>
+
+    <h2>🦷 Explore Carnivore Teeth</h2>
+
+    <div class="grid grid-3">
+
+        <div class="card">
+            <img class="teeth-image"
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ07CZcfTkF97QZN63B-CqD9HldyliUyaeNI9a_UCMjTrWoEzG4tWI357XD&s=10"
+                 alt="Sharp carnivore teeth">
+        </div>
+
+        <div style="grid-column:span 2;">
+
+            <div class="question">
+                Look carefully at these teeth. What do you notice?
+            </div>
+
+            <div class="choice-grid" data-question="q3">
+
+                <button class="choice" data-answer="correct">
+                    🔺 Sharp and pointed
+                </button>
+
+                <button class="choice" data-answer="wrong">
+                    ⬜ Wide and flat
+                </button>
+
+                <button class="choice" data-answer="wrong">
+                    ⚪ Tiny and round
+                </button>
+
+                <button class="choice" data-answer="wrong">
+                    🟦 Completely flat
+                </button>
+
+            </div>
+
+            <div class="feedback" id="feedback-q3"></div>
+
+        </div>
+
+    </div>
+
+    <div class="big-idea">
+        <strong>Sharp teeth help carnivores grip and tear meat.</strong>
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 4 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 4 • Herbivores</div>
+
+    <h2>🐄 What Does a Herbivore Eat?</h2>
+
+    <div class="question">
+        Click the foods that a herbivore could eat.
+    </div>
+
+    <div class="grid grid-4">
+
+        <div class="food-card card" data-correct="true">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvrEaNvxkHLrFZBcvgGO8zt2_yQbPI49gynsaWZAQ_4Q&s" alt="Grass">
+            <div class="food-name">🌿 Grass</div>
+        </div>
+
+        <div class="food-card card" data-correct="false">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTQkFoh4cz9QfJwRP-fyUnRM6qPpXzPhbMMjzdyqGDig&s=10" alt="Fish">
+            <div class="food-name">🐟 Fish</div>
+        </div>
+
+        <div class="food-card card" data-correct="true">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsh0MZedFtn040sX-0OBAK7pzGWVV3rUKWiILWrBeNhQ&s" alt="Leaves">
+            <div class="food-name">🌿 Leaves</div>
+        </div>
+
+        <div class="food-card card" data-correct="false">
+            <img src="https://cdn.britannica.com/94/151894-050-F72A5317/Brown-eggs.jpg" alt="Egg">
+            <div class="food-name">🥚 Egg</div>
+        </div>
+
+    </div>
+
+    <button class="nav-btn" style="margin-top:20px;" id="checkHerbivore">
+        Check My Choices
+    </button>
+
+    <div class="feedback" id="feedback-q4"></div>
+
+    <div class="big-idea">
+        <strong>🌿 Herbivores mainly eat plants.</strong>
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 5 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 5 • Teeth Challenge</div>
+
+    <h2>🦷 Which Teeth Help a Cow?</h2>
+
+    <div class="grid grid-3">
+
+        <div class="card">
+            <img class="teeth-image"
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWXrwMU3vcSeI5TSaXb_6t_qMnaVDBSrY_L-c5EuSOPbRD8hic7br-ojBz&s=10"
+                 alt="Flat herbivore teeth">
+        </div>
+
+        <div style="grid-column:span 2;">
+
+            <div class="question">
+                Which teeth would help a cow grind grass?
+            </div>
+
+            <div class="choice-grid" data-question="q5">
+
+                <button class="choice" data-answer="wrong">
+                    🔺 Sharp pointed teeth
+                </button>
+
+                <button class="choice" data-answer="correct">
+                    ⬜ Wide flat teeth
+                </button>
+
+            </div>
+
+            <div class="feedback" id="feedback-q5"></div>
+
+        </div>
+
+    </div>
+
+    <div class="big-idea">
+        <strong>Wide, flat teeth help herbivores crush and grind plants.</strong>
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 6 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 6 • Omnivores</div>
+
+    <h2>🐻 What Is an Omnivore?</h2>
+
+    <div class="grid grid-3" style="align-items:center;">
+
+        <div class="card">
+            <img class="hero-image"
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0tx8dRABWjUyRhMs9Gg6TY6vps0okpCjKSA1vZmHWaPNwkWzFbPAjv13O&s=10"
+                 alt="Bear">
+        </div>
+
+        <div style="grid-column:span 2;">
+
+            <div class="flow">
+
+                <div class="flow-box">
+                    <div style="font-size:45px;">🌿</div>
+                    <strong>Plants</strong>
+                </div>
+
+                <div class="flow-arrow">+</div>
+
+                <div class="flow-box">
+                    <div style="font-size:45px;">🥩</div>
+                    <strong>Animals</strong>
+                </div>
+
+            </div>
+
+            <div class="question">
+                What do we call an animal that eats both plants and animals?
+            </div>
+
+            <div class="choice-grid" data-question="q6">
+
+                <button class="choice" data-answer="wrong">
+                    🦁 Carnivore
+                </button>
+
+                <button class="choice" data-answer="wrong">
+                    🐄 Herbivore
+                </button>
+
+                <button class="choice" data-answer="correct">
+                    🐻 Omnivore
+                </button>
+
+            </div>
+
+            <div class="feedback" id="feedback-q6"></div>
+
+        </div>
+
+    </div>
+
+    <div class="big-idea">
+        <strong>Omnivores eat both plants and animals.</strong>
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 7 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 7 • Build the Mouth</div>
+
+    <h2>🦷 Why Does an Omnivore Need Different Teeth?</h2>
+
+    <div class="question">
+        Click each type of tooth to discover its job.
+    </div>
+
+    <div class="grid grid-3">
+
+        <div class="tooth-choice" data-tooth="incisor">
+            <div class="tooth-icon">🦷</div>
+            <h3>Incisors</h3>
+            <div class="tooth-job" id="job-incisor">
+                Click to reveal
+            </div>
+        </div>
+
+        <div class="tooth-choice" data-tooth="canine">
+            <div class="tooth-icon">🔺</div>
+            <h3>Canines</h3>
+            <div class="tooth-job" id="job-canine">
+                Click to reveal
+            </div>
+        </div>
+
+        <div class="tooth-choice" data-tooth="molar">
+            <div class="tooth-icon">⬜</div>
+            <h3>Molars</h3>
+            <div class="tooth-job" id="job-molar">
+                Click to reveal
+            </div>
+        </div>
+
+    </div>
+
+    <div class="big-idea">
+        <strong>
+            Omnivores have different types of teeth for different jobs.
+        </strong>
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 8 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 8 • Animal Sort</div>
+
+    <h2>🧩 Sort the Animals</h2>
+
+    <p class="subtitle">
+        Click an animal, then click the group where you think it belongs.
+    </p>
+
+    <div class="sort-pool" id="animalPool">
+
+        <span class="sort-item animal-sort" data-animal="lion" data-answer="carnivore">🦁 Lion</span>
+        <span class="sort-item animal-sort" data-animal="cow" data-answer="herbivore">🐄 Cow</span>
+        <span class="sort-item animal-sort" data-animal="rabbit" data-answer="herbivore">🐇 Rabbit</span>
+        <span class="sort-item animal-sort" data-animal="tiger" data-answer="carnivore">🐅 Tiger</span>
+        <span class="sort-item animal-sort" data-animal="bear" data-answer="omnivore">🐻 Bear</span>
+        <span class="sort-item animal-sort" data-animal="human" data-answer="omnivore">🧒 Human</span>
+        <span class="sort-item animal-sort" data-animal="eagle" data-answer="carnivore">🦅 Eagle</span>
+
+    </div>
+
+    <div class="grid grid-3">
+
+        <div class="sort-zone carnivore">
+            <h3>🦁 CARNIVORE</h3>
+            <div class="sort-target" data-group="carnivore"></div>
+        </div>
+
+        <div class="sort-zone herbivore">
+            <h3>🐄 HERBIVORE</h3>
+            <div class="sort-target" data-group="herbivore"></div>
+        </div>
+
+        <div class="sort-zone omnivore">
+            <h3>🐻 OMNIVORE</h3>
+            <div class="sort-target" data-group="omnivore"></div>
+        </div>
+
+    </div>
+
+    <div class="feedback" id="feedback-q8"></div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 9 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 9 • Food Detective</div>
+
+    <h2>🍽️ What Could Each Animal Eat?</h2>
+
+    <div class="question">
+        Choose the foods that could be eaten by the animal shown.
+    </div>
+
+    <div class="grid grid-3">
+
+        <div class="card">
+            <h3>🦁 Lion</h3>
+            <div class="choice-grid" data-group="lionFood">
+
+                <button class="choice" data-answer="correct">🥩 Meat</button>
+                <button class="choice" data-answer="wrong">🌿 Grass</button>
+                <button class="choice" data-answer="wrong">🍎 Fruit</button>
+                <button class="choice" data-answer="correct">🐟 Fish</button>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🐄 Cow</h3>
+            <div class="choice-grid" data-group="cowFood">
+
+                <button class="choice" data-answer="correct">🌿 Grass</button>
+                <button class="choice" data-answer="wrong">🐟 Fish</button>
+                <button class="choice" data-answer="correct">🍃 Leaves</button>
+                <button class="choice" data-answer="wrong">🥩 Meat</button>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🐻 Bear</h3>
+            <div class="choice-grid" data-group="bearFood">
+
+                <button class="choice" data-answer="correct">🍎 Fruit</button>
+                <button class="choice" data-answer="correct">🐟 Fish</button>
+                <button class="choice" data-answer="correct">🥚 Eggs</button>
+                <button class="choice" data-answer="correct">🌿 Plants</button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="big-idea">
+        <strong>Different animals can have very different diets.</strong>
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 10 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 10 • Mystery Teeth</div>
+
+    <h2>🔍 Guess the Animal from Its Teeth</h2>
+
+    <p class="subtitle">
+        Look only at the teeth. Can you identify the type of animal?
+    </p>
+
+    <div class="grid grid-3" style="margin-top:20px;">
+
+        <div class="mystery-card card" data-reveal="Carnivore">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScv1LBMk_nO71E2ih-P0dYt8C_SIT0JcCpAcgBI3KrnQ&s=10"
+                 alt="Mystery skull with sharp teeth">
+
+            <h3 style="margin-top:12px;">Mystery A</h3>
+
+            <div class="reveal">
+                🦁 Carnivore<br>
+                Sharp teeth help tear meat.
+            </div>
+        </div>
+
+        <div class="mystery-card card" data-reveal="Herbivore">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKdIb1c6BQCqvPrPHjXpRVco03i7YU6HhDtz1tkZRSqdWrFrzz7hs7h9ch&s=10"
+                 alt="Mystery skull with flat teeth">
+
+            <h3 style="margin-top:12px;">Mystery B</h3>
+
+            <div class="reveal">
+                🐄 Herbivore<br>
+                Flat teeth help grind plants.
+            </div>
+        </div>
+
+        <div class="mystery-card card" data-reveal="Omnivore">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLNpDcsi8SvV-C0PTub_kD7YqnpS7NsWXh5ehZXDpx5w&s"
+                 alt="Mystery skull with mixed teeth">
+
+            <h3 style="margin-top:12px;">Mystery C</h3>
+
+            <div class="reveal">
+                🐻 Omnivore<br>
+                Different teeth perform different jobs.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="question">
+        💡 Click each mystery mouth to reveal your detective answer.
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 11 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 11 • Connect the Ideas</div>
+
+    <h2>🧠 Why Are Teeth Different?</h2>
+
+    <div class="flow">
+
+        <div class="flow-box">
+            <div style="font-size:48px;">🍖</div>
+            <h3>FOOD</h3>
+            <p>What an animal eats</p>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
+        <div class="flow-box">
+            <div style="font-size:48px;">🦷</div>
+            <h3>TEETH</h3>
+            <p>Teeth suited to the food</p>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
+        <div class="flow-box">
+            <div style="font-size:48px;">💪</div>
+            <h3>JOB</h3>
+            <p>Cut, tear, crush or grind</p>
+        </div>
+
+    </div>
+
+    <div class="question">
+        Complete each sentence by choosing the correct answer.
+    </div>
+
+    <div class="grid grid-3">
+
+        <div class="card">
+            <h3>🍖 Meat</h3>
+            <div class="choice-grid">
+                <button class="choice" data-answer="correct">Sharp teeth</button>
+                <button class="choice" data-answer="wrong">Flat teeth</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🌿 Plants</h3>
+            <div class="choice-grid">
+                <button class="choice" data-answer="wrong">Sharp teeth</button>
+                <button class="choice" data-answer="correct">Flat teeth</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🍖 + 🌿</h3>
+            <div class="choice-grid">
+                <button class="choice" data-answer="correct">Different teeth</button>
+                <button class="choice" data-answer="wrong">Only one tooth type</button>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 12 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 12 • Quick Fire</div>
+
+    <h2>⚡ Quick-Fire Challenge</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>Question 1</h3>
+            <p style="margin:10px 0;">A lion eats meat.</p>
+
+            <div class="choice-grid quick-question">
+                <button class="choice" data-answer="correct">Carnivore</button>
+                <button class="choice" data-answer="wrong">Herbivore</button>
+                <button class="choice" data-answer="wrong">Omnivore</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Question 2</h3>
+            <p style="margin:10px 0;">A cow eats grass.</p>
+
+            <div class="choice-grid quick-question">
+                <button class="choice" data-answer="wrong">Carnivore</button>
+                <button class="choice" data-answer="correct">Herbivore</button>
+                <button class="choice" data-answer="wrong">Omnivore</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Question 3</h3>
+            <p style="margin:10px 0;">A bear can eat plants and animals.</p>
+
+            <div class="choice-grid quick-question">
+                <button class="choice" data-answer="wrong">Carnivore</button>
+                <button class="choice" data-answer="wrong">Herbivore</button>
+                <button class="choice" data-answer="correct">Omnivore</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Question 4</h3>
+            <p style="margin:10px 0;">Which teeth help tear meat?</p>
+
+            <div class="choice-grid quick-question">
+                <button class="choice" data-answer="correct">Sharp canines</button>
+                <button class="choice" data-answer="wrong">Flat molars</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Question 5</h3>
+            <p style="margin:10px 0;">Which teeth help grind plants?</p>
+
+            <div class="choice-grid quick-question">
+                <button class="choice" data-answer="wrong">Sharp canines</button>
+                <button class="choice" data-answer="correct">Flat molars</button>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 13 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 13 • Tooth Detective</div>
+
+    <h2>🏆 Final Mission</h2>
+
+    <div class="card" style="margin-top:20px;">
+
+        <div style="font-size:65px; text-align:center;">🔬 🦷 🔍</div>
+
+        <div class="question">
+            Scientists discovered a mystery animal!
+            <br><br>
+            It has <strong>wide, flat back teeth</strong> and mostly eats
+            <strong>leaves and grass</strong>.
+        </div>
+
+        <h3 style="margin-bottom:12px;">
+            What type of animal is it?
+        </h3>
+
+        <div class="choice-grid" data-question="q13">
+
+            <button class="choice" data-answer="wrong">
+                🦁 Carnivore
+            </button>
+
+            <button class="choice" data-answer="correct">
+                🐄 Herbivore
+            </button>
+
+            <button class="choice" data-answer="wrong">
+                🐻 Omnivore
+            </button>
+
+        </div>
+
+        <div class="feedback" id="feedback-q13"></div>
+
+        <div class="question" style="margin-top:25px;">
+            Why?
+        </div>
+
+        <div class="choice-grid" data-question="q13b">
+
+            <button class="choice" data-answer="wrong">
+                Its teeth are designed to tear meat.
+            </button>
+
+            <button class="choice" data-answer="correct">
+                Its flat teeth help grind plants.
+            </button>
+
+            <button class="choice" data-answer="wrong">
+                It only has sharp canines.
+            </button>
+
+        </div>
+
+        <div class="feedback" id="feedback-q13b"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- SLIDE 14 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+    <div class="slide-kicker">Mission 14 • Exit Ticket</div>
+
+    <h2>🎯 Show What You Know!</h2>
+
+    <p class="subtitle">
+        Complete the five questions before finishing your mission.
+    </p>
+
+    <div style="margin-top:20px;">
+
+        <div class="ticket-question">
+            <label>1. A carnivore eats...</label>
+            <input type="text" id="ticket1" placeholder="Type your answer">
+        </div>
+
+        <div class="ticket-question">
+            <label>2. A herbivore eats...</label>
+            <input type="text" id="ticket2" placeholder="Type your answer">
+        </div>
+
+        <div class="ticket-question">
+            <label>3. An omnivore eats...</label>
+            <input type="text" id="ticket3" placeholder="Type your answer">
+        </div>
+
+        <div class="ticket-question">
+            <label>4. Sharp canine teeth help animals...</label>
+            <input type="text" id="ticket4" placeholder="Type your answer">
+        </div>
+
+        <div class="ticket-question">
+            <label>5. Animals have different teeth because...</label>
+            <input type="text" id="ticket5" placeholder="Type your answer">
+        </div>
+
+        <button class="nav-btn" id="finishTicket">
+            Check My Exit Ticket
+        </button>
+
+        <div class="feedback" id="ticketFeedback"></div>
+
+    </div>
+
+    <div class="big-idea" style="margin-top:25px;">
+        <strong>
+            🦷 Different food → Different teeth → Different jobs
+        </strong>
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- NAVIGATION -->
+<nav class="navbar">
+
+    <div class="nav-inner">
+
+        <div class="slide-count" id="slideCount">
+            Slide 1 of 14
+        </div>
+
+        <div class="nav-buttons">
+
+            <button class="nav-btn secondary" id="backBtn">
+                ← Back
+            </button>
+
+            <button class="nav-btn" id="nextBtn">
+                Next →
+            </button>
+
+        </div>
+
+    </div>
+
+</nav>
+
+</div>
+
+
+<script>
+
+(function () {
+
+"use strict";
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentSlide = 0;
+
+const slides = Array.from(document.querySelectorAll(".slide"));
+const totalSlides = slides.length;
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const nextBtn = document.getElementById("nextBtn");
+const backBtn = document.getElementById("backBtn");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
+const slideCount = document.getElementById("slideCount");
+
+
+function updateDeck() {
+
+    slides.forEach((slide, index) => {
+        slide.classList.toggle("active", index === currentSlide);
+    });
+
+    const percent =
+        ((currentSlide + 1) / totalSlides) * 100;
+
+    progressFill.style.width = percent + "%";
+
+    progressText.textContent =
+        `${currentSlide + 1} / ${totalSlides}`;
+
+    slideCount.textContent =
+        `Slide ${currentSlide + 1} of ${totalSlides}`;
+
+    backBtn.disabled = currentSlide === 0;
+
+    nextBtn.disabled =
+        currentSlide === totalSlides - 1;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+nextBtn.addEventListener("click", function () {
+
+    if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateDeck();
+    }
+
+});
+
+
+backBtn.addEventListener("click", function () {
+
+    if (currentSlide > 0) {
+        currentSlide--;
+        updateDeck();
+    }
+
+});
+
+
+/* =========================================================
+   MULTIPLE CHOICE QUESTIONS
+========================================================= */
+
+document.querySelectorAll(".choice-grid").forEach(group => {
+
+    group.querySelectorAll(".choice").forEach(button => {
+
+        button.addEventListener("click", function () {
+
+            const parent = this.closest(".choice-grid");
+
+            parent.querySelectorAll(".choice").forEach(btn => {
+                btn.classList.remove("correct", "wrong");
+            });
+
+            if (this.dataset.answer === "correct") {
+
+                this.classList.add("correct");
+
+                const question =
+                    parent.dataset.question;
+
+                if (question) {
+
+                    const feedback =
+                        document.getElementById(
+                            "feedback-" + question
+                        );
+
+                    if (feedback) {
+                        feedback.textContent =
+                            "✅ Correct! Great thinking!";
+                        feedback.className =
+                            "feedback good";
+                    }
+                }
+
+            } else {
+
+                this.classList.add("wrong");
+
+                const question =
+                    parent.dataset.question;
+
+                if (question) {
+
+                    const feedback =
+                        document.getElementById(
+                            "feedback-" + question
+                        );
+
+                    if (feedback) {
+                        feedback.textContent =
+                            "❌ Not quite. Think about what the animal eats or what the teeth do.";
+                        feedback.className =
+                            "feedback bad";
+                    }
+                }
+            }
+
+        });
+
+    });
+
+});
+
+
+/* =========================================================
+   CARNIVORE ANIMAL SELECTION
+========================================================= */
+
+document.querySelectorAll(".selectable-animal").forEach(card => {
+
+    card.addEventListener("click", function () {
+
+        this.classList.toggle("selected");
+
+    });
+
+});
+
+
+document.getElementById("checkCarnivores")
+    .addEventListener("click", function () {
+
+        const cards =
+            Array.from(document.querySelectorAll(".selectable-animal"));
+
+        const selected =
+            cards.filter(card =>
+                card.classList.contains("selected")
+            );
+
+        const correctCards =
+            cards.filter(card =>
+                card.dataset.correct === "true"
+            );
+
+        const correct =
+            selected.length === correctCards.length &&
+            selected.every(card =>
+                card.dataset.correct === "true"
+            );
+
+        const feedback =
+            document.getElementById("feedback-q2");
+
+        if (correct) {
+
+            feedback.textContent =
+                "🎉 Excellent! Lion, tiger and eagle are carnivores.";
+
+            feedback.className =
+                "feedback good";
+
+        } else {
+
+            feedback.textContent =
+                "💡 Remember: carnivores hunt and eat other animals.";
+
+            feedback.className =
+                "feedback bad";
+        }
+
+    });
+
+
+/* =========================================================
+   HERBIVORE FOOD SELECTION
+========================================================= */
+
+document.querySelectorAll(".food-card").forEach(card => {
+
+    card.addEventListener("click", function () {
+        this.classList.toggle("selected");
+    });
+
+});
+
+
+document.getElementById("checkHerbivore")
+    .addEventListener("click", function () {
+
+        const cards =
+            Array.from(document.querySelectorAll(".food-card"));
+
+        const selected =
+            cards.filter(card =>
+                card.classList.contains("selected")
+            );
+
+        const correctCards =
+            cards.filter(card =>
+                card.dataset.correct === "true"
+            );
+
+        const correct =
+            selected.length === correctCards.length &&
+            selected.every(card =>
+                card.dataset.correct === "true"
+            );
+
+        const feedback =
+            document.getElementById("feedback-q4");
+
+        if (correct) {
+
+            feedback.textContent =
+                "🎉 Correct! Herbivores eat plant foods such as grass and leaves.";
+
+            feedback.className =
+                "feedback good";
+
+        } else {
+
+            feedback.textContent =
+                "💡 Think about foods that come from plants.";
+
+            feedback.className =
+                "feedback bad";
+        }
+
+    });
+
+
+/* =========================================================
+   OMNIVORE TEETH
+========================================================= */
+
+const toothJobs = {
+
+    incisor:
+        "✂️ Incisors help bite and cut food.",
+
+    canine:
+        "🔺 Canines help grip and tear food.",
+
+    molar:
+        "⬜ Molars help crush and grind food."
+};
+
+
+document.querySelectorAll(".tooth-choice")
+    .forEach(card => {
+
+        card.addEventListener("click", function () {
+
+            const type = this.dataset.tooth;
+
+            this.classList.toggle("selected");
+
+            document.getElementById(
+                "job-" + type
+            ).textContent =
+                toothJobs[type];
+
+        });
+
+    });
+
+
+/* =========================================================
+   ANIMAL SORTING
+========================================================= */
+
+let selectedAnimal = null;
+
+const animalItems =
+    document.querySelectorAll(".animal-sort");
+
+animalItems.forEach(item => {
+
+    item.addEventListener("click", function () {
+
+        animalItems.forEach(i =>
+            i.classList.remove("active")
+        );
+
+        this.classList.add("active");
+
+        selectedAnimal = this;
+
+        document.getElementById("feedback-q8")
+            .textContent =
+            `Now choose a group for ${this.textContent}.`;
+
+        document.getElementById("feedback-q8")
+            .className =
+            "feedback";
+
+    });
+
+});
+
+
+document.querySelectorAll(".sort-target")
+    .forEach(target => {
+
+        target.addEventListener("click", function () {
+
+            if (!selectedAnimal) {
+
+                const feedback =
+                    document.getElementById("feedback-q8");
+
+                feedback.textContent =
+                    "👆 First choose an animal.";
+
+                feedback.className =
+                    "feedback bad";
+
+                return;
+            }
+
+            const expected =
+                selectedAnimal.dataset.answer;
+
+            const chosenGroup =
+                this.dataset.group;
+
+            const feedback =
+                document.getElementById("feedback-q8");
+
+            if (expected === chosenGroup) {
+
+                this.appendChild(selectedAnimal);
+
+                selectedAnimal.classList.remove("active");
+
+                feedback.textContent =
+                    "✅ Correct classification!";
+
+                feedback.className =
+                    "feedback good";
+
+                selectedAnimal = null;
+
+            } else {
+
+                feedback.textContent =
+                    "❌ Not quite. Think about what this animal eats.";
+
+                feedback.className =
+                    "feedback bad";
+            }
+
+        });
+
+    });
+
+
+/* =========================================================
+   MYSTERY TEETH
+========================================================= */
+
+document.querySelectorAll(".mystery-card")
+    .forEach(card => {
+
+        card.addEventListener("click", function () {
+
+            this.classList.toggle("revealed");
+
+        });
+
+    });
+
+
+/* =========================================================
+   FOOD QUESTIONS
+========================================================= */
+
+document.querySelectorAll(
+    '[data-group="lionFood"], [data-group="cowFood"], [data-group="bearFood"]'
+).forEach(group => {
+
+    group.querySelectorAll(".choice").forEach(button => {
+
+        button.addEventListener("click", function () {
+
+            this.classList.toggle(
+                "correct",
+                this.dataset.answer === "correct"
+            );
+
+            this.classList.toggle(
+                "wrong",
+                this.dataset.answer !== "correct"
+            );
+
+        });
+
+    });
+
+});
+
+
+/* =========================================================
+   EXIT TICKET
+========================================================= */
+
+document.getElementById("finishTicket")
+    .addEventListener("click", function () {
+
+        const answers = [
+
+            document.getElementById("ticket1").value
+                .trim().toLowerCase(),
+
+            document.getElementById("ticket2").value
+                .trim().toLowerCase(),
+
+            document.getElementById("ticket3").value
+                .trim().toLowerCase(),
+
+            document.getElementById("ticket4").value
+                .trim().toLowerCase(),
+
+            document.getElementById("ticket5").value
+                .trim().toLowerCase()
+
+        ];
+
+        let score = 0;
+
+        if (
+            answers[0].includes("animal") ||
+            answers[0].includes("meat")
+        ) score++;
+
+        if (
+            answers[1].includes("plant") ||
+            answers[1].includes("grass") ||
+            answers[1].includes("leaf")
+        ) score++;
+
+        if (
+            answers[2].includes("both") ||
+            (
+                answers[2].includes("plant") &&
+                answers[2].includes("animal")
+            )
+        ) score++;
+
+        if (
+            answers[3].includes("tear") ||
+            answers[3].includes("grip")
+        ) score++;
+
+        if (
+            answers[4].includes("food") ||
+            answers[4].includes("diet") ||
+            answers[4].includes("eat") ||
+            answers[4].includes("job")
+        ) score++;
+
+        const feedback =
+            document.getElementById("ticketFeedback");
+
+        if (score === 5) {
+
+            feedback.textContent =
+                "🏆 5/5! Amazing! You are a Tooth Detective!";
+
+            feedback.className =
+                "feedback good";
+
+        } else if (score >= 3) {
+
+            feedback.textContent =
+                `🌟 ${score}/5 correct! Great work — review the ideas you missed.`;
+
+            feedback.className =
+                "feedback good";
+
+        } else {
+
+            feedback.textContent =
+                `${score}/5 correct. Keep investigating! Remember: food affects the type of teeth an animal needs.`;
+
+            feedback.className =
+                "feedback bad";
+        }
+
+    });
+
+
+/* =========================================================
+   KEYBOARD NAVIGATION
+========================================================= */
+
+document.addEventListener("keydown", function (event) {
+
+    const tag = event.target.tagName.toLowerCase();
+
+    if (
+        tag === "input" ||
+        tag === "textarea" ||
+        tag === "select"
+    ) {
+        return;
+    }
+
+    if (event.key === "ArrowRight") {
+        nextBtn.click();
+    }
+
+    if (event.key === "ArrowLeft") {
+        backBtn.click();
+    }
+
+});
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+updateDeck();
+
+})();
+</script>
+
+</body>
+</html>
