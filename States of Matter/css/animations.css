@@ -1,0 +1,60 @@
+/* Keyframes and motion. Everything respects "reduce motion" settings. */
+@keyframes nextReady { 0%, 100% { box-shadow: 0 3px 0 #047857, 0 0 0 rgba(110, 231, 183, 0); } 50% { box-shadow: 0 3px 0 #047857, 0 0 22px rgba(110, 231, 183, .95); } }
+@keyframes selected { 0%, 100% { transform: scale(1.04); } 50% { transform: scale(1.09); } }
+@keyframes toastIn { from { opacity: 0; transform: translateX(40px) scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes medal { 0% { transform: scale(0) rotate(-180deg); } 70% { transform: scale(1.25) rotate(10deg); } 100% { transform: none; } }
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes floatyRot { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
+@keyframes pop { 0% { transform: scale(.3); opacity: 0; } 70% { transform: scale(1.1); opacity: 1; } 100% { transform: none; opacity: 1; } }
+@keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes letterIn { 0% { opacity: 0; transform: translateY(40px) scale(.5) rotate(-14deg); } 70% { transform: translateY(-6px) scale(1.1); } 100% { opacity: 1; transform: none; } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-7px) rotate(-1deg); } 40% { transform: translateX(6px) rotate(1deg); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+@keyframes goodPop { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 211, 153, .9); } 40% { transform: scale(1.09); box-shadow: 0 0 0 7px rgba(52, 211, 153, .85), 0 0 34px rgba(52, 211, 153, .9); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); } }
+@keyframes slideInF { from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 70px)) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes slideOutF { to { opacity: 0; transform: translateX(calc(var(--dir, 1) * -70px)) scale(.985); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes beam { 0%, 100% { top: 34px; } 50% { top: calc(100% - 12px); } }
+@keyframes glowPulse { 0%, 100% { filter: drop-shadow(0 0 6px rgba(253, 230, 138, .4)); } 50% { filter: drop-shadow(0 0 20px rgba(253, 230, 138, 1)); } }
+@keyframes waveMove { to { transform: translateX(-200px); } }
+@keyframes driftDot { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(26px, -30px); } 50% { transform: translate(-22px, -8px); } 75% { transform: translate(18px, 26px); } }
+@keyframes fall { 0% { transform: translateY(-16px); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(76px); opacity: .9; } }
+@keyframes bubbleUp { 0% { transform: translateY(0) scale(.5); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-104px) scale(1.2); opacity: 0; } }
+@keyframes bubbleUp2 { 0% { transform: translateY(0) scale(.5); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-122px) scale(1.25); opacity: 0; } }
+@keyframes vapRise { 0% { transform: translateY(40px); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-110px) translateX(14px); opacity: .1; } }
+@keyframes evapRise { 0% { transform: translate(0, 0) scale(.9); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(14px, -104px) scale(.7); opacity: 0; } }
+@keyframes flowDash { to { stroke-dashoffset: -44; } }
+@keyframes twinkle { 0%, 100% { transform: scale(.65) rotate(0); opacity: .45; } 50% { transform: scale(1.1) rotate(25deg); opacity: 1; } }
+@keyframes trophyIn { 0% { transform: translateY(40px) scale(.3) rotate(-14deg); opacity: 0; } 70% { transform: translateY(-8px) scale(1.08) rotate(3deg); opacity: 1; } 100% { transform: none; opacity: 1; } }
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+@keyframes wave { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-12deg); } }
+@keyframes smallBub { 0% { transform: translateY(4px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-16px); opacity: 0; } }
+@keyframes columnsGlow { 0%, 100% { opacity: .55; } 50% { opacity: .95; } }
+@keyframes rays { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes lidOff { 0% { transform: none; } 40% { transform: translateY(-46px) rotate(-14deg); } 100% { transform: translate(90px, -14px) rotate(38deg); opacity: 0; } }
+@keyframes cubeBob { 0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); } 50% { transform: translateY(-8px) rotate(var(--rot, 0deg)); } }
+@keyframes promptGlow { 0%, 100% { stroke-opacity: 1; filter: none; } 50% { filter: drop-shadow(0 0 8px #FDE68A); } }
+
+.entering { animation: slideInF .34s cubic-bezier(.2, .8, .3, 1); }
+.leaving { animation: slideOutF .28s ease-in forwards; pointer-events: none; }
+.fx-good { animation: goodPop .55s ease; border-radius: 16px; }
+.fx-shake { animation: shake .5s ease; }
+.note-in { animation: riseIn .3s ease; }
+.bump { animation: pop .4s ease; }
+.hud-badge.just-won { animation: medal .9s ease; }
+
+/* Mascot life */
+.m-eyes { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite; }
+.m-arm-r { transform-box: view-box; transform-origin: 160px 158px; animation: wave 1.5s ease-in-out infinite; }
+.m-bub { animation: smallBub 1.8s ease-in infinite; }
+.m-bub2 { animation-delay: .7s; }
+.hud-mascot .m-arm-r, .s7-mascot .m-arm-r { animation-duration: 3s; }
+
+/* Equipment life */
+.bk-b { animation: smallBub 2s ease-in infinite; }
+.bk-b2 { animation-delay: .6s; }
+.bk-b3 { animation-delay: 1.2s; }
+.th-col { transition: transform 1.2s cubic-bezier(.3, 1.2, .5, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
