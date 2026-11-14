@@ -1,0 +1,58 @@
+/* ==========================================================
+   Animations & keyframes
+   ========================================================== */
+@keyframes floatUp { from { transform: translateY(40px) scale(.6); opacity: 0; } 15% { opacity: .22; } 85% { opacity: .18; } to { transform: translateY(-760px) scale(1.1); opacity: 0; } }
+@keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(83, 230, 223, .6), var(--shadow); } 50% { box-shadow: 0 0 0 14px rgba(83, 230, 223, 0), var(--shadow); } }
+@keyframes dashFlow { to { stroke-dashoffset: -28; } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+@keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes toastIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
+@keyframes toastOut { to { transform: translateX(130%); opacity: 0; } }
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes enterFromRight { from { opacity: 0; transform: translateX(60px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes enterFromLeft { from { opacity: 0; transform: translateX(-60px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+@keyframes glowPulse { 0%, 100% { filter: drop-shadow(0 0 6px var(--accent)); } 50% { filter: drop-shadow(0 0 22px var(--accent)); } }
+@keyframes twinkle { 0%, 100% { opacity: .3; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.15); } }
+@keyframes ripple { from { transform: scale(.4); opacity: .9; } to { transform: scale(2.2); opacity: 0; } }
+@keyframes waveOut { from { transform: scale(.5); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+@keyframes confettiFall { from { transform: translateY(-40px) rotate(0); opacity: 1; } to { transform: translateY(760px) rotate(720deg); opacity: .7; } }
+
+/* vibration styles used when objects are clicked */
+@keyframes vibX { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+@keyframes vibY { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-3px); } 75% { transform: translateY(3px); } }
+@keyframes vibScale { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.03, .97); } }
+@keyframes wobble { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-5deg); } 40% { transform: rotate(4deg); } 60% { transform: rotate(-3deg); } 80% { transform: rotate(2deg); } }
+@keyframes hop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+.vib-x { animation: vibX .06s linear infinite; }
+.vib-y { animation: vibY .07s linear infinite; }
+.vib-s { animation: vibScale .08s linear infinite; }
+.wobble { animation: wobble .6s ease; }
+
+/* slide entrance */
+.slide.enter-r { animation: enterFromRight .5s cubic-bezier(.2, .8, .2, 1); }
+.slide.enter-l { animation: enterFromLeft .5s cubic-bezier(.2, .8, .2, 1); }
+.slide .pop { animation: rise .55s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--d, 0) * 90ms + 120ms); }
+.bob { animation: bob 3.2s ease-in-out infinite; }
+
+/* ball vs light analogy (slide 4) */
+@keyframes ballPath { 0% { transform: translate(0, 0); } 50% { transform: translate(118px, 60px); } 100% { transform: translate(236px, 0); } }
+@keyframes ballSquash { 0%, 45%, 55%, 100% { scale: 1 1; } 50% { scale: 1.25 .7; } }
+.analogy-ball { animation: ballPath 2.2s ease-in-out infinite; }
+.analogy-ball circle { animation: ballSquash 2.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+@keyframes rayIn { 0% { stroke-dashoffset: 140; } 45%, 100% { stroke-dashoffset: 0; } }
+@keyframes rayOut { 0%, 45% { stroke-dashoffset: 140; } 90%, 100% { stroke-dashoffset: 0; } }
+.anim-ray-in { stroke-dasharray: 140; animation: rayIn 2.2s ease-in-out infinite; }
+.anim-ray-out { stroke-dasharray: 140; animation: rayOut 2.2s ease-in-out infinite; }
+
+/* door hover (slide 1) */
+.door-panel { transition: transform .7s cubic-bezier(.2, .8, .2, 1); transform-origin: left center; }
+.door:hover .door-panel, .door:focus-visible .door-panel { transform: perspective(700px) rotateY(-62deg); }
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bg-fx span, .bob, .slide .pop, .slide.enter-r, .slide.enter-l { animation: none !important; }
+}

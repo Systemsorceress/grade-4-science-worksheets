@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Light &amp; Sound Mission — Year 4 Science</title>
+<meta name="description" content="An interactive 60-minute Year 4 science lesson about light and sound.">
+<link rel="icon" href="assets/icons/star.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/slides.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-section="intro">
+<div id="app">
+
+  <header class="hud" role="banner">
+    <button class="hud-brand" id="btn-home" title="Home (go to the start)" aria-label="Home">
+      <span class="brand-orb"><img src="assets/icons/star.svg" alt=""></span>
+      <span class="brand-text"><strong>Light &amp; Sound</strong><small>Science Detective Mission</small></span>
+    </button>
+
+    <div class="hud-lab" id="hud-lab" aria-live="polite"><span class="lab-dot"></span><span id="hud-lab-name">Mission HQ</span></div>
+
+    <button class="hud-progress" id="btn-map" title="Open the mission map">
+      <span class="hud-progress-label">Slide <b id="hud-slide">1</b> / <span id="hud-total">21</span></span>
+      <span class="progress-track"><span class="progress-fill" id="hud-progress"></span></span>
+    </button>
+
+    <div class="hud-right">
+      <button class="hud-stars" id="btn-badges" title="Your stars and badges">
+        <img src="assets/icons/star.svg" alt="" class="hud-star-img" id="hud-star-target">
+        <b id="hud-stars">0</b>
+        <span class="hud-badge-count" id="hud-badges">0</span>
+      </button>
+      <button class="icon-btn" id="btn-sound" title="Sound on/off (M)" aria-label="Toggle sound"></button>
+      <button class="icon-btn" id="btn-teacher" title="Teacher notes (T)" aria-label="Toggle teacher notes"></button>
+      <button class="icon-btn" id="btn-fullscreen" title="Fullscreen (F)" aria-label="Toggle fullscreen"></button>
+    </div>
+  </header>
+
+  <main class="viewport" id="viewport">
+    <button class="nav-btn nav-prev" id="btn-prev" aria-label="Previous slide" title="Previous (←)"></button>
+    <div class="stage-wrap" id="stage-wrap">
+      <div class="stage" id="stage">
+        <div class="stage-bg" aria-hidden="true">
+          <div class="bg-fx" id="bg-fx"></div>
+        </div>
+        <div class="slide-host" id="slide-host"></div>
+      </div>
+    </div>
+    <button class="nav-btn nav-next" id="btn-next" aria-label="Next slide" title="Next (→)"></button>
+  </main>
+
+  <aside class="teacher-panel" id="teacher-panel" aria-label="Teacher notes" hidden></aside>
+  <div class="overlay" id="overlay" hidden></div>
+  <div class="toast-zone" id="toast-zone" aria-live="polite"></div>
+</div>
+
+<script src="js/audio.js"></script>
+<script src="js/activities.js"></script>
+<script src="js/slides.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/teacher-mode.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

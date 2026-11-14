@@ -1,0 +1,67 @@
+/* ==========================================================
+   Responsive behaviour
+   - Desktop / laptop / tablet landscape: the 16:9 stage is scaled
+     to fit (see LS.layout in app.js) and never gets too small.
+   - Small screens (phones, narrow windows): body.flow — the stage
+     becomes a normal scrolling page and layouts stack.
+   ========================================================== */
+
+@media (max-width: 1100px) {
+  .brand-text small { display: none; }
+  .hud-lab { font-size: 15px; padding: 6px 10px; }
+}
+@media (max-width: 900px) {
+  .brand-text { display: none; }
+  .hud-progress-label { display: none; }
+  .hud { gap: 10px; padding: 0 10px; }
+  .teacher-panel { width: min(420px, 100%); }
+}
+@media (max-width: 560px) {
+  .hud-lab { display: none; }
+  .icon-btn { width: 38px; height: 38px; }
+  .hud-badge-count { display: none; }
+}
+
+/* ---------------- flow (stacked) mode ---------------- */
+body.flow { overflow: hidden; font-size: 18px; }
+.flow .viewport { display: block; }
+.flow .stage-wrap { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 12px 12px 90px; }
+.flow .stage { position: relative; width: 100%; height: auto; min-height: 100%; border-radius: 20px; }
+.flow .stage-bg { position: fixed; }
+.flow .slide-host, .flow .slide { position: relative; inset: auto; }
+.flow .slide { padding: 16px; }
+.flow .nav-btn { position: fixed; top: auto; bottom: 16px; margin: 0; }
+.flow .nav-prev { left: 16px; } .flow .nav-next { right: 16px !important; }
+
+.flow .slide-title { font-size: 30px; }
+.flow .hero-title { font-size: 40px; }
+.flow .slide-head { flex-wrap: wrap; }
+.flow .slide-body, .flow .see-top, .flow .welcome-top, .flow .tr-bottom, .flow .abs-bottom { display: flex; flex-direction: column; height: auto !important; }
+.flow .slide-body > [style*="width"], .flow .col[style*="width"] { width: auto !important; }
+.flow .missions, .flow .mystery-grid, .flow .media-grid, .flow .abs-row, .flow .chal-grid, .flow .feat-grid,
+.flow .freq-row, .flow .rule, .flow .bins, .flow .det-qs, .flow .rp-qs, .flow .phone-qs, .flow .pitch-body, .flow .compare { grid-template-columns: 1fr; }
+.flow .vib-grid, .flow .pitch-tiles { grid-template-columns: 1fr 1fr; grid-template-rows: none; }
+.flow .finder-row { grid-template-columns: repeat(4, 1fr); }
+.flow .doors { justify-content: center; }
+.flow .door-frame { width: 140px; height: 220px; }
+.flow .mascot { display: none; }
+.flow .big-ideas { flex-direction: column; height: auto; }
+.flow .sort-items { flex-wrap: wrap; }
+.flow .sort-item { width: 120px; height: 120px; }
+.flow .bin { min-height: 200px; }
+.flow .mirror-stage, .flow #rp-host, .flow #rx-host { height: 300px; flex: none; }
+.flow .travel-card { height: 320px; }
+.flow .pitch-meter-card { height: 260px; }
+.flow .freq-try { flex-wrap: wrap; }
+.flow .freq-try canvas { width: 100%; }
+.flow .quiz-card { width: 100%; }
+.flow .qz-tf .opts, .flow .qz-pic .opts, .flow .qz-predict .opts { flex-wrap: wrap; }
+.flow .match { grid-template-columns: 1fr; }
+.flow .bottle-row { flex-wrap: wrap; }
+.flow .bottle svg { width: 70px; height: 190px; }
+.flow .cert-controls { flex-direction: column; align-items: stretch; }
+.flow .cert-trophy, .flow .cert-pip { display: none; }
+.flow .cert-name { min-width: 0; width: 100%; font-size: 34px; }
+.flow .cert-title { font-size: 38px; }
+.flow .cert-foot { gap: 30px; }
+.flow .teacher-panel { width: 100%; }

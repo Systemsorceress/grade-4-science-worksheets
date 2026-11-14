@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280">
+<defs>
+<radialGradient id="sk" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#FFE0C2"/><stop offset="1" stop-color="#E9A97C"/></radialGradient>
+<linearGradient id="coat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C9D6F2"/></linearGradient>
+<linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5B3FD1"/><stop offset="1" stop-color="#2A1C73"/></linearGradient>
+<radialGradient id="gl" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#DFFFFD"/><stop offset="1" stop-color="#53E6DF"/></radialGradient>
+<linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC8FF"/><stop offset="1" stop-color="#2E8FE0"/></linearGradient>
+</defs>
+<ellipse cx="110" cy="268" rx="70" ry="9" fill="#101A35" opacity="0.25"/>
+<path d="M58 270 L66 178 Q110 160 154 178 L162 270 Z" fill="url(#coat)" stroke="#9FB2DD" stroke-width="2"/>
+<path d="M92 176 L110 222 L128 176 Q110 168 92 176Z" fill="url(#shirt)"/>
+<path d="M92 176 L104 230 L84 196Z M128 176 L116 230 L136 196Z" fill="#E7EEFF" stroke="#9FB2DD" stroke-width="1.5"/>
+<rect x="122" y="214" width="20" height="16" rx="3" fill="#E1E9FB" stroke="#9FB2DD"/>
+<rect x="126" y="206" width="3" height="14" rx="1.5" fill="#FF8B80"/><rect x="132" y="208" width="3" height="12" rx="1.5" fill="#45B8FF"/>
+<path d="M66 190 Q40 210 52 236" stroke="#E4EBFA" stroke-width="20" stroke-linecap="round" fill="none"/>
+<path d="M154 188 Q186 170 186 140" stroke="#E4EBFA" stroke-width="20" stroke-linecap="round" fill="none"/>
+<circle cx="52" cy="240" r="11" fill="url(#sk)"/>
+<circle cx="186" cy="132" r="11" fill="url(#sk)"/>
+<line x1="186" y1="124" x2="196" y2="96" stroke="#3A2F6B" stroke-width="7" stroke-linecap="round"/>
+<circle cx="200" cy="80" r="18" fill="url(#gl)" opacity=".85" stroke="#3A2F6B" stroke-width="5"/>
+<path d="M192 72 Q198 66 206 70" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+<rect x="100" y="150" width="20" height="22" rx="8" fill="#E9A97C"/>
+<circle cx="110" cy="100" r="58" fill="url(#sk)"/>
+<path d="M52 98 Q50 38 110 36 Q170 38 168 98 Q160 66 132 62 Q118 76 92 70 Q66 70 52 98Z" fill="url(#hair)"/>
+<circle cx="56" cy="104" r="10" fill="#EDB28A"/><circle cx="164" cy="104" r="10" fill="#EDB28A"/>
+<rect x="66" y="56" width="88" height="8" rx="4" fill="#3A2F6B"/>
+<circle cx="88" cy="58" r="15" fill="url(#gl)" stroke="#3A2F6B" stroke-width="5"/>
+<circle cx="132" cy="58" r="15" fill="url(#gl)" stroke="#3A2F6B" stroke-width="5"/>
+<path d="M81 52 Q86 48 92 50 M125 52 Q130 48 136 50" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+<ellipse cx="88" cy="104" rx="10" ry="12" fill="#1C1640"/><ellipse cx="132" cy="104" rx="10" ry="12" fill="#1C1640"/>
+<circle cx="92" cy="99" r="4" fill="#fff"/><circle cx="136" cy="99" r="4" fill="#fff"/>
+<circle cx="85" cy="109" r="2" fill="#fff"/><circle cx="129" cy="109" r="2" fill="#fff"/>
+<ellipse cx="74" cy="124" rx="9" ry="5" fill="#FF8B80" opacity=".5"/><ellipse cx="146" cy="124" rx="9" ry="5" fill="#FF8B80" opacity=".5"/>
+<path d="M96 128 Q110 142 124 128" stroke="#8A3A2E" stroke-width="4" fill="#fff" stroke-linecap="round"/></svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 340">
+<defs><linearGradient id="bb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9A6FF"/><stop offset="1" stop-color="#5A3CD6"/></linearGradient></defs>
+<ellipse cx="80" cy="332" rx="60" ry="7" fill="#101A35" opacity="0.2"/>
+<rect x="66" y="6" width="28" height="40" rx="6" fill="#2A1C73"/>
+<rect x="52" y="14" width="10" height="8" rx="3" fill="#E7ECF7"/><rect x="98" y="14" width="10" height="8" rx="3" fill="#E7ECF7"/><rect x="52" y="30" width="10" height="8" rx="3" fill="#E7ECF7"/><rect x="98" y="30" width="10" height="8" rx="3" fill="#E7ECF7"/>
+<rect x="70" y="44" width="20" height="170" fill="#3D2A12"/>
+<path d="M52 200 Q30 180 34 220 Q14 250 26 290 Q40 330 80 326 Q130 330 136 286 Q148 246 124 222 Q134 186 106 200 Q80 214 52 200Z" fill="url(#bb)" stroke="#2A1C73" stroke-width="4"/>
+<rect x="60" y="250" width="40" height="12" rx="4" fill="#101A35"/><rect x="62" y="290" width="36" height="8" rx="3" fill="#101A35"/>
+<line x1="73" y1="44" x2="73" y2="294" stroke="#F4F1E8" stroke-width="2.6"/><line x1="78" y1="44" x2="78" y2="294" stroke="#F4F1E8" stroke-width="2.2"/><line x1="83" y1="44" x2="83" y2="294" stroke="#F4F1E8" stroke-width="1.8"/><line x1="88" y1="44" x2="88" y2="294" stroke="#F4F1E8" stroke-width="1.4"/></svg>
